@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Landing Page</title>
+    <style>
+        /* Base Dark Theme Reset */
+        body, html {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            background-color: #0f172a;
+            color: #f8fafc;
+            font-family: 'Inter', -apple-system, sans-serif;
+            overflow-x: hidden;
+        }
+
+        /* Hero Section Layout */
+        .hero {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            text-align: center;
+            padding: 2rem;
+        }
+
+        h1 {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(to right, #a855f7, #3b82f6);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        p {
+            font-size: 1.2rem;
+            color: #94a3b8;
+            max-width: 600px;
+            margin-bottom: 3rem;
+            line-height: 1.6;
+        }
+
+        /* --- Circulating Avatars Animation --- */
+        .orbit-wrapper {
+            position: relative;
+            width: 400px;
+            height: 400px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 2rem;
+        }
+
+        /* Central AI Node */
+        .ai-core {
+            width: 100px;
+            height: 100px;
+            background: radial-gradient(circle, #8b5cf6, #2563eb);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.5rem;
+            box-shadow: 0 0 40px rgba(139, 92, 246, 0.6);
+            z-index: 10;
+        }
+
+        /* Orbiting Ring */
+        .orbit-ring {
+            position: absolute;
+            width: 320px;
+            height: 320px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            animation: spin 20s linear infinite;
+        }
+
+        /* Avatar Images */
+        .avatar {
+            position: absolute;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: 2px solid #0f172a;
+            object-fit: cover;
+        }
+
+        /* 
+           Positioning the avatars on the ring. 
+           We use a counter-spin animation so the faces stay upright while rotating.
+        */
+        .av-1 { top: -25px; left: 135px; animation: counter-spin 20s linear infinite; }
+        .av-2 { bottom: -25px; left: 135px; animation: counter-spin 20s linear infinite; }
+        .av-3 { left: -25px; top: 135px; animation: counter-spin 20s linear infinite; }
+        .av-4 { right: -25px; top: 135px; animation: counter-spin 20s linear infinite; }
+
+        /* Keyframes */
+        @keyframes spin {
+            100% { transform: rotate(360deg); }
+        }
+        
+        @keyframes counter-spin {
+            100% { transform: rotate(-360deg); }
+        }
+
+        /* CTA Button */
+        .cta-btn {
+            padding: 1rem 2rem;
+            font-size: 1.1rem;
+            color: white;
+            background: #3b82f6;
+            border: none;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: background 0.3s;
+            margin-top: 2rem;
+        }
+
+        .cta-btn:hover {
+            background: #2563eb;
+        }
+    </style>
+</head>
+<body>
+
+    <section class="hero">
+        <h1>Human-Centric AI</h1>
+        <p>Connecting artificial intelligence with real human workflows. Watch the network grow in real-time as millions join the ecosystem.</p>
+        
+        <div class="orbit-wrapper">
+            <div class="ai-core">AI</div>
+            <div class="orbit-ring">
+                <!-- Using placeholder face images from Unsplash -->
+                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80" alt="Human" class="avatar av-1">
+                <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=100&q=80" alt="Human" class="avatar av-2">
+                <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=100&q=80" alt="Human" class="avatar av-3">
+                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=100&q=80" alt="Human" class="avatar av-4">
+            </div>
+        </div>
+
+        <button class="cta-btn">Join the Network</button>
+    </section>
+
+</body>
+</html>
