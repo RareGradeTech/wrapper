@@ -3,21 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Landing Page</title>
+    <title>AI Wrapper Landing Page</title>
+    <!-- Importing Outfit to mimic Google Sans / Gemini typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    
     <style>
-        /* Base Dark Theme Reset */
+        /* Base Light Theme Reset */
         body, html {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
-            background-color: #0f172a;
-            color: #f8fafc;
-            font-family: 'Inter', -apple-system, sans-serif;
+            background-color: #f8fafc;
+            color: #0f172a;
+            font-family: 'Google Sans', 'Outfit', sans-serif;
             overflow-x: hidden;
+        }
+
+        /* Subtle Background Glows (Gemini Colors) */
+        .bg-glow {
+            position: absolute;
+            width: 800px;
+            height: 800px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(66, 133, 244, 0.08) 0%, rgba(155, 114, 203, 0.05) 40%, rgba(255,255,255,0) 70%);
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 0;
+            pointer-events: none;
         }
 
         /* Hero Section Layout */
         .hero {
+            position: relative;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -25,124 +43,185 @@
             min-height: 100vh;
             text-align: center;
             padding: 2rem;
+            z-index: 1;
         }
 
+        /* Typography */
         h1 {
-            font-size: 4rem;
+            font-size: 4.5rem;
+            font-weight: 700;
             margin-bottom: 1rem;
-            background: linear-gradient(to right, #a855f7, #3b82f6);
+            letter-spacing: -0.05em;
+            background: linear-gradient(90deg, #4285f4, #9b72cb, #d96570);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
         p {
-            font-size: 1.2rem;
-            color: #94a3b8;
-            max-width: 600px;
+            font-size: 1.25rem;
+            color: #475569;
+            max-width: 650px;
             margin-bottom: 3rem;
-            line-height: 1.6;
+            line-height: 1.7;
+            font-weight: 300;
         }
 
-        /* --- Circulating Avatars Animation --- */
-        .orbit-wrapper {
+        /* --- 3D Atom Animation --- */
+        .atom-container {
             position: relative;
-            width: 400px;
-            height: 400px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            width: 450px;
+            height: 450px;
+            perspective: 1200px;
             margin-top: 2rem;
+            margin-bottom: 3rem;
+            /* Slight tilt to view the atom in 3D space */
+            transform: rotateX(15deg) rotateY(15deg);
         }
 
-        /* Central AI Node */
+        /* Central AI Core (Glassmorphism) */
         .ai-core {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) rotateY(-15deg) rotateX(-15deg); /* Counter parent tilt */
             width: 100px;
             height: 100px;
-            background: radial-gradient(circle, #8b5cf6, #2563eb);
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.8);
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-weight: bold;
-            font-size: 1.5rem;
-            box-shadow: 0 0 40px rgba(139, 92, 246, 0.6);
+            font-weight: 700;
+            font-size: 1.8rem;
+            color: #4285f4;
+            box-shadow: 0 10px 30px rgba(66, 133, 244, 0.15), inset 0 0 20px rgba(155, 114, 203, 0.1);
             z-index: 10;
         }
 
-        /* Orbiting Ring */
+        /* 3D Orbit Rings */
         .orbit-ring {
             position: absolute;
-            width: 320px;
-            height: 320px;
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            top: 0; left: 0; right: 0; bottom: 0;
+            border: 2px solid rgba(66, 133, 244, 0.15);
             border-radius: 50%;
-            animation: spin 20s linear infinite;
+            transform-style: preserve-3d;
         }
 
-        /* Avatar Images */
+        /* Tilting the rings to form an atom shape */
+        .ring-1 { transform: rotateX(65deg) rotateY(0deg); }
+        .ring-2 { transform: rotateX(65deg) rotateY(60deg); }
+        .ring-3 { transform: rotateX(65deg) rotateY(120deg); }
+
+        /* The invisible track that spins */
+        .orbit-track {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            transform-style: preserve-3d;
+            animation: spinTrack 12s linear infinite;
+        }
+        
+        /* Staggering the animation speeds and directions */
+        .ring-2 .orbit-track { animation-duration: 16s; animation-direction: reverse; }
+        .ring-3 .orbit-track { animation-duration: 20s; }
+
+        @keyframes spinTrack {
+            0% { transform: rotateZ(0deg); }
+            100% { transform: rotateZ(360deg); }
+        }
+
+        /* The Human Avatars */
         .avatar {
             position: absolute;
+            top: -25px; /* Offset by half the height to center on the line */
+            left: calc(50% - 25px);
             width: 50px;
             height: 50px;
             border-radius: 50%;
-            border: 2px solid #0f172a;
+            border: 3px solid #ffffff;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.12);
             object-fit: cover;
+            /* Counter-spin so the image stays upright in 3D space */
+            animation: counterSpinTrack 12s linear infinite;
         }
 
-        /* 
-           Positioning the avatars on the ring. 
-           We use a counter-spin animation so the faces stay upright while rotating.
-        */
-        .av-1 { top: -25px; left: 135px; animation: counter-spin 20s linear infinite; }
-        .av-2 { bottom: -25px; left: 135px; animation: counter-spin 20s linear infinite; }
-        .av-3 { left: -25px; top: 135px; animation: counter-spin 20s linear infinite; }
-        .av-4 { right: -25px; top: 135px; animation: counter-spin 20s linear infinite; }
+        .ring-2 .avatar { animation-duration: 16s; animation-direction: reverse; }
+        .ring-3 .avatar { animation-duration: 20s; }
 
-        /* Keyframes */
-        @keyframes spin {
-            100% { transform: rotate(360deg); }
-        }
-        
-        @keyframes counter-spin {
-            100% { transform: rotate(-360deg); }
+        @keyframes counterSpinTrack {
+            /* We reverse the Z rotation and apply a -90deg X rotation so they stand perpendicular to the rings */
+            0% { transform: rotateZ(0deg) rotateX(-90deg); }
+            100% { transform: rotateZ(-360deg) rotateX(-90deg); }
         }
 
-        /* CTA Button */
+        /* Glassmorphism CTA Button */
         .cta-btn {
-            padding: 1rem 2rem;
+            padding: 1.2rem 2.5rem;
             font-size: 1.1rem;
-            color: white;
-            background: #3b82f6;
+            font-weight: 600;
+            color: #ffffff;
+            background: linear-gradient(135deg, #4285f4, #9b72cb);
             border: none;
-            border-radius: 30px;
+            border-radius: 40px;
             cursor: pointer;
-            transition: background 0.3s;
-            margin-top: 2rem;
+            box-shadow: 0 10px 25px rgba(66, 133, 244, 0.3);
+            transition: all 0.3s ease;
+            font-family: inherit;
         }
 
         .cta-btn:hover {
-            background: #2563eb;
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(66, 133, 244, 0.4);
+        }
+        
+        /* Mobile Optimization */
+        @media (max-width: 768px) {
+            h1 { font-size: 3rem; }
+            .atom-container { width: 300px; height: 300px; }
+            .avatar { width: 40px; height: 40px; top: -20px; left: calc(50% - 20px); }
+            .ai-core { width: 80px; height: 80px; font-size: 1.4rem; }
         }
     </style>
 </head>
 <body>
 
+    <div class="bg-glow"></div>
+
     <section class="hero">
-        <h1>Human-Centric AI</h1>
-        <p>Connecting artificial intelligence with real human workflows. Watch the network grow in real-time as millions join the ecosystem.</p>
+        <h1>The Ultimate AI Wrapper</h1>
+        <p>Seamlessly integrate powerful AI models into your workflows. Watch the network expand in 3D as human intelligence orbits around core AI architecture.</p>
         
-        <div class="orbit-wrapper">
+        <!-- 3D Atom Container -->
+        <div class="atom-container">
             <div class="ai-core">AI</div>
-            <div class="orbit-ring">
-                <!-- Using placeholder face images from Unsplash -->
-                <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80" alt="Human" class="avatar av-1">
-                <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=100&q=80" alt="Human" class="avatar av-2">
-                <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=100&q=80" alt="Human" class="avatar av-3">
-                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=100&q=80" alt="Human" class="avatar av-4">
+            
+            <!-- Atom Ring 1 -->
+            <div class="orbit-ring ring-1">
+                <div class="orbit-track">
+                    <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80" alt="Human User" class="avatar">
+                </div>
+            </div>
+
+            <!-- Atom Ring 2 -->
+            <div class="orbit-ring ring-2">
+                <div class="orbit-track">
+                    <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=100&q=80" alt="Human User" class="avatar">
+                </div>
+            </div>
+
+            <!-- Atom Ring 3 -->
+            <div class="orbit-ring ring-3">
+                <div class="orbit-track">
+                    <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=100&q=80" alt="Human User" class="avatar">
+                </div>
             </div>
         </div>
 
-        <button class="cta-btn">Join the Network</button>
+        <button class="cta-btn">Start Building</button>
     </section>
 
 </body>
