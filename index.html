@@ -1,10 +1,11 @@
 <!DOCTYPE html>
-<html lang="en)
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>AI Wrapper Landing Page</title>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght=300;400;600;700&display=swap" rel="stylesheet">
+    <!-- Importing Outfit to mimic Google Sans / Gemini typography -->
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
     
     <style>
         /* Base Light Theme Reset */
@@ -152,49 +153,9 @@
         .ring-3 .avatar { animation-duration: 20s; }
 
         @keyframes counterSpinTrack {
+            /* We reverse the Z rotation and apply a -90deg X rotation so they stand perpendicular to the rings */
             0% { transform: rotateZ(0deg) rotateX(-90deg); }
             100% { transform: rotateZ(-360deg) rotateX(-90deg); }
-        }
-
-        /* --- AI Hand Overlay --- */
-        .ai-hand {
-            position: absolute;
-            /* Positioned relative to the atom container, reaching inward from the left screen space */
-            right: 100%; 
-            top: 50%;
-            width: 280px;
-            height: auto;
-            margin-right: -40px; /* Adjusts finger close to the AI core */
-            z-index: 20;
-            pointer-events: none;
-            /* Counteract the 3D tilt of the atom container so hand remains flat/readable */
-            transform: translateY(-50%) rotateY(-15deg) rotateX(-15deg) translateX(-150px);
-            opacity: 0;
-            filter: drop-shadow(0px 15px 25px rgba(66, 133, 244, 0.15));
-            animation: handEmergeAndPoint 2s cubic-bezier(0.16, 1, 0.3, 1) forwards 0.5s;
-        }
-
-        /* Combination entry and constant idle hover keyframes */
-        @keyframes handEmergeAndPoint {
-            0% {
-                opacity: 0;
-                transform: translateY(-50%) rotateY(-15deg) rotateX(-15deg) translateX(-150px);
-            }
-            100% {
-                opacity: 1;
-                transform: translateY(-50%) rotateY(-15deg) rotateX(-15deg) translateX(0);
-                /* Link to subtle floating animation seamlessly */
-                animation: handIdleFloat 4s ease-in-out infinite alternate;
-            }
-        }
-
-        @keyframes handIdleFloat {
-            0% {
-                transform: translateY(-50%) rotateY(-15deg) rotateX(-15deg) translateX(0);
-            }
-            100% {
-                transform: translateY(-53%) rotateY(-13deg) rotateX(-13deg) translateX(-5px);
-            }
         }
 
         /* Glassmorphism CTA Button */
@@ -218,13 +179,6 @@
         }
         
         /* Mobile Optimization */
-        @media (max-width: 1024px) {
-            /* Hide or adapt the hand on small screens to prevent covering up central content layout */
-            .ai-hand {
-                display: none;
-            }
-        }
-
         @media (max-width: 768px) {
             h1 { font-size: 3rem; }
             .atom-container { width: 300px; height: 300px; }
@@ -241,41 +195,25 @@
         <h1>The Ultimate AI Wrapper</h1>
         <p>Seamlessly integrate powerful AI models into your workflows. Watch the network expand in 3D as human intelligence orbits around core AI architecture.</p>
         
+        <!-- 3D Atom Container -->
         <div class="atom-container">
-            
-            <svg class="ai-hand" viewBox="0 0 200 100" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <defs>
-                    <linearGradient id="handGradient" x1="0%" y1="0%" x2="100%" y2="100%">
-                        <stop offset="0%" stop-color="#4285f4" stop-opacity="0.2"/>
-                        <stop offset="60%" stop-color="#9b72cb" stop-opacity="0.8"/>
-                        <stop offset="100%" stop-color="#d96570"/>
-                    </linearGradient>
-                </defs>
-                <path d="M10 45 L50 43 L80 47 L110 40 L140 45 L150 50 L140 55 L80 55 Z" fill="url(#handGradient)" />
-                <circle cx="80" cy="47" r="3" fill="#ffffff" opacity="0.7"/>
-                <circle cx="110" cy="40" r="3" fill="#ffffff" opacity="0.9"/>
-                <circle cx="140" cy="45" r="2.5" fill="#ffffff"/>
-                <path d="M140 45 L185 45 C190 45, 190 41, 185 41 L140 41 Z" fill="url(#handGradient)" stroke="#ffffff" stroke-width="0.5"/>
-                <circle cx="185" cy="43" r="4" fill="#d96570" />
-                <circle cx="185" cy="43" r="1.5" fill="#ffffff" />
-                <path d="M135 49 C142 49, 145 56, 135 57" stroke="#9b72cb" stroke-width="2" stroke-linecap="round"/>
-                <path d="M130 54 C137 54, 140 61, 130 62" stroke="#9b72cb" stroke-width="2" stroke-linecap="round"/>
-            </svg>
-
             <div class="ai-core">AI</div>
             
+            <!-- Atom Ring 1 -->
             <div class="orbit-ring ring-1">
                 <div class="orbit-track">
                     <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=100&q=80" alt="Human User" class="avatar">
                 </div>
             </div>
 
+            <!-- Atom Ring 2 -->
             <div class="orbit-ring ring-2">
                 <div class="orbit-track">
                     <img src="https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?auto=format&fit=crop&w=100&q=80" alt="Human User" class="avatar">
                 </div>
             </div>
 
+            <!-- Atom Ring 3 -->
             <div class="orbit-ring ring-3">
                 <div class="orbit-track">
                     <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=100&q=80" alt="Human User" class="avatar">
