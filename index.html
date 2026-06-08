@@ -9,8 +9,8 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;600;700&family=Google+Sans+Display:wght@400;500;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
-  <!-- inline SVG icons via JS helper -->
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Syne:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/feather-icons"></script>
 
   <style>
     /* ══════════════════════════════════════
@@ -47,8 +47,7 @@
       --radius-xl: 22px;
 
       --font-code: 'JetBrains Mono', monospace;
-      --font-ui:   'Google Sans', sans-serif;
-      --font-display: 'Google Sans Display', 'Google Sans', sans-serif;
+      --font-ui:   'Syne', sans-serif;
 
       --sidebar-w: 260px;
     }
@@ -120,10 +119,8 @@
     }
     .new-thread-btn:hover { background: var(--accent-glow); border-color: var(--accent); transform: translateY(-1px); }
 
-    .sidebar-section { padding: 16px 12px 8px; flex: 1; overflow-y: auto; min-height: 0; }
+    .sidebar-section { padding: 16px 12px 8px; }
     .sidebar-label { font-size: 0.65rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-3); padding: 0 8px; margin-bottom: 6px; }
-
-    #threadList { display: flex; flex-direction: column; gap: 2px; }
 
     .thread-item {
       display: flex; align-items: center; gap: 10px; padding: 9px 10px;
@@ -186,7 +183,7 @@
 
     /* Welcome */
     .welcome { padding: 48px 0 32px; }
-    .welcome-headline { font-size: 2.4rem; font-weight: 700; letter-spacing: -0.03em; line-height: 1.1; margin-bottom: 10px; font-family: var(--font-display); }
+    .welcome-headline { font-size: 2.4rem; font-weight: 800; letter-spacing: -0.04em; line-height: 1.1; margin-bottom: 10px; }
     .welcome-headline .hl { color: var(--accent-bright); }
     .welcome-sub { font-size: 0.95rem; color: var(--text-2); margin-bottom: 36px; font-weight: 400; line-height: 1.6; max-width: 480px; }
 
@@ -359,6 +356,51 @@
     /* Scroll anchor */
     #scrollAnchor {}
 
+    /* ══ PRICING MODAL ══ */
+    .pricing-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.75); backdrop-filter: blur(8px); z-index: 2500; display: none; align-items: flex-start; justify-content: center; opacity: 0; transition: opacity 0.3s; overflow-y: auto; padding: 24px 16px 40px; }
+    .pricing-overlay.visible { opacity: 1; }
+    .pricing-box { background: var(--bg-surface); border: 1px solid var(--border); border-radius: var(--radius-xl); width: 100%; max-width: 860px; padding: 36px 28px 40px; position: relative; box-shadow: 0 32px 80px rgba(0,0,0,0.5); margin: auto; }
+    .pricing-close { position: absolute; top: 16px; right: 16px; background: none; border: none; cursor: pointer; color: var(--text-3); padding: 6px; border-radius: var(--radius-sm); transition: all 0.15s; }
+    .pricing-close:hover { color: var(--text-1); background: var(--bg-hover); }
+    .pricing-header { text-align: center; margin-bottom: 32px; }
+    .pricing-eyebrow { font-size: 0.7rem; font-family: var(--font-code); font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent-bright); margin-bottom: 10px; }
+    .pricing-title { font-size: 2rem; font-weight: 800; letter-spacing: -0.04em; margin-bottom: 10px; }
+    .pricing-sub { font-size: 0.9rem; color: var(--text-2); line-height: 1.6; }
+    .pricing-free-note { display: inline-flex; align-items: center; gap: 6px; margin-top: 10px; background: rgba(61,220,132,0.1); border: 1px solid rgba(61,220,132,0.25); border-radius: 99px; padding: 5px 14px; font-size: 0.75rem; font-family: var(--font-code); color: var(--green); }
+
+    .pricing-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 14px; }
+    .plan-card {
+      background: var(--bg-elevated); border: 1px solid var(--border);
+      border-radius: var(--radius-lg); padding: 22px 18px 20px;
+      display: flex; flex-direction: column; gap: 14px;
+      cursor: pointer; transition: all 0.22s; position: relative; overflow: hidden;
+    }
+    .plan-card:hover { border-color: var(--accent); transform: translateY(-3px); box-shadow: 0 12px 32px rgba(124,106,255,0.15); }
+    .plan-card.plan-popular { border-color: var(--accent); background: var(--bg-active); }
+    .plan-card.plan-enterprise { cursor: default; }
+    .plan-badge { position: absolute; top: 14px; right: 14px; font-size: 0.6rem; font-family: var(--font-code); font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; background: var(--accent); color: white; padding: 2px 8px; border-radius: 99px; }
+    .plan-name { font-size: 0.82rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; font-family: var(--font-code); color: var(--text-3); }
+    .plan-price-row { display: flex; align-items: flex-end; gap: 4px; }
+    .plan-price { font-size: 1.8rem; font-weight: 800; letter-spacing: -0.04em; line-height: 1; }
+    .plan-price-unit { font-size: 0.75rem; color: var(--text-3); font-family: var(--font-code); margin-bottom: 2px; }
+    .plan-yearly { font-size: 0.72rem; color: var(--green); font-family: var(--font-code); }
+    .plan-target { font-size: 0.78rem; color: var(--text-2); line-height: 1.4; }
+    .plan-credits { font-size: 0.72rem; font-family: var(--font-code); color: var(--accent-bright); background: var(--accent-dim); border: 1px solid var(--accent-glow); border-radius: 6px; padding: 4px 10px; display: inline-block; }
+    .plan-cta { margin-top: auto; width: 100%; padding: 10px 14px; border-radius: var(--radius-md); border: none; font-family: var(--font-ui); font-size: 0.85rem; font-weight: 700; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px; }
+    .cta-accent { background: var(--accent); color: white; box-shadow: 0 4px 14px var(--accent-glow); }
+    .cta-accent:hover { background: var(--accent-bright); transform: translateY(-1px); }
+    .cta-outline { background: transparent; color: var(--text-1); border: 1px solid var(--border); }
+    .cta-outline:hover { border-color: var(--accent); color: var(--accent-bright); background: var(--accent-dim); }
+    .cta-muted { background: var(--bg-hover); color: var(--text-2); border: 1px solid var(--border); cursor: default; }
+
+    .plan-current-badge { font-size: 0.65rem; font-family: var(--font-code); font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--green); border: 1px solid rgba(61,220,132,0.3); border-radius: 99px; padding: 2px 8px; display: inline-block; background: rgba(61,220,132,0.08); }
+
+    @media (max-width: 600px) {
+      .pricing-grid { grid-template-columns: 1fr; }
+      .pricing-box { padding: 28px 16px 32px; }
+      .pricing-title { font-size: 1.5rem; }
+    }
+
     /* Syntax highlight tints */
     .tok-kw    { color: var(--accent-bright); }
     .tok-str   { color: var(--green); }
@@ -366,58 +408,6 @@
     .tok-num   { color: var(--orange); }
     .tok-cmt   { color: var(--text-3); font-style: italic; }
     .tok-type  { color: var(--yellow); }
-
-    /* ══ PRICING MODAL ══ */
-    .pricing-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.75); backdrop-filter: blur(8px); z-index: 2500; display: none; align-items: flex-start; justify-content: center; opacity: 0; transition: opacity 0.3s; overflow-y: auto; padding: 24px 16px; }
-    .pricing-box { background: var(--bg-base); border: 1px solid var(--border); border-radius: var(--radius-xl); width: 100%; max-width: 860px; padding: 36px 32px; position: relative; transform: translateY(24px); transition: transform 0.4s cubic-bezier(.16,1,.3,1); margin: auto; }
-    .pricing-close { position: absolute; top: 16px; right: 16px; background: none; border: none; cursor: pointer; color: var(--text-3); padding: 7px; border-radius: var(--radius-sm); transition: all 0.15s; }
-    .pricing-close:hover { color: var(--text-1); background: var(--bg-hover); }
-    .pricing-header { text-align: center; margin-bottom: 36px; }
-    .pricing-header h2 { font-size: 1.9rem; font-weight: 800; letter-spacing: -0.04em; margin-bottom: 8px; }
-    .pricing-header h2 span { color: var(--accent-bright); }
-    .pricing-header p { font-size: 0.9rem; color: var(--text-2); }
-    .pricing-toggle { display: flex; align-items: center; justify-content: center; gap: 12px; margin-top: 16px; font-size: 0.82rem; color: var(--text-2); font-family: var(--font-code); }
-    .toggle-switch { width: 40px; height: 22px; background: var(--bg-active); border-radius: 99px; cursor: pointer; position: relative; transition: background 0.2s; flex-shrink: 0; border: 1px solid var(--border); }
-    .toggle-switch.on { background: var(--accent); border-color: var(--accent); }
-    .toggle-knob { position: absolute; top: 2px; left: 2px; width: 16px; height: 16px; border-radius: 50%; background: white; transition: transform 0.2s; }
-    .toggle-switch.on .toggle-knob { transform: translateX(18px); }
-    .save-badge { background: var(--green); color: #000; font-size: 0.6rem; font-weight: 700; padding: 2px 6px; border-radius: 99px; letter-spacing: 0.04em; }
-
-    .pricing-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); gap: 14px; margin-bottom: 20px; }
-    .plan-card { background: var(--bg-surface); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 22px 18px; display: flex; flex-direction: column; gap: 14px; transition: all 0.2s; position: relative; }
-    .plan-card:hover { border-color: var(--border-glow); box-shadow: 0 8px 28px rgba(0,0,0,0.2); transform: translateY(-2px); }
-    .plan-card.popular { border-color: var(--accent); background: var(--bg-elevated); box-shadow: 0 0 0 1px var(--accent), 0 8px 32px var(--accent-glow); }
-    .plan-badge { position: absolute; top: -11px; left: 50%; transform: translateX(-50%); background: var(--accent); color: white; font-size: 0.62rem; font-weight: 700; padding: 3px 10px; border-radius: 99px; letter-spacing: 0.06em; white-space: nowrap; }
-    .plan-name { font-size: 0.72rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-3); font-family: var(--font-code); }
-    .plan-price { display: flex; align-items: flex-end; gap: 4px; }
-    .plan-price .amount { font-size: 1.8rem; font-weight: 800; letter-spacing: -0.04em; line-height: 1; }
-    .plan-price .currency { font-size: 0.9rem; font-weight: 600; color: var(--text-2); margin-bottom: 3px; }
-    .plan-price .period { font-size: 0.75rem; color: var(--text-3); margin-bottom: 4px; font-family: var(--font-code); }
-    .plan-price-alt { font-size: 0.7rem; color: var(--text-3); font-family: var(--font-code); margin-top: -8px; }
-    .plan-credits { font-size: 0.75rem; color: var(--text-2); background: var(--bg-active); padding: 5px 10px; border-radius: var(--radius-sm); font-family: var(--font-code); }
-    .plan-credits strong { color: var(--accent-bright); }
-    .plan-target { font-size: 0.72rem; color: var(--text-3); font-family: var(--font-code); padding-top: 4px; border-top: 1px solid var(--border); }
-    .plan-cta { margin-top: auto; padding: 9px 14px; border-radius: var(--radius-md); border: none; font-family: var(--font-ui); font-size: 0.82rem; font-weight: 700; cursor: pointer; transition: all 0.2s; text-align: center; }
-    .plan-cta.cta-free { background: var(--bg-active); color: var(--text-2); cursor: default; }
-    .plan-cta.cta-pro { background: var(--accent); color: white; box-shadow: 0 4px 14px var(--accent-glow); }
-    .plan-cta.cta-pro:hover { background: var(--accent-bright); transform: translateY(-1px); }
-    .plan-cta.cta-outline { background: transparent; color: var(--accent-bright); border: 1px solid var(--accent-glow); }
-    .plan-cta.cta-outline:hover { background: var(--accent-dim); }
-    .plan-cta.cta-enterprise { background: var(--bg-active); color: var(--text-1); border: 1px solid var(--border); }
-    .plan-cta.cta-enterprise:hover { background: var(--bg-hover); }
-
-    .pricing-free-note { text-align: center; font-size: 0.75rem; color: var(--text-3); font-family: var(--font-code); padding: 12px; background: var(--bg-surface); border-radius: var(--radius-md); border: 1px solid var(--border); }
-    .pricing-free-note strong { color: var(--text-2); }
-
-    /* Token quota bar */
-    .quota-bar-wrap { margin: 0 12px 10px; padding: 10px 12px; background: var(--bg-surface); border: 1px solid var(--border); border-radius: var(--radius-md); }
-    .quota-bar-label { display: flex; justify-content: space-between; font-size: 0.65rem; font-family: var(--font-code); color: var(--text-3); margin-bottom: 6px; }
-    .quota-bar-track { height: 4px; background: var(--bg-active); border-radius: 99px; overflow: hidden; }
-    .quota-bar-fill { height: 100%; background: var(--accent); border-radius: 99px; transition: width 0.4s; }
-    .quota-bar-fill.warn { background: var(--yellow); }
-    .quota-bar-fill.danger { background: var(--red); }
-    .quota-upgrade-link { font-size: 0.65rem; font-family: var(--font-code); color: var(--accent-bright); cursor: pointer; margin-top: 5px; display: block; text-align: right; }
-    .quota-upgrade-link:hover { text-decoration: underline; }
 
     /* Scrollbar */
     ::-webkit-scrollbar { width: 5px; }
@@ -444,31 +434,7 @@
   <div class="splash-bar"><div class="splash-bar-fill"></div></div>
 </div>
 
-<!-- PRICING MODAL -->
-<div class="pricing-overlay" id="pricingOverlay">
-  <div class="pricing-box" id="pricingBox">
-    <button class="pricing-close" onclick="window.closePricing()"><span data-feather="x" style="width:18px;height:18px;"></span></button>
-    <div class="pricing-header">
-      <h2>Simple, <span>transparent</span> pricing</h2>
-      <p>Start free. Upgrade when you're ready. All plans include daily free tokens.</p>
-      <div class="pricing-toggle">
-        <span>Monthly</span>
-        <div class="toggle-switch" id="billingToggle" onclick="window.toggleBilling()">
-          <div class="toggle-knob"></div>
-        </div>
-        <span>Yearly <span class="save-badge">SAVE 20%</span></span>
-      </div>
-    </div>
-    <div class="pricing-grid" id="pricingGrid">
-      <!-- rendered by JS -->
-    </div>
-    <div class="pricing-free-note">
-      🎁 <strong>All users</strong> get <strong id="freeQuotaLabel">50 free tokens/day</strong> without choosing a plan. Resets at midnight.
-    </div>
-  </div>
-</div>
-
-
+<!-- DIALOG -->
 <div class="dialog-overlay" id="dialogOverlay">
   <div class="dialog-box" id="dialogBox">
     <div class="dialog-title" id="dialogTitle"></div>
@@ -480,8 +446,8 @@
 <!-- AUTH -->
 <div class="auth-overlay" id="authOverlay">
   <div class="auth-box" id="authBox">
-    <button class="auth-close" id="authClose"><span data-feather="x" style="width:18px;height:18px;"></span></button>
-    <div class="auth-icon"><span data-feather="code" style="width:24px;height:24px;"></span></div>
+    <button class="auth-close" id="authClose"><i data-feather="x" style="width:18px;height:18px;"></i></button>
+    <div class="auth-icon"><i data-feather="code" style="width:24px;height:24px;"></i></div>
     <div class="auth-title">Sign in to CodeForge</div>
     <div class="auth-sub">Unlock unlimited conversations, saved threads, and the full power of Grok Build.</div>
     <button class="google-btn" id="googleSignInBtn">
@@ -491,15 +457,100 @@
   </div>
 </div>
 
-<!-- SIDEBAR -->
+<!-- PRICING MODAL -->
+<div class="pricing-overlay" id="pricingOverlay">
+  <div class="pricing-box" id="pricingBox">
+    <button class="pricing-close" id="pricingClose"><i data-feather="x" style="width:18px;height:18px;"></i></button>
+    <div class="pricing-header">
+      <div class="pricing-eyebrow">CodeForge Plans</div>
+      <div class="pricing-title">Build without limits</div>
+      <div class="pricing-sub">Every account gets free daily credits. Upgrade anytime to unlock more power.</div>
+      <div class="pricing-free-note">
+        <i data-feather="gift" style="width:12px;height:12px;"></i>
+        Free users get <strong id="freeLimitLabel">10 messages/day</strong> — no card required
+      </div>
+    </div>
+    <div class="pricing-grid" id="pricingGrid">
+
+      <!-- FREE -->
+      <div class="plan-card" id="plan-free" onclick="window.selectPlan('free')">
+        <div class="plan-name">Free / Hobby</div>
+        <div class="plan-price-row">
+          <div class="plan-price">R0</div>
+          <div class="plan-price-unit">/mo</div>
+        </div>
+        <div class="plan-target">Students, casual users</div>
+        <div class="plan-credits">R80–R165 credits</div>
+        <button class="plan-cta cta-outline" onclick="window.selectPlan('free');event.stopPropagation()">Continue Free</button>
+      </div>
+
+      <!-- PRO -->
+      <div class="plan-card plan-popular" id="plan-pro" onclick="window.selectPlan('pro')">
+        <div class="plan-badge">Sweet Spot</div>
+        <div class="plan-name">Pro</div>
+        <div class="plan-price-row">
+          <div class="plan-price">R330</div>
+          <div class="plan-price-unit">/mo</div>
+        </div>
+        <div class="plan-yearly">R2,640/yr · save ~20%</div>
+        <div class="plan-target">Individual developers</div>
+        <div class="plan-credits">R330 credits included</div>
+        <button class="plan-cta cta-accent" onclick="window.selectPlan('pro');event.stopPropagation()">
+          <i data-feather="zap" style="width:14px;height:14px;"></i> Get Pro
+        </button>
+      </div>
+
+      <!-- PRO+ -->
+      <div class="plan-card" id="plan-proplus" onclick="window.selectPlan('proplus')">
+        <div class="plan-name">Pro+ / Heavy</div>
+        <div class="plan-price-row">
+          <div class="plan-price">R825</div>
+          <div class="plan-price-unit">/mo</div>
+        </div>
+        <div class="plan-yearly">R6,600–R7,920/yr</div>
+        <div class="plan-target">Power users &amp; full-time devs</div>
+        <div class="plan-credits">R990 credits included</div>
+        <button class="plan-cta cta-accent" onclick="window.selectPlan('proplus');event.stopPropagation()">Get Pro+</button>
+      </div>
+
+      <!-- TEAMS -->
+      <div class="plan-card" id="plan-teams" onclick="window.selectPlan('teams')">
+        <div class="plan-name">Teams</div>
+        <div class="plan-price-row">
+          <div class="plan-price">R580</div>
+          <div class="plan-price-unit">/user/mo</div>
+        </div>
+        <div class="plan-yearly">R4,640–R5,280/user/yr</div>
+        <div class="plan-target">Small teams &amp; startups</div>
+        <div class="plan-credits">R660/user credits</div>
+        <button class="plan-cta cta-accent" onclick="window.selectPlan('teams');event.stopPropagation()">Get Teams</button>
+      </div>
+
+      <!-- ENTERPRISE -->
+      <div class="plan-card plan-enterprise" id="plan-enterprise">
+        <div class="plan-name">Enterprise</div>
+        <div class="plan-price-row">
+          <div class="plan-price" style="font-size:1.3rem;">Custom</div>
+        </div>
+        <div class="plan-yearly" style="color:var(--text-3);">Custom annual</div>
+        <div class="plan-target">Companies &amp; larger teams. Pooled credits, SSO, SLAs.</div>
+        <div class="plan-credits">Pooled credits</div>
+        <button class="plan-cta cta-outline" onclick="window.contactSales()">Contact Sales</button>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+
 <aside class="sidebar" id="sidebar">
   <div class="sidebar-top">
     <div class="wordmark">
-      <div class="wordmark-icon"><span data-feather="zap" style="width:16px;height:16px;"></span></div>
+      <div class="wordmark-icon"><i data-feather="zap" style="width:16px;height:16px;"></i></div>
       <div class="wordmark-text">Code<span>Forge</span></div>
     </div>
     <button class="new-thread-btn" id="newThreadBtn">
-      <span data-feather="plus" style="width:16px;height:16px;"></span>
+      <i data-feather="plus" style="width:16px;height:16px;"></i>
       New Thread
     </button>
   </div>
@@ -508,24 +559,15 @@
     <div id="threadList"></div>
   </div>
   <div class="sidebar-footer">
-    <!-- Quota bar -->
-    <div class="quota-bar-wrap" id="quotaBarWrap">
-      <div class="quota-bar-label">
-        <span>Daily tokens</span>
-        <span id="quotaText">— / —</span>
-      </div>
-      <div class="quota-bar-track"><div class="quota-bar-fill" id="quotaBarFill" style="width:0%"></div></div>
-      <span class="quota-upgrade-link" onclick="window.openPricing()">Upgrade plan →</span>
-    </div>
     <div class="user-chip" id="userChip">
       <div class="user-avatar" id="userAvatar">
-        <span data-feather="user" style="width:16px;height:16px;"></span>
+        <i data-feather="user" style="width:16px;height:16px;"></i>
       </div>
       <div class="user-info">
         <div class="user-name" id="userName">Guest</div>
         <div class="user-status">grok-build · ready</div>
       </div>
-      <span data-feather="more-horizontal" style="width:16px;height:16px;color:var(--text-3);"></span>
+      <i data-feather="more-horizontal" style="width:16px;height:16px;color:var(--text-3);"></i>
     </div>
   </div>
 </aside>
@@ -535,22 +577,22 @@
 
   <!-- TOPBAR -->
   <div class="topbar">
-    <button class="menu-toggle" id="menuToggle"><span data-feather="menu" style="width:18px;height:18px;"></span></button>
+    <button class="menu-toggle" id="menuToggle"><i data-feather="menu" style="width:18px;height:18px;"></i></button>
     <div class="model-selector">
       <div class="model-dot"></div>
       <span id="modelLabel">grok build</span>
-      <span data-feather="chevron-down" style="width:14px;height:14px;opacity:0.5;"></span>
+      <i data-feather="chevron-down" style="width:14px;height:14px;opacity:0.5;"></i>
     </div>
     <div class="topbar-spacer"></div>
     <div class="topbar-actions">
-      <button class="topbar-btn" title="Pricing & Plans" onclick="window.openPricing()" style="font-family:var(--font-code);font-size:0.68rem;font-weight:700;padding:5px 10px;border-radius:var(--radius-sm);color:var(--accent-bright);border:1px solid var(--accent-glow);background:var(--accent-dim);gap:5px;">
-        <span data-feather="zap" style="width:12px;height:12px;"></span> Upgrade
-      </button>
       <button class="topbar-btn" id="themeToggle" title="Toggle theme">
-        <span data-feather="sun" id="themeIcon" style="width:18px;height:18px;"></span>
+        <i data-feather="sun" id="themeIcon" style="width:18px;height:18px;"></i>
       </button>
       <button class="topbar-btn" title="Keyboard shortcuts" onclick="window.showShortcuts()">
-        <span data-feather="command" style="width:18px;height:18px;"></span>
+        <i data-feather="command" style="width:18px;height:18px;"></i>
+      </button>
+      <button class="topbar-btn" id="pricingBtn" title="Upgrade plan" style="color:var(--accent-bright);">
+        <i data-feather="star" style="width:18px;height:18px;"></i>
       </button>
     </div>
   </div>
@@ -565,32 +607,32 @@
         <div class="welcome-sub">Powered by Grok Build Code. Ask anything: debug code, write functions, review PRs, explain algorithms, or architect entire systems.</div>
         <div class="starter-grid">
           <div class="starter-card" data-prompt="Review this code for bugs, performance issues, and best practice violations. Provide specific fixes.">
-            <div class="starter-icon ic-red"><span data-feather="alert-circle" style="width:18px;height:18px;"></span></div>
+            <div class="starter-icon ic-red"><i data-feather="alert-circle" style="width:18px;height:18px;"></i></div>
             <p>Debug & code review</p>
             <div class="starter-tag">inspect · fix</div>
           </div>
           <div class="starter-card" data-prompt="Write a well-structured, production-ready function with error handling, JSDoc comments, and edge case coverage for:">
-            <div class="starter-icon ic-green"><span data-feather="feather" style="width:18px;height:18px;"></span></div>
+            <div class="starter-icon ic-green"><i data-feather="feather" style="width:18px;height:18px;"></i></div>
             <p>Write production-ready code</p>
             <div class="starter-tag">generate · document</div>
           </div>
           <div class="starter-card" data-prompt="Explain how this works step by step, like I'm an intermediate developer. Include mental models and diagrams if needed:">
-            <div class="starter-icon ic-cyan"><span data-feather="book-open" style="width:18px;height:18px;"></span></div>
+            <div class="starter-icon ic-cyan"><i data-feather="book-open" style="width:18px;height:18px;"></i></div>
             <p>Explain a concept deeply</p>
             <div class="starter-tag">learn · understand</div>
           </div>
           <div class="starter-card" data-prompt="Design the architecture and data model for a full-stack app that does:">
-            <div class="starter-icon ic-purple"><span data-feather="layers" style="width:18px;height:18px;"></span></div>
+            <div class="starter-icon ic-purple"><i data-feather="layers" style="width:18px;height:18px;"></i></div>
             <p>Architect a full system</p>
             <div class="starter-tag">design · plan</div>
           </div>
           <div class="starter-card" data-prompt="Refactor this code to be more readable, maintainable, and follow SOLID principles:">
-            <div class="starter-icon ic-yellow"><span data-feather="refresh-cw" style="width:18px;height:18px;"></span></div>
+            <div class="starter-icon ic-yellow"><i data-feather="refresh-cw" style="width:18px;height:18px;"></i></div>
             <p>Refactor & improve</p>
             <div class="starter-tag">clean · optimize</div>
           </div>
           <div class="starter-card" data-prompt="Write comprehensive unit tests for the following code, covering happy paths, edge cases, and error scenarios:">
-            <div class="starter-icon ic-orange"><span data-feather="check-square" style="width:18px;height:18px;"></span></div>
+            <div class="starter-icon ic-orange"><i data-feather="check-square" style="width:18px;height:18px;"></i></div>
             <p>Generate test coverage</p>
             <div class="starter-tag">test · validate</div>
           </div>
@@ -608,7 +650,7 @@
     <div class="input-panel">
       <div class="input-context-bar">
         <div class="ctx-pill" id="langCtx">
-          <span data-feather="hash" style="width:11px;height:11px;"></span>
+          <i data-feather="hash" style="width:11px;height:11px;"></i>
           <span id="langLabel">general</span>
         </div>
         <div class="ctx-spacer"></div>
@@ -616,79 +658,21 @@
       </div>
       <div class="input-box" id="inputBox">
         <div class="input-left">
-          <button class="input-tool-btn" title="Attach file" id="attachBtn"><span data-feather="paperclip" style="width:17px;height:17px;"></span></button>
+          <button class="input-tool-btn" title="Attach file" id="attachBtn"><i data-feather="paperclip" style="width:17px;height:17px;"></i></button>
         </div>
         <textarea class="chat-textarea" id="chatTextarea" placeholder="Ask anything about your code..." rows="1"></textarea>
         <button class="send-btn" id="sendBtn" disabled>
-          <span data-feather="arrow-up" style="width:16px;height:16px;"></span>
+          <i data-feather="arrow-up" style="width:16px;height:16px;"></i>
         </button>
       </div>
     </div>
   </div>
 </div>
 
-<script>
-// ── SVG ICON SYSTEM ──
-const ICONS = {
-  zap: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>`,
-  plus: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>`,
-  'message-square': `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>`,
-  'trash-2': `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>`,
-  user: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>`,
-  'more-horizontal': `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="5" cy="12" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/></svg>`,
-  menu: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>`,
-  'chevron-down': `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>`,
-  sun: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>`,
-  moon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>`,
-  command: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 3a3 3 0 0 0-3 3v12a3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3H6a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3V6a3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3h12a3 3 0 0 0 3-3 3 3 0 0 0-3-3z"/></svg>`,
-  'arrow-up': `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg>`,
-  paperclip: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>`,
-  hash: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="9" x2="20" y2="9"/><line x1="4" y1="15" x2="20" y2="15"/><line x1="10" y1="3" x2="8" y2="21"/><line x1="16" y1="3" x2="14" y2="21"/></svg>`,
-  lock: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>`,
-  code: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>`,
-  x: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>`,
-  copy: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>`,
-  'refresh-cw': `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>`,
-  'corner-down-left': `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 10 4 15 9 20"/><path d="M20 4v7a4 4 0 0 1-4 4H4"/></svg>`,
-  'alert-circle': `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>`,
-  feather: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.24 12.24a6 6 0 0 0-8.49-8.49L5 10.5V19h8.5l6.74-6.76z"/><line x1="16" y1="8" x2="2" y2="22"/><line x1="17.5" y1="15" x2="9" y2="15"/></svg>`,
-  'book-open': `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>`,
-  layers: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>`,
-  'check-square': `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>`,
-  'zap-off': `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="12.41 6.75 13 2 10.57 4.92"/><polyline points="18.57 12.91 21 10 15.66 10"/><polyline points="8 8 3 14 12 14 11 22 16.61 15.53"/><line x1="1" y1="1" x2="23" y2="23"/></svg>`,
-};
-
-function icon(name, size = 16) {
-  const svg = ICONS[name];
-  if (!svg) return '';
-  return svg.replace('<svg ', `<svg width="${size}" height="${size}" `);
-}
-
-// Replace all data-feather elements with inline SVGs
-function featherReplace() {
-  document.querySelectorAll('[data-feather]').forEach(el => {
-    const name = el.getAttribute('data-feather');
-    const styleAttr = el.getAttribute('style') || '';
-    const sizeMatch = styleAttr.match(/width:\s*(\d+)px/);
-    const size = sizeMatch ? parseInt(sizeMatch[1]) : 16;
-    const svgStr = ICONS[name];
-    if (!svgStr) return;
-    const wrapper = document.createElement('span');
-    wrapper.style.display = 'inline-flex';
-    wrapper.style.alignItems = 'center';
-    wrapper.innerHTML = svgStr.replace('<svg ', `<svg width="${size}" height="${size}" style="${styleAttr}" `);
-    el.replaceWith(wrapper);
-  });
-}
-
-// Expose as feather.replace() for compatibility
-window.feather = { replace: featherReplace };
-</script>
-
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
   import { getAuth, onAuthStateChanged, GoogleAuthProvider, signInWithPopup, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-  import { getDatabase, ref, get, push, set, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+  import { getDatabase, ref, get, push, set, serverTimestamp, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
   import { getRemoteConfig, fetchAndActivate, getValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-remote-config.js";
 
   // ── SPLASH ──
@@ -703,10 +687,8 @@ window.feather = { replace: featherReplace };
   const themeIcon = document.getElementById('themeIcon');
   function updateThemeIcon() {
     const dark = document.documentElement.getAttribute('data-theme') === 'dark';
-    const iconName = dark ? 'sun' : 'moon';
-    themeIcon.innerHTML = ICONS[iconName]
-      ? `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${ICONS[iconName].replace(/<svg[^>]*>/, '').replace('</svg>', '')}</svg>`
-      : '';
+    themeIcon.setAttribute('data-feather', dark ? 'sun' : 'moon');
+    feather.replace();
   }
   updateThemeIcon();
   themeToggle.addEventListener('click', () => {
@@ -745,6 +727,11 @@ window.feather = { replace: featherReplace };
   let guestCount = 0;
   let chatHistory = [];
   const API_BASE = "https://api.x.ai/v1";
+
+  // ── SUBSCRIPTION STATE ──
+  let userPlan = 'free'; // free | pro | proplus | teams | enterprise
+  const PLAN_DAILY_LIMITS = { guest: 5, free: 10, pro: 999, proplus: 9999, teams: 999, enterprise: 9999 };
+  let todayUsage = 0;
 
   const SYSTEM_PROMPT = `You are CodeForge, an expert AI coding assistant with deep knowledge across all programming languages, frameworks, algorithms, system design, and software engineering best practices.
 
@@ -812,6 +799,125 @@ Keep responses technically precise, modern, and directly actionable.`;
     window.showDialog('Keyboard Shortcuts', '/ — focus input · Cmd+Enter — send · Esc — close dialogs · Cmd+K — new thread', [{ text: 'Got it', cls: 'btn-primary' }]);
   };
 
+  // ── PRICING MODAL ──
+  const pricingOverlay = document.getElementById('pricingOverlay');
+  const pricingBox = document.getElementById('pricingBox');
+
+  window.openPricing = () => {
+    updatePricingUI();
+    pricingOverlay.style.display = 'flex';
+    setTimeout(() => pricingOverlay.classList.add('visible'), 10);
+    feather.replace();
+  };
+  window.closePricing = () => {
+    pricingOverlay.classList.remove('visible');
+    setTimeout(() => { pricingOverlay.style.display = 'none'; }, 300);
+  };
+  document.getElementById('pricingClose').onclick = window.closePricing;
+  document.getElementById('pricingBtn').onclick = window.openPricing;
+  pricingOverlay.addEventListener('click', e => { if (e.target === pricingOverlay) window.closePricing(); });
+
+  function updatePricingUI() {
+    const planIds = ['free','pro','proplus','teams','enterprise'];
+    planIds.forEach(id => {
+      const card = document.getElementById(`plan-${id}`);
+      if (!card) return;
+      const existingBadge = card.querySelector('.plan-current-badge');
+      if (existingBadge) existingBadge.remove();
+      const cta = card.querySelector('.plan-cta');
+      if (id === userPlan && id !== 'free') {
+        const badge = document.createElement('div');
+        badge.className = 'plan-current-badge';
+        badge.textContent = 'Current Plan';
+        card.querySelector('.plan-name').after(badge);
+        if (cta && id !== 'enterprise') { cta.textContent = 'Current Plan'; cta.className = 'plan-cta cta-muted'; cta.onclick = null; }
+      }
+    });
+    // mark free as current if on free
+    if (userPlan === 'free') {
+      const freeCard = document.getElementById('plan-free');
+      const ctaFree = freeCard?.querySelector('.plan-cta');
+      if (ctaFree) { ctaFree.textContent = '✓ Current Plan'; ctaFree.className = 'plan-cta cta-muted'; }
+    }
+    const limit = currentUser ? PLAN_DAILY_LIMITS[userPlan] || 10 : PLAN_DAILY_LIMITS.guest;
+    const label = document.getElementById('freeLimitLabel');
+    if (label) label.textContent = limit >= 999 ? 'Unlimited messages/day' : `${PLAN_DAILY_LIMITS.free} messages/day`;
+  }
+
+  window.selectPlan = (planId) => {
+    if (planId === 'free') { window.closePricing(); return; }
+    if (!currentUser) { window.closePricing(); window.openAuth(); return; }
+    // redirect to payment page with plan info
+    const params = new URLSearchParams({ plan: planId, uid: currentUser.uid, email: currentUser.email || '' });
+    window.location.href = `payment.html?${params.toString()}`;
+  };
+
+  window.contactSales = () => {
+    window.showDialog('Enterprise Sales', 'Contact us at sales@codeforge.dev to discuss custom enterprise pricing, pooled credits, SSO, and SLAs.', [{ text: 'Got it', cls: 'btn-primary' }]);
+  };
+
+  // ── SUBSCRIPTION LOADER ──
+  async function loadSubscription(uid) {
+    const snap = await get(ref(db, `cf_subscriptions/${uid}`));
+    if (snap.exists()) {
+      const sub = snap.val();
+      userPlan = sub.plan || 'free';
+    } else {
+      userPlan = 'free';
+      await set(ref(db, `cf_subscriptions/${uid}`), { plan: 'free', createdAt: serverTimestamp() });
+    }
+    updatePlanStatus();
+  }
+
+  // ── DAILY USAGE TRACKER ──
+  async function loadTodayUsage(uid) {
+    const today = new Date().toISOString().slice(0,10);
+    const snap = await get(ref(db, `cf_usage/${uid}/${today}`));
+    todayUsage = snap.exists() ? (snap.val().count || 0) : 0;
+  }
+
+  async function incrementUsage(uid) {
+    const today = new Date().toISOString().slice(0,10);
+    todayUsage++;
+    await set(ref(db, `cf_usage/${uid}/${today}`), { count: todayUsage, updatedAt: serverTimestamp() });
+  }
+
+  function getDailyLimit() {
+    if (!currentUser) return PLAN_DAILY_LIMITS.guest;
+    return PLAN_DAILY_LIMITS[userPlan] || PLAN_DAILY_LIMITS.free;
+  }
+
+  function isAtDailyLimit() {
+    return todayUsage >= getDailyLimit();
+  }
+
+  function updatePlanStatus() {
+    const statusEl = document.querySelector('.user-status');
+    if (statusEl) {
+      const planLabel = { free: 'free plan', pro: 'pro plan', proplus: 'pro+ plan', teams: 'teams plan', enterprise: 'enterprise' };
+      statusEl.textContent = `grok-build · ${planLabel[userPlan] || 'free plan'}`;
+    }
+  }
+
+  function showUpgradeGate() {
+    if (document.getElementById('upgrade-gate')) return;
+    const limit = getDailyLimit();
+    const div = document.createElement('div');
+    div.id = 'upgrade-gate';
+    div.innerHTML = `<div class="auth-gate" style="border-color:rgba(255,210,96,0.25);background:rgba(255,210,96,0.06);">
+      <div class="gate-icon" style="background:rgba(255,210,96,0.1);border-color:rgba(255,210,96,0.3);">
+        <i data-feather="zap-off" style="width:20px;height:20px;color:var(--yellow);"></i>
+      </div>
+      <div class="gate-title">Daily limit reached</div>
+      <div class="gate-sub">You've used all ${limit} free messages for today. Upgrade for more daily credits, or come back tomorrow.</div>
+      <button class="gate-btn" style="background:var(--accent);" onclick="window.openPricing()">
+        <i data-feather="star" style="width:14px;height:14px;"></i> View Plans
+      </button>
+    </div>`;
+    messagesContainer.appendChild(div);
+    feather.replace(); scrollToBottom();
+  }
+
   // ── AUTH ──
   const authOverlay = document.getElementById('authOverlay');
   const authBox = document.getElementById('authBox');
@@ -837,7 +943,7 @@ Keep responses technically precise, modern, and directly actionable.`;
     else window.openAuth();
   });
 
-  onAuthStateChanged(auth, user => {
+  onAuthStateChanged(auth, async user => {
     currentUser = user;
     const avatarEl = document.getElementById('userAvatar');
     const nameEl = document.getElementById('userName');
@@ -847,14 +953,15 @@ Keep responses technically precise, modern, and directly actionable.`;
       else avatarEl.innerHTML = `<span>${(user.displayName||'U')[0].toUpperCase()}</span>`;
       guestCount = 0;
       const gateEl = document.getElementById('auth-gate'); if (gateEl) gateEl.remove();
+      const upgradeGate = document.getElementById('upgrade-gate'); if (upgradeGate) upgradeGate.remove();
+      await loadSubscription(user.uid);
+      await loadTodayUsage(user.uid);
       loadThreads(user.uid);
-      loadUserPlan(user.uid);
     } else {
       nameEl.textContent = 'Guest';
-      avatarEl.innerHTML = icon('user', 16);
+      avatarEl.innerHTML = `<i data-feather="user" style="width:16px;height:16px;"></i>`;
       threadList.innerHTML = ''; startNewThread();
-      loadGuestQuota();
-      
+      feather.replace();
     }
   });
 
@@ -868,16 +975,17 @@ Keep responses technically precise, modern, and directly actionable.`;
       threads.sort((a, b) => (b.updatedAt || 0) - (a.updatedAt || 0));
       threads.forEach(t => addThreadToSidebar(t));
     }
-    
+    feather.replace();
   }
 
   function addThreadToSidebar(t) {
     const div = document.createElement('div');
     div.className = `thread-item${t.id === currentThreadId ? ' active' : ''}`;
     div.id = `thread-${t.id}`;
-    div.innerHTML = `<span class="t-icon" style="display:inline-flex;align-items:center;">${icon('message-square',14)}</span><span class="thread-text">${escapeHtml(t.title || 'New Thread')}</span><div class="thread-actions"><button class="t-action-btn" title="Delete" onclick="window.deleteThread('${t.id}',event)">${icon('trash-2',12)}</button></div>`;
+    div.innerHTML = `<i data-feather="message-square" class="t-icon" style="width:14px;height:14px;"></i><span class="thread-text">${escapeHtml(t.title || 'New Thread')}</span><div class="thread-actions"><button class="t-action-btn" title="Delete" onclick="window.deleteThread('${t.id}',event)"><i data-feather="trash-2" style="width:12px;height:12px;"></i></button></div>`;
     div.onclick = () => loadThread(t.id, currentUser.uid);
     threadList.appendChild(div);
+    feather.replace();
   }
 
   window.deleteThread = async (tid, e) => {
@@ -961,7 +1069,7 @@ Keep responses technically precise, modern, and directly actionable.`;
       const l = lang || 'code';
       const id = 'cb_' + Math.random().toString(36).substr(2,8);
       codeBlocks.push({ ph, html:
-        `<div class="code-block"><div class="code-block-header"><span class="code-lang-badge">${l}</span><div class="code-actions"><button class="code-action-btn" onclick="window.copyBlock('${id}')">${icon('copy',12)} copy</button><button class="code-action-btn" onclick="window.insertToInput('${id}')">${icon('corner-down-left',12)} use</button></div></div><pre id="${id}"><code>${code.trim()}</code></pre></div>` });
+        `<div class="code-block"><div class="code-block-header"><span class="code-lang-badge">${l}</span><div class="code-actions"><button class="code-action-btn" onclick="window.copyBlock('${id}')"><i data-feather="copy" style="width:12px;height:12px;"></i> copy</button><button class="code-action-btn" onclick="window.insertToInput('${id}')"><i data-feather="corner-down-left" style="width:12px;height:12px;"></i> use</button></div></div><pre id="${id}"><code>${code.trim()}</code></pre></div>` });
       return ph;
     });
     // headings
@@ -1003,234 +1111,7 @@ Keep responses technically precise, modern, and directly actionable.`;
     if (pre) { chatTextarea.value = pre.innerText; chatTextarea.dispatchEvent(new Event('input')); chatTextarea.focus(); }
   };
 
-
-  // ══════════════════════════════════════
-  // PRICING & QUOTA SYSTEM
-  // ══════════════════════════════════════
-
-  const PLANS = [
-    {
-      id: 'free',
-      name: 'Free / Hobby',
-      monthlyPrice: 0,
-      yearlyPrice: 0,
-      credits: 'R80 – R165 free credits',
-      creditsShort: 'Free credits',
-      target: 'Students, casual users',
-      cta: 'Current Plan',
-      ctaCls: 'cta-free',
-      dailyTokens: 50,
-    },
-    {
-      id: 'pro',
-      name: 'Pro',
-      monthlyPrice: 330,
-      yearlyPrice: 220, // per month billed yearly (R2,640/yr)
-      yearlyTotal: 2640,
-      credits: 'R330 credits / mo',
-      creditsShort: 'R330 credits',
-      target: 'Individual developers',
-      cta: 'Get Pro',
-      ctaCls: 'cta-pro',
-      popular: true,
-      dailyTokens: 1000,
-    },
-    {
-      id: 'pro_plus',
-      name: 'Pro+',
-      monthlyPrice: 990,
-      yearlyPrice: 660, // ~R7,920/yr
-      yearlyTotal: 7920,
-      credits: 'R990 credits / mo',
-      creditsShort: 'R990 credits',
-      target: 'Power users & full-time devs',
-      cta: 'Get Pro+',
-      ctaCls: 'cta-outline',
-      dailyTokens: 5000,
-    },
-    {
-      id: 'teams',
-      name: 'Teams',
-      monthlyPrice: 660,
-      yearlyPrice: 520, // ~R5,280/yr/user
-      yearlyTotal: 5280,
-      credits: 'R660 / user / mo',
-      creditsShort: 'R660/user',
-      target: 'Small teams & startups',
-      cta: 'Get Teams',
-      ctaCls: 'cta-outline',
-      perUser: true,
-      dailyTokens: 2000,
-    },
-    {
-      id: 'enterprise',
-      name: 'Enterprise',
-      monthlyPrice: null,
-      yearlyPrice: null,
-      credits: 'Pooled credits',
-      creditsShort: 'Pooled',
-      target: 'Companies & larger teams',
-      cta: 'Contact Us',
-      ctaCls: 'cta-enterprise',
-      dailyTokens: Infinity,
-    },
-  ];
-
-  let billingYearly = false;
-  let userPlan = 'free';
-  let quotaUsed = 0;
-  let quotaMax = 50;
-
-  // ── Load user plan from Firebase ──
-  async function loadUserPlan(uid) {
-    try {
-      const snap = await get(ref(db, `cf_plans/${uid}`));
-      if (snap.exists()) {
-        const d = snap.val();
-        userPlan = d.planId || 'free';
-        const today = new Date().toISOString().slice(0,10);
-        if (d.quotaDate === today) {
-          quotaUsed = d.quotaUsed || 0;
-        } else {
-          quotaUsed = 0;
-          await set(ref(db, `cf_plans/${uid}`), { ...d, quotaDate: today, quotaUsed: 0 });
-        }
-      } else {
-        userPlan = 'free';
-        quotaUsed = 0;
-        await set(ref(db, `cf_plans/${uid}`), { planId: 'free', quotaDate: new Date().toISOString().slice(0,10), quotaUsed: 0 });
-      }
-    } catch(e) { console.error('Plan load:', e); }
-    updateQuotaDisplay();
-  }
-
-  // Guest quota uses localStorage
-  function loadGuestQuota() {
-    userPlan = 'free';
-    const today = new Date().toISOString().slice(0,10);
-    const stored = JSON.parse(localStorage.getItem('cf_guest_quota') || '{}');
-    if (stored.date === today) {
-      quotaUsed = stored.used || 0;
-    } else {
-      quotaUsed = 0;
-      localStorage.setItem('cf_guest_quota', JSON.stringify({ date: today, used: 0 }));
-    }
-    updateQuotaDisplay();
-  }
-
-  async function incrementQuota(tokens = 1) {
-    quotaUsed += tokens;
-    if (currentUser) {
-      try {
-        const today = new Date().toISOString().slice(0,10);
-        await set(ref(db, `cf_plans/${currentUser.uid}/quotaUsed`), quotaUsed);
-        await set(ref(db, `cf_plans/${currentUser.uid}/quotaDate`), today);
-      } catch(e) {}
-    } else {
-      const today = new Date().toISOString().slice(0,10);
-      localStorage.setItem('cf_guest_quota', JSON.stringify({ date: today, used: quotaUsed }));
-    }
-    updateQuotaDisplay();
-  }
-
-  function getPlanDailyTokens() {
-    const plan = PLANS.find(p => p.id === userPlan) || PLANS[0];
-    return plan.dailyTokens;
-  }
-
-  function updateQuotaDisplay() {
-    quotaMax = getPlanDailyTokens();
-    const wrap = document.getElementById('quotaBarWrap');
-    const fill = document.getElementById('quotaBarFill');
-    const text = document.getElementById('quotaText');
-    if (!wrap || !fill || !text) return;
-    if (quotaMax === Infinity) {
-      text.textContent = '∞ unlimited';
-      fill.style.width = '100%';
-      fill.className = 'quota-bar-fill';
-      return;
-    }
-    const pct = Math.min((quotaUsed / quotaMax) * 100, 100);
-    fill.style.width = pct + '%';
-    fill.className = 'quota-bar-fill' + (pct >= 90 ? ' danger' : pct >= 65 ? ' warn' : '');
-    text.textContent = `${quotaUsed} / ${quotaMax}`;
-  }
-
-  function isQuotaExceeded() {
-    if (getPlanDailyTokens() === Infinity) return false;
-    return quotaUsed >= getPlanDailyTokens();
-  }
-
-  // ── Pricing modal ──
-  window.toggleBilling = () => {
-    billingYearly = !billingYearly;
-    document.getElementById('billingToggle').classList.toggle('on', billingYearly);
-    renderPricingCards();
-  };
-
-  function renderPricingCards() {
-    const grid = document.getElementById('pricingGrid');
-    if (!grid) return;
-    grid.innerHTML = PLANS.map(plan => {
-      const isCurrent = plan.id === userPlan;
-      let priceHTML = '';
-      if (plan.monthlyPrice === null) {
-        priceHTML = `<div class="plan-price"><span class="amount" style="font-size:1.3rem;line-height:1.4;color:var(--text-2)">Custom</span></div><div class="plan-price-alt">Contact for quote</div>`;
-      } else if (plan.monthlyPrice === 0) {
-        priceHTML = `<div class="plan-price"><span class="currency">R</span><span class="amount">0</span><span class="period">/mo</span></div><div class="plan-price-alt">Always free</div>`;
-      } else {
-        const shown = billingYearly ? plan.yearlyPrice : plan.monthlyPrice;
-        const altText = billingYearly ? `R${plan.yearlyTotal?.toLocaleString()} / year${plan.perUser ? ' / user' : ''}` : `R${(plan.yearlyPrice || 0).toLocaleString()}/mo billed yearly`;
-        priceHTML = `<div class="plan-price"><span class="currency">R</span><span class="amount">${shown}</span><span class="period">/mo${plan.perUser ? ' / user' : ''}</span></div><div class="plan-price-alt">${altText}</div>`;
-      }
-      const ctaCls = isCurrent ? 'cta-free' : plan.ctaCls;
-      const ctaText = isCurrent ? '✓ Current Plan' : plan.cta;
-      const ctaAction = isCurrent ? '' : plan.id === 'enterprise' ? `onclick="window.closePricing();window.location.href='payment.html?plan=enterprise'"` : `onclick="window.goToPayment('${plan.id}',${billingYearly})"`;
-      return `
-        <div class="plan-card${plan.popular ? ' popular' : ''}">
-          ${plan.popular ? `<div class="plan-badge">⚡ SWEET SPOT</div>` : ''}
-          <div class="plan-name">${plan.name}</div>
-          ${priceHTML}
-          <div class="plan-credits"><strong>${plan.creditsShort}</strong> included</div>
-          <div class="plan-target">${plan.target}</div>
-          <button class="plan-cta ${ctaCls}" ${ctaAction} ${isCurrent ? 'disabled' : ''}>${ctaText}</button>
-        </div>`;
-    }).join('');
-    document.getElementById('freeQuotaLabel').textContent = `${PLANS[0].dailyTokens} free tokens/day`;
-    
-  }
-
-  window.goToPayment = (planId, yearly) => {
-    window.closePricing();
-    const billing = yearly ? 'yearly' : 'monthly';
-    window.location.href = `payment.html?plan=${planId}&billing=${billing}`;
-  };
-
-  window.openPricing = () => {
-    renderPricingCards();
-    const overlay = document.getElementById('pricingOverlay');
-    const box = document.getElementById('pricingBox');
-    overlay.style.display = 'flex';
-    setTimeout(() => { overlay.style.opacity = '1'; box.style.transform = 'translateY(0)'; }, 10);
-    
-  };
-  window.closePricing = () => {
-    const overlay = document.getElementById('pricingOverlay');
-    const box = document.getElementById('pricingBox');
-    overlay.style.opacity = '0'; box.style.transform = 'translateY(24px)';
-    setTimeout(() => { overlay.style.display = 'none'; }, 300);
-  };
-  document.getElementById('pricingOverlay').addEventListener('click', e => {
-    if (e.target === document.getElementById('pricingOverlay')) window.closePricing();
-  });
-
-  // ── Patch auth state change to load plan ──
-  // (extends the existing onAuthStateChanged block — handled below via override)
-
-  // ══════════════════════════════════════
-  // END PRICING SYSTEM
-  // ══════════════════════════════════════
-
+  // ── MESSAGE RENDERING ──
   function appendUserMsg(text, animate = true) {
     welcomeScreen.style.display = 'none';
     const block = document.createElement('div');
@@ -1254,12 +1135,12 @@ Keep responses technically precise, modern, and directly actionable.`;
       </div>
       <div class="msg-ai-content" id="${mid}"></div>
       <div class="msg-actions">
-        <button class="msg-action" onclick="window.copyAIMsg('${mid}')">${icon('copy',12)} copy</button>
-        <button class="msg-action" onclick="window.retryLast()">${icon('refresh-cw',12)} retry</button>
+        <button class="msg-action" onclick="window.copyAIMsg('${mid}')"><i data-feather="copy" style="width:12px;height:12px;"></i> copy</button>
+        <button class="msg-action" onclick="window.retryLast()"><i data-feather="refresh-cw" style="width:12px;height:12px;"></i> retry</button>
       </div>`;
     messagesContainer.appendChild(block);
     if (animate) requestAnimationFrame(() => { block.style.transition = 'opacity 0.2s'; block.style.opacity = '1'; });
-    if (content) { document.getElementById(mid).innerHTML = parseMarkdown(content);  }
+    if (content) { document.getElementById(mid).innerHTML = parseMarkdown(content); feather.replace(); }
     scrollToBottom();
     return { block, mid };
   }
@@ -1306,22 +1187,20 @@ Keep responses technically precise, modern, and directly actionable.`;
     if (document.getElementById('auth-gate')) return;
     const div = document.createElement('div');
     div.id = 'auth-gate';
-    div.innerHTML = `<div class="auth-gate"><div class="gate-icon">${icon('lock',20)}</div><div class="gate-title">Free limit reached</div><div class="gate-sub">Sign in to keep building. Unlimited threads, full history, and faster responses.</div><button class="gate-btn" onclick="window.openAuth()"><img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" style="width:18px;height:18px;" alt=""> Sign in with Google</button></div>`;
+    div.innerHTML = `<div class="auth-gate"><div class="gate-icon"><i data-feather="lock" style="width:20px;height:20px;"></i></div><div class="gate-title">Free limit reached</div><div class="gate-sub">Sign in to keep building. Unlimited threads, full history, and faster responses.</div><button class="gate-btn" onclick="window.openAuth()"><img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" style="width:18px;height:18px;" alt=""> Sign in with Google</button></div>`;
     messagesContainer.appendChild(div);
-     scrollToBottom();
+    feather.replace(); scrollToBottom();
   }
 
   // ── SEND ──
   async function handleSend() {
     const prompt = chatTextarea.value.trim();
     if (!prompt || !XAI_KEY) return;
-    if (!currentUser && guestCount >= 4) { showAuthGate(); return; }
 
-    // Quota check
-    if (isQuotaExceeded()) {
-      showQuotaGate();
-      return;
-    }
+    // Guest gate (auth required after 5 messages)
+    if (!currentUser && guestCount >= PLAN_DAILY_LIMITS.guest) { showAuthGate(); return; }
+    // Daily limit gate (for signed-in users)
+    if (currentUser && isAtDailyLimit()) { showUpgradeGate(); return; }
 
     appendUserMsg(prompt);
     chatTextarea.value = ''; chatTextarea.style.height = 'auto'; sendBtn.disabled = true;
@@ -1348,13 +1227,24 @@ Keep responses technically precise, modern, and directly actionable.`;
       chatHistory.push({ role: 'assistant', content: aiText });
 
       const { mid } = appendAIMsg(aiText);
-      
+      feather.replace();
       saveThread();
 
-      // Increment quota (estimate 1 token unit per message)
-      await incrementQuota(1);
-
-      if (!currentUser) { guestCount++; if (guestCount >= 4) showAuthGate(); }
+      if (!currentUser) {
+        guestCount++;
+        if (guestCount >= PLAN_DAILY_LIMITS.guest) showAuthGate();
+      } else {
+        await incrementUsage(currentUser.uid);
+        // Show soft warning when approaching limit
+        const limit = getDailyLimit();
+        if (limit < 999 && todayUsage >= limit - 2 && todayUsage < limit) {
+          const remaining = limit - todayUsage;
+          window.showDialog('Almost at daily limit', `You have ${remaining} message${remaining === 1 ? '' : 's'} left today on your ${userPlan} plan. Upgrade to keep building.`, [
+            { text: 'Maybe Later', cls: 'btn-secondary' },
+            { text: 'View Plans', cls: 'btn-primary', fn: () => window.openPricing() }
+          ]);
+        }
+      }
     } catch (err) {
       clearThinking();
       document.getElementById('thinking-block')?.remove();
@@ -1364,23 +1254,6 @@ Keep responses technically precise, modern, and directly actionable.`;
       messagesContainer.appendChild(errBlock);
       scrollToBottom();
     }
-  }
-
-  function showQuotaGate() {
-    if (document.getElementById('quota-gate')) return;
-    const plan = PLANS.find(p => p.id === userPlan) || PLANS[0];
-    const div = document.createElement('div');
-    div.id = 'quota-gate';
-    div.innerHTML = `<div class="auth-gate" style="border-color:rgba(255,210,96,0.25);background:rgba(255,210,96,0.05);">
-      <div class="gate-icon" style="background:rgba(255,210,96,0.1);border-color:rgba(255,210,96,0.3);color:var(--yellow);">${icon('zap-off',20)}</div>
-      <div class="gate-title">Daily limit reached</div>
-      <div class="gate-sub">You've used all <strong>${plan.dailyTokens}</strong> free tokens for today on the <strong>${plan.name}</strong> plan. Resets at midnight, or upgrade for more.</div>
-      <button class="gate-btn" onclick="document.getElementById('quota-gate').remove();window.openPricing();" style="background:var(--yellow);color:#000;box-shadow:0 4px 14px rgba(255,210,96,0.3);">
-        ${icon('zap',16)} View Plans
-      </button>
-    </div>`;
-    messagesContainer.appendChild(div);
-     scrollToBottom();
   }
   window.handleSend = handleSend;
 
