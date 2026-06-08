@@ -9,8 +9,8 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Syne:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-  <script src="https://unpkg.com/feather-icons"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@400;500;600;700&family=Google+Sans+Display:wght@400;500;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <!-- inline SVG icons via JS helper -->
 
   <style>
     /* ══════════════════════════════════════
@@ -47,7 +47,8 @@
       --radius-xl: 22px;
 
       --font-code: 'JetBrains Mono', monospace;
-      --font-ui:   'Syne', sans-serif;
+      --font-ui:   'Google Sans', sans-serif;
+      --font-display: 'Google Sans Display', 'Google Sans', sans-serif;
 
       --sidebar-w: 260px;
     }
@@ -119,8 +120,10 @@
     }
     .new-thread-btn:hover { background: var(--accent-glow); border-color: var(--accent); transform: translateY(-1px); }
 
-    .sidebar-section { padding: 16px 12px 8px; }
+    .sidebar-section { padding: 16px 12px 8px; flex: 1; overflow-y: auto; min-height: 0; }
     .sidebar-label { font-size: 0.65rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-3); padding: 0 8px; margin-bottom: 6px; }
+
+    #threadList { display: flex; flex-direction: column; gap: 2px; }
 
     .thread-item {
       display: flex; align-items: center; gap: 10px; padding: 9px 10px;
@@ -183,7 +186,7 @@
 
     /* Welcome */
     .welcome { padding: 48px 0 32px; }
-    .welcome-headline { font-size: 2.4rem; font-weight: 800; letter-spacing: -0.04em; line-height: 1.1; margin-bottom: 10px; }
+    .welcome-headline { font-size: 2.4rem; font-weight: 700; letter-spacing: -0.03em; line-height: 1.1; margin-bottom: 10px; font-family: var(--font-display); }
     .welcome-headline .hl { color: var(--accent-bright); }
     .welcome-sub { font-size: 0.95rem; color: var(--text-2); margin-bottom: 36px; font-weight: 400; line-height: 1.6; max-width: 480px; }
 
@@ -444,7 +447,7 @@
 <!-- PRICING MODAL -->
 <div class="pricing-overlay" id="pricingOverlay">
   <div class="pricing-box" id="pricingBox">
-    <button class="pricing-close" onclick="window.closePricing()"><i data-feather="x" style="width:18px;height:18px;"></i></button>
+    <button class="pricing-close" onclick="window.closePricing()"><span data-feather="x" style="width:18px;height:18px;"></span></button>
     <div class="pricing-header">
       <h2>Simple, <span>transparent</span> pricing</h2>
       <p>Start free. Upgrade when you're ready. All plans include daily free tokens.</p>
@@ -477,8 +480,8 @@
 <!-- AUTH -->
 <div class="auth-overlay" id="authOverlay">
   <div class="auth-box" id="authBox">
-    <button class="auth-close" id="authClose"><i data-feather="x" style="width:18px;height:18px;"></i></button>
-    <div class="auth-icon"><i data-feather="code" style="width:24px;height:24px;"></i></div>
+    <button class="auth-close" id="authClose"><span data-feather="x" style="width:18px;height:18px;"></span></button>
+    <div class="auth-icon"><span data-feather="code" style="width:24px;height:24px;"></span></div>
     <div class="auth-title">Sign in to CodeForge</div>
     <div class="auth-sub">Unlock unlimited conversations, saved threads, and the full power of Grok Build.</div>
     <button class="google-btn" id="googleSignInBtn">
@@ -492,11 +495,11 @@
 <aside class="sidebar" id="sidebar">
   <div class="sidebar-top">
     <div class="wordmark">
-      <div class="wordmark-icon"><i data-feather="zap" style="width:16px;height:16px;"></i></div>
+      <div class="wordmark-icon"><span data-feather="zap" style="width:16px;height:16px;"></span></div>
       <div class="wordmark-text">Code<span>Forge</span></div>
     </div>
     <button class="new-thread-btn" id="newThreadBtn">
-      <i data-feather="plus" style="width:16px;height:16px;"></i>
+      <span data-feather="plus" style="width:16px;height:16px;"></span>
       New Thread
     </button>
   </div>
@@ -516,13 +519,13 @@
     </div>
     <div class="user-chip" id="userChip">
       <div class="user-avatar" id="userAvatar">
-        <i data-feather="user" style="width:16px;height:16px;"></i>
+        <span data-feather="user" style="width:16px;height:16px;"></span>
       </div>
       <div class="user-info">
         <div class="user-name" id="userName">Guest</div>
         <div class="user-status">grok-build · ready</div>
       </div>
-      <i data-feather="more-horizontal" style="width:16px;height:16px;color:var(--text-3);"></i>
+      <span data-feather="more-horizontal" style="width:16px;height:16px;color:var(--text-3);"></span>
     </div>
   </div>
 </aside>
@@ -532,22 +535,22 @@
 
   <!-- TOPBAR -->
   <div class="topbar">
-    <button class="menu-toggle" id="menuToggle"><i data-feather="menu" style="width:18px;height:18px;"></i></button>
+    <button class="menu-toggle" id="menuToggle"><span data-feather="menu" style="width:18px;height:18px;"></span></button>
     <div class="model-selector">
       <div class="model-dot"></div>
       <span id="modelLabel">grok build</span>
-      <i data-feather="chevron-down" style="width:14px;height:14px;opacity:0.5;"></i>
+      <span data-feather="chevron-down" style="width:14px;height:14px;opacity:0.5;"></span>
     </div>
     <div class="topbar-spacer"></div>
     <div class="topbar-actions">
       <button class="topbar-btn" title="Pricing & Plans" onclick="window.openPricing()" style="font-family:var(--font-code);font-size:0.68rem;font-weight:700;padding:5px 10px;border-radius:var(--radius-sm);color:var(--accent-bright);border:1px solid var(--accent-glow);background:var(--accent-dim);gap:5px;">
-        <i data-feather="zap" style="width:12px;height:12px;"></i> Upgrade
+        <span data-feather="zap" style="width:12px;height:12px;"></span> Upgrade
       </button>
       <button class="topbar-btn" id="themeToggle" title="Toggle theme">
-        <i data-feather="sun" id="themeIcon" style="width:18px;height:18px;"></i>
+        <span data-feather="sun" id="themeIcon" style="width:18px;height:18px;"></span>
       </button>
       <button class="topbar-btn" title="Keyboard shortcuts" onclick="window.showShortcuts()">
-        <i data-feather="command" style="width:18px;height:18px;"></i>
+        <span data-feather="command" style="width:18px;height:18px;"></span>
       </button>
     </div>
   </div>
@@ -562,32 +565,32 @@
         <div class="welcome-sub">Powered by Grok Build Code. Ask anything: debug code, write functions, review PRs, explain algorithms, or architect entire systems.</div>
         <div class="starter-grid">
           <div class="starter-card" data-prompt="Review this code for bugs, performance issues, and best practice violations. Provide specific fixes.">
-            <div class="starter-icon ic-red"><i data-feather="alert-circle" style="width:18px;height:18px;"></i></div>
+            <div class="starter-icon ic-red"><span data-feather="alert-circle" style="width:18px;height:18px;"></span></div>
             <p>Debug & code review</p>
             <div class="starter-tag">inspect · fix</div>
           </div>
           <div class="starter-card" data-prompt="Write a well-structured, production-ready function with error handling, JSDoc comments, and edge case coverage for:">
-            <div class="starter-icon ic-green"><i data-feather="feather" style="width:18px;height:18px;"></i></div>
+            <div class="starter-icon ic-green"><span data-feather="feather" style="width:18px;height:18px;"></span></div>
             <p>Write production-ready code</p>
             <div class="starter-tag">generate · document</div>
           </div>
           <div class="starter-card" data-prompt="Explain how this works step by step, like I'm an intermediate developer. Include mental models and diagrams if needed:">
-            <div class="starter-icon ic-cyan"><i data-feather="book-open" style="width:18px;height:18px;"></i></div>
+            <div class="starter-icon ic-cyan"><span data-feather="book-open" style="width:18px;height:18px;"></span></div>
             <p>Explain a concept deeply</p>
             <div class="starter-tag">learn · understand</div>
           </div>
           <div class="starter-card" data-prompt="Design the architecture and data model for a full-stack app that does:">
-            <div class="starter-icon ic-purple"><i data-feather="layers" style="width:18px;height:18px;"></i></div>
+            <div class="starter-icon ic-purple"><span data-feather="layers" style="width:18px;height:18px;"></span></div>
             <p>Architect a full system</p>
             <div class="starter-tag">design · plan</div>
           </div>
           <div class="starter-card" data-prompt="Refactor this code to be more readable, maintainable, and follow SOLID principles:">
-            <div class="starter-icon ic-yellow"><i data-feather="refresh-cw" style="width:18px;height:18px;"></i></div>
+            <div class="starter-icon ic-yellow"><span data-feather="refresh-cw" style="width:18px;height:18px;"></span></div>
             <p>Refactor & improve</p>
             <div class="starter-tag">clean · optimize</div>
           </div>
           <div class="starter-card" data-prompt="Write comprehensive unit tests for the following code, covering happy paths, edge cases, and error scenarios:">
-            <div class="starter-icon ic-orange"><i data-feather="check-square" style="width:18px;height:18px;"></i></div>
+            <div class="starter-icon ic-orange"><span data-feather="check-square" style="width:18px;height:18px;"></span></div>
             <p>Generate test coverage</p>
             <div class="starter-tag">test · validate</div>
           </div>
@@ -605,7 +608,7 @@
     <div class="input-panel">
       <div class="input-context-bar">
         <div class="ctx-pill" id="langCtx">
-          <i data-feather="hash" style="width:11px;height:11px;"></i>
+          <span data-feather="hash" style="width:11px;height:11px;"></span>
           <span id="langLabel">general</span>
         </div>
         <div class="ctx-spacer"></div>
@@ -613,16 +616,74 @@
       </div>
       <div class="input-box" id="inputBox">
         <div class="input-left">
-          <button class="input-tool-btn" title="Attach file" id="attachBtn"><i data-feather="paperclip" style="width:17px;height:17px;"></i></button>
+          <button class="input-tool-btn" title="Attach file" id="attachBtn"><span data-feather="paperclip" style="width:17px;height:17px;"></span></button>
         </div>
         <textarea class="chat-textarea" id="chatTextarea" placeholder="Ask anything about your code..." rows="1"></textarea>
         <button class="send-btn" id="sendBtn" disabled>
-          <i data-feather="arrow-up" style="width:16px;height:16px;"></i>
+          <span data-feather="arrow-up" style="width:16px;height:16px;"></span>
         </button>
       </div>
     </div>
   </div>
 </div>
+
+<script>
+// ── SVG ICON SYSTEM ──
+const ICONS = {
+  zap: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>`,
+  plus: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>`,
+  'message-square': `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>`,
+  'trash-2': `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>`,
+  user: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>`,
+  'more-horizontal': `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="5" cy="12" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/></svg>`,
+  menu: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>`,
+  'chevron-down': `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>`,
+  sun: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>`,
+  moon: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>`,
+  command: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 3a3 3 0 0 0-3 3v12a3 3 0 0 0 3 3 3 3 0 0 0 3-3 3 3 0 0 0-3-3H6a3 3 0 0 0-3 3 3 3 0 0 0 3 3 3 3 0 0 0 3-3V6a3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3h12a3 3 0 0 0 3-3 3 3 0 0 0-3-3z"/></svg>`,
+  'arrow-up': `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="19" x2="12" y2="5"/><polyline points="5 12 12 5 19 12"/></svg>`,
+  paperclip: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48"/></svg>`,
+  hash: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="4" y1="9" x2="20" y2="9"/><line x1="4" y1="15" x2="20" y2="15"/><line x1="10" y1="3" x2="8" y2="21"/><line x1="16" y1="3" x2="14" y2="21"/></svg>`,
+  lock: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>`,
+  code: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>`,
+  x: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>`,
+  copy: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>`,
+  'refresh-cw': `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>`,
+  'corner-down-left': `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 10 4 15 9 20"/><path d="M20 4v7a4 4 0 0 1-4 4H4"/></svg>`,
+  'alert-circle': `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>`,
+  feather: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.24 12.24a6 6 0 0 0-8.49-8.49L5 10.5V19h8.5l6.74-6.76z"/><line x1="16" y1="8" x2="2" y2="22"/><line x1="17.5" y1="15" x2="9" y2="15"/></svg>`,
+  'book-open': `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>`,
+  layers: `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg>`,
+  'check-square': `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 11 12 14 22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>`,
+  'zap-off': `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="12.41 6.75 13 2 10.57 4.92"/><polyline points="18.57 12.91 21 10 15.66 10"/><polyline points="8 8 3 14 12 14 11 22 16.61 15.53"/><line x1="1" y1="1" x2="23" y2="23"/></svg>`,
+};
+
+function icon(name, size = 16) {
+  const svg = ICONS[name];
+  if (!svg) return '';
+  return svg.replace('<svg ', `<svg width="${size}" height="${size}" `);
+}
+
+// Replace all data-feather elements with inline SVGs
+function featherReplace() {
+  document.querySelectorAll('[data-feather]').forEach(el => {
+    const name = el.getAttribute('data-feather');
+    const styleAttr = el.getAttribute('style') || '';
+    const sizeMatch = styleAttr.match(/width:\s*(\d+)px/);
+    const size = sizeMatch ? parseInt(sizeMatch[1]) : 16;
+    const svgStr = ICONS[name];
+    if (!svgStr) return;
+    const wrapper = document.createElement('span');
+    wrapper.style.display = 'inline-flex';
+    wrapper.style.alignItems = 'center';
+    wrapper.innerHTML = svgStr.replace('<svg ', `<svg width="${size}" height="${size}" style="${styleAttr}" `);
+    el.replaceWith(wrapper);
+  });
+}
+
+// Expose as feather.replace() for compatibility
+window.feather = { replace: featherReplace };
+</script>
 
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
@@ -642,8 +703,10 @@
   const themeIcon = document.getElementById('themeIcon');
   function updateThemeIcon() {
     const dark = document.documentElement.getAttribute('data-theme') === 'dark';
-    themeIcon.setAttribute('data-feather', dark ? 'sun' : 'moon');
-    feather.replace();
+    const iconName = dark ? 'sun' : 'moon';
+    themeIcon.innerHTML = ICONS[iconName]
+      ? `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${ICONS[iconName].replace(/<svg[^>]*>/, '').replace('</svg>', '')}</svg>`
+      : '';
   }
   updateThemeIcon();
   themeToggle.addEventListener('click', () => {
@@ -788,10 +851,10 @@ Keep responses technically precise, modern, and directly actionable.`;
       loadUserPlan(user.uid);
     } else {
       nameEl.textContent = 'Guest';
-      avatarEl.innerHTML = `<i data-feather="user" style="width:16px;height:16px;"></i>`;
+      avatarEl.innerHTML = icon('user', 16);
       threadList.innerHTML = ''; startNewThread();
       loadGuestQuota();
-      feather.replace();
+      
     }
   });
 
@@ -805,17 +868,16 @@ Keep responses technically precise, modern, and directly actionable.`;
       threads.sort((a, b) => (b.updatedAt || 0) - (a.updatedAt || 0));
       threads.forEach(t => addThreadToSidebar(t));
     }
-    feather.replace();
+    
   }
 
   function addThreadToSidebar(t) {
     const div = document.createElement('div');
     div.className = `thread-item${t.id === currentThreadId ? ' active' : ''}`;
     div.id = `thread-${t.id}`;
-    div.innerHTML = `<i data-feather="message-square" class="t-icon" style="width:14px;height:14px;"></i><span class="thread-text">${escapeHtml(t.title || 'New Thread')}</span><div class="thread-actions"><button class="t-action-btn" title="Delete" onclick="window.deleteThread('${t.id}',event)"><i data-feather="trash-2" style="width:12px;height:12px;"></i></button></div>`;
+    div.innerHTML = `<span class="t-icon" style="display:inline-flex;align-items:center;">${icon('message-square',14)}</span><span class="thread-text">${escapeHtml(t.title || 'New Thread')}</span><div class="thread-actions"><button class="t-action-btn" title="Delete" onclick="window.deleteThread('${t.id}',event)">${icon('trash-2',12)}</button></div>`;
     div.onclick = () => loadThread(t.id, currentUser.uid);
     threadList.appendChild(div);
-    feather.replace();
   }
 
   window.deleteThread = async (tid, e) => {
@@ -899,7 +961,7 @@ Keep responses technically precise, modern, and directly actionable.`;
       const l = lang || 'code';
       const id = 'cb_' + Math.random().toString(36).substr(2,8);
       codeBlocks.push({ ph, html:
-        `<div class="code-block"><div class="code-block-header"><span class="code-lang-badge">${l}</span><div class="code-actions"><button class="code-action-btn" onclick="window.copyBlock('${id}')"><i data-feather="copy" style="width:12px;height:12px;"></i> copy</button><button class="code-action-btn" onclick="window.insertToInput('${id}')"><i data-feather="corner-down-left" style="width:12px;height:12px;"></i> use</button></div></div><pre id="${id}"><code>${code.trim()}</code></pre></div>` });
+        `<div class="code-block"><div class="code-block-header"><span class="code-lang-badge">${l}</span><div class="code-actions"><button class="code-action-btn" onclick="window.copyBlock('${id}')">${icon('copy',12)} copy</button><button class="code-action-btn" onclick="window.insertToInput('${id}')">${icon('corner-down-left',12)} use</button></div></div><pre id="${id}"><code>${code.trim()}</code></pre></div>` });
       return ph;
     });
     // headings
@@ -1135,7 +1197,7 @@ Keep responses technically precise, modern, and directly actionable.`;
         </div>`;
     }).join('');
     document.getElementById('freeQuotaLabel').textContent = `${PLANS[0].dailyTokens} free tokens/day`;
-    feather.replace();
+    
   }
 
   window.goToPayment = (planId, yearly) => {
@@ -1150,7 +1212,7 @@ Keep responses technically precise, modern, and directly actionable.`;
     const box = document.getElementById('pricingBox');
     overlay.style.display = 'flex';
     setTimeout(() => { overlay.style.opacity = '1'; box.style.transform = 'translateY(0)'; }, 10);
-    feather.replace();
+    
   };
   window.closePricing = () => {
     const overlay = document.getElementById('pricingOverlay');
@@ -1192,12 +1254,12 @@ Keep responses technically precise, modern, and directly actionable.`;
       </div>
       <div class="msg-ai-content" id="${mid}"></div>
       <div class="msg-actions">
-        <button class="msg-action" onclick="window.copyAIMsg('${mid}')"><i data-feather="copy" style="width:12px;height:12px;"></i> copy</button>
-        <button class="msg-action" onclick="window.retryLast()"><i data-feather="refresh-cw" style="width:12px;height:12px;"></i> retry</button>
+        <button class="msg-action" onclick="window.copyAIMsg('${mid}')">${icon('copy',12)} copy</button>
+        <button class="msg-action" onclick="window.retryLast()">${icon('refresh-cw',12)} retry</button>
       </div>`;
     messagesContainer.appendChild(block);
     if (animate) requestAnimationFrame(() => { block.style.transition = 'opacity 0.2s'; block.style.opacity = '1'; });
-    if (content) { document.getElementById(mid).innerHTML = parseMarkdown(content); feather.replace(); }
+    if (content) { document.getElementById(mid).innerHTML = parseMarkdown(content);  }
     scrollToBottom();
     return { block, mid };
   }
@@ -1244,9 +1306,9 @@ Keep responses technically precise, modern, and directly actionable.`;
     if (document.getElementById('auth-gate')) return;
     const div = document.createElement('div');
     div.id = 'auth-gate';
-    div.innerHTML = `<div class="auth-gate"><div class="gate-icon"><i data-feather="lock" style="width:20px;height:20px;"></i></div><div class="gate-title">Free limit reached</div><div class="gate-sub">Sign in to keep building. Unlimited threads, full history, and faster responses.</div><button class="gate-btn" onclick="window.openAuth()"><img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" style="width:18px;height:18px;" alt=""> Sign in with Google</button></div>`;
+    div.innerHTML = `<div class="auth-gate"><div class="gate-icon">${icon('lock',20)}</div><div class="gate-title">Free limit reached</div><div class="gate-sub">Sign in to keep building. Unlimited threads, full history, and faster responses.</div><button class="gate-btn" onclick="window.openAuth()"><img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" style="width:18px;height:18px;" alt=""> Sign in with Google</button></div>`;
     messagesContainer.appendChild(div);
-    feather.replace(); scrollToBottom();
+     scrollToBottom();
   }
 
   // ── SEND ──
@@ -1286,7 +1348,7 @@ Keep responses technically precise, modern, and directly actionable.`;
       chatHistory.push({ role: 'assistant', content: aiText });
 
       const { mid } = appendAIMsg(aiText);
-      feather.replace();
+      
       saveThread();
 
       // Increment quota (estimate 1 token unit per message)
@@ -1310,15 +1372,15 @@ Keep responses technically precise, modern, and directly actionable.`;
     const div = document.createElement('div');
     div.id = 'quota-gate';
     div.innerHTML = `<div class="auth-gate" style="border-color:rgba(255,210,96,0.25);background:rgba(255,210,96,0.05);">
-      <div class="gate-icon" style="background:rgba(255,210,96,0.1);border-color:rgba(255,210,96,0.3);color:var(--yellow);"><i data-feather="zap-off" style="width:20px;height:20px;"></i></div>
+      <div class="gate-icon" style="background:rgba(255,210,96,0.1);border-color:rgba(255,210,96,0.3);color:var(--yellow);">${icon('zap-off',20)}</div>
       <div class="gate-title">Daily limit reached</div>
       <div class="gate-sub">You've used all <strong>${plan.dailyTokens}</strong> free tokens for today on the <strong>${plan.name}</strong> plan. Resets at midnight, or upgrade for more.</div>
       <button class="gate-btn" onclick="document.getElementById('quota-gate').remove();window.openPricing();" style="background:var(--yellow);color:#000;box-shadow:0 4px 14px rgba(255,210,96,0.3);">
-        <i data-feather="zap" style="width:16px;height:16px;"></i> View Plans
+        ${icon('zap',16)} View Plans
       </button>
     </div>`;
     messagesContainer.appendChild(div);
-    feather.replace(); scrollToBottom();
+     scrollToBottom();
   }
   window.handleSend = handleSend;
 
