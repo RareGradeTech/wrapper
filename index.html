@@ -951,7 +951,7 @@ Keep responses technically precise, modern, and directly actionable.`;
       const res = await fetch(`${API_BASE}/chat/completions`, {
         method: 'POST',
         headers: { 'Authorization': `Bearer ${XAI_KEY}`, 'Content-Type': 'application/json' },
-        body: JSON.stringify({ model: 'grok-4-1-fast-reasoning', messages: msgs })
+        body: JSON.stringify({ model: 'grok-build-0.1', messages: msgs })
       });
       if (!res.ok) throw new Error(await res.text());
       const data = await res.json();
