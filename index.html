@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
   <meta name="theme-color" content="#0D0D0F" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
-  <title>CodeForge — AI Coding Assistant</title>
+  <title>Steward — AI Coding Assistant</title>
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -90,8 +90,7 @@
       transition: opacity 0.5s ease;
     }
     #splash.hide { opacity: 0; pointer-events: none; }
-    .splash-wordmark { font-size: 1.8rem; font-weight: 800; letter-spacing: -0.04em; }
-    .splash-wordmark span { color: var(--accent-bright); }
+    .splash-logo { height: 48px; width: auto; object-fit: contain; }
     .splash-bar { width: 160px; height: 2px; background: var(--bg-active); border-radius: 99px; overflow: hidden; }
     .splash-bar-fill { height: 100%; width: 0%; background: var(--accent); border-radius: 99px; animation: barFill 1.2s ease forwards; }
     @keyframes barFill { to { width: 100%; } }
@@ -106,9 +105,7 @@
     }
     .sidebar-top { padding: 16px 12px 12px; border-bottom: 1px solid var(--border); }
     .wordmark { display: flex; align-items: center; gap: 10px; padding: 6px 8px; margin-bottom: 12px; }
-    .wordmark-icon { width: 30px; height: 30px; background: var(--accent); border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; color: white; flex-shrink: 0; }
-    .wordmark-text { font-size: 1.1rem; font-weight: 800; letter-spacing: -0.03em; }
-    .wordmark-text span { color: var(--accent-bright); }
+    .wordmark-logo { height: 32px; width: auto; object-fit: contain; }
 
     .new-thread-btn {
       width: 100%; display: flex; align-items: center; gap: 10px;
@@ -121,6 +118,7 @@
 
     .sidebar-section { padding: 16px 12px 8px; }
     .sidebar-label { font-size: 0.65rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-3); padding: 0 8px; margin-bottom: 6px; }
+    #threadList { display: flex; flex-direction: column; gap: 0; }
 
     .thread-item {
       display: flex; align-items: center; gap: 10px; padding: 9px 10px;
@@ -438,7 +436,7 @@
 
 <!-- SPLASH -->
 <div id="splash">
-  <div class="splash-wordmark">Code<span>Forge</span></div>
+  <img src="https://i.postimg.cc/tRMK3mNK/Steward-logo.png" alt="Steward" class="splash-logo">
   <div class="splash-bar"><div class="splash-bar-fill"></div></div>
 </div>
 
@@ -456,7 +454,7 @@
   <div class="auth-box" id="authBox">
     <button class="auth-close" id="authClose"><i data-feather="x" style="width:18px;height:18px;"></i></button>
     <div class="auth-icon"><i data-feather="code" style="width:24px;height:24px;"></i></div>
-    <div class="auth-title">Sign in to CodeForge</div>
+    <div class="auth-title">Sign in to Steward</div>
     <div class="auth-sub">Unlock unlimited conversations, saved threads, and the full power of Grok Build.</div>
     <button class="google-btn" id="googleSignInBtn">
       <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="20" height="20" alt="Google">
@@ -470,7 +468,7 @@
   <div class="pricing-box" id="pricingBox">
     <button class="pricing-close" id="pricingClose"><i data-feather="x" style="width:18px;height:18px;"></i></button>
     <div class="pricing-header">
-      <div class="pricing-eyebrow">CodeForge Plans</div>
+      <div class="pricing-eyebrow">Steward Plans</div>
       <div class="pricing-title">Build without limits</div>
       <div class="pricing-sub">Every account gets free daily credits. Upgrade anytime to unlock more power.</div>
       <div class="pricing-free-note">
@@ -554,8 +552,7 @@
 <aside class="sidebar" id="sidebar">
   <div class="sidebar-top">
     <div class="wordmark">
-      <div class="wordmark-icon"><i data-feather="zap" style="width:16px;height:16px;"></i></div>
-      <div class="wordmark-text">Code<span>Forge</span></div>
+      <img src="https://i.postimg.cc/tRMK3mNK/Steward-logo.png" alt="Steward" class="wordmark-logo">
     </div>
     <button class="new-thread-btn" id="newThreadBtn">
       <i data-feather="plus" style="width:16px;height:16px;"></i>
@@ -860,8 +857,8 @@ Keep responses technically precise, modern, and directly actionable.`;
     window.location.href = `payment.html?${params.toString()}`;
   };
 
-  window.contactSales = () => {
-    window.showDialog('Enterprise Sales', 'Contact us at sales@codeforge.dev to discuss custom enterprise pricing, pooled credits, SSO, and SLAs.', [{ text: 'Got it', cls: 'btn-primary' }]);
+    window.contactSales = () => {
+    window.showDialog('Enterprise Sales', 'Contact us at sales@steward.dev to discuss custom enterprise pricing, pooled credits, SSO, and SLAs.', [{ text: 'Got it', cls: 'btn-primary' }]);
   };
 
   // ── SUBSCRIPTION LOADER ──
@@ -1139,7 +1136,7 @@ Keep responses technically precise, modern, and directly actionable.`;
     const mid = 'ai_' + Math.random().toString(36).substr(2,9);
     block.innerHTML = `
       <div class="msg-ai-header">
-        <div class="ai-badge"><div class="ai-badge-dot"></div>CodeForge</div>
+        <div class="ai-badge"><div class="ai-badge-dot"></div>Steward</div>
       </div>
       <div class="msg-ai-content" id="${mid}"></div>
       <div class="msg-actions">
