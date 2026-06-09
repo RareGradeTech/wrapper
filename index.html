@@ -110,102 +110,25 @@
     }
     .new-thread-btn:hover { background: var(--accent-glow); border-color: var(--accent); transform: translateY(-1px); }
 
-    /* ══ SIDEBAR THREADS GRID ══ */
-    .sidebar-section-threads {
-      padding: 16px 12px 8px;
-      display: flex;
-      flex-direction: column;
-      max-height: 240px;
-      overflow-y: auto;
-      border-bottom: 1px solid var(--border);
-    }
+    .sidebar-section { padding: 16px 12px 8px; }
     .sidebar-label { font-size: 0.65rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-3); padding: 0 8px; margin-bottom: 6px; }
-    
-    #threadList {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 8px;
-      padding-top: 4px;
-    }
+    #threadList { display: flex; flex-direction: column; gap: 0; }
 
     .thread-item {
-      display: flex;
-      flex-direction: column;
-      align-items: flex-start;
-      justify-content: space-between;
-      gap: 6px;
-      padding: 10px;
-      height: 84px;
-      border-radius: var(--radius-md);
-      cursor: pointer;
-      color: var(--text-2);
-      background: var(--bg-surface);
-      border: 1px solid var(--border);
-      transition: all 0.15s ease;
-      position: relative;
-      overflow: hidden;
+      display: flex; align-items: center; gap: 10px; padding: 9px 10px;
+      border-radius: var(--radius-md); cursor: pointer; color: var(--text-2);
+      font-size: 0.82rem; font-weight: 500; transition: all 0.15s; margin-bottom: 2px;
+      border: 1px solid transparent;
     }
-    .thread-item:hover { background: var(--bg-hover); color: var(--text-1); border-color: var(--border-glow); }
-    .thread-item.active { background: var(--accent-dim); border-color: var(--accent); color: var(--accent-bright); }
-    
-    .thread-text {
-      width: 100%;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      white-space: nowrap;
-      font-family: var(--font-ui);
-      font-size: 0.76rem;
-      font-weight: 600;
-      line-height: 1.3;
-    }
-    
-    .thread-meta-row {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      width: 100%;
-    }
-    .thread-item .t-icon { flex-shrink: 0; opacity: 0.6; }
+    .thread-item:hover { background: var(--bg-hover); color: var(--text-1); }
+    .thread-item.active { background: var(--accent-dim); border-color: var(--accent-glow); color: var(--accent-bright); }
+    .thread-item .t-icon { flex-shrink: 0; opacity: 0.5; }
     .thread-item.active .t-icon { opacity: 1; }
-    
-    .thread-actions { display: flex; opacity: 0; gap: 2px; transition: opacity 0.15s ease; }
-    .thread-item:hover .thread-actions { opacity: 1; }
-
+    .thread-text { flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-family: var(--font-code); font-size: 0.78rem; }
+    .thread-actions { display: none; gap: 2px; }
+    .thread-item:hover .thread-actions { display: flex; }
     .t-action-btn { background: none; border: none; cursor: pointer; color: var(--text-3); padding: 4px; border-radius: 4px; transition: all 0.15s; display: flex; }
     .t-action-btn:hover { color: var(--text-1); background: var(--bg-active); }
-
-    /* ══ WORKSPACE STYLES ══ */
-    .workspace-section {
-      padding: 16px 12px 8px;
-      display: flex;
-      flex-direction: column;
-      flex: 1;
-      overflow-y: auto;
-    }
-    .workspace-btn {
-      width: 100%; display: flex; align-items: center; justify-content: center; gap: 8px;
-      background: var(--bg-surface); border: 1px solid var(--border);
-      color: var(--text-1); padding: 8px 12px; border-radius: var(--radius-md);
-      font-family: var(--font-ui); font-size: 0.8rem; font-weight: 600;
-      cursor: pointer; transition: all 0.2s; margin-bottom: 10px;
-    }
-    .workspace-btn:hover { background: var(--bg-hover); border-color: var(--border-glow); }
-    .tree-container { display: flex; flex-direction: column; gap: 4px; font-family: var(--font-code); font-size: 0.75rem; color: var(--text-2); }
-    .tree-node { display: flex; align-items: center; gap: 6px; padding: 4px 6px; border-radius: 4px; cursor: pointer; user-select: none; }
-    .tree-node:hover { background: var(--bg-hover); color: var(--text-1); }
-    .tree-node.file { padding-left: 10px; }
-    .tree-node .node-icon { width: 12px; height: 12px; opacity: 0.7; }
-
-    /* Autocomplete dropup panel */
-    .autocomplete-panel {
-      position: absolute; bottom: 100%; left: 0; right: 0;
-      background: var(--bg-surface); border: 1px solid var(--border);
-      border-radius: var(--radius-md); max-height: 180px; overflow-y: auto;
-      box-shadow: 0 -4px 24px rgba(0,0,0,0.4); display: none; flex-direction: column;
-      z-index: 100; margin-bottom: 8px;
-    }
-    .autocomplete-item { display: flex; align-items: center; gap: 8px; padding: 8px 12px; font-family: var(--font-code); font-size: 0.78rem; color: var(--text-2); cursor: pointer; transition: background 0.15s; }
-    .autocomplete-item:hover, .autocomplete-item.selected { background: var(--bg-hover); color: var(--text-1); }
 
     .sidebar-footer { margin-top: auto; padding: 12px; border-top: 1px solid var(--border); }
     .user-chip { display: flex; align-items: center; gap: 10px; padding: 8px 10px; border-radius: var(--radius-md); cursor: pointer; transition: background 0.15s; }
@@ -362,7 +285,6 @@
       display: flex; align-items: flex-end; gap: 10px;
       transition: border-color 0.2s, box-shadow 0.2s;
       box-shadow: 0 4px 32px rgba(0,0,0,0.3);
-      position: relative;
     }
     .input-box:focus-within { border-color: var(--accent); box-shadow: 0 4px 32px rgba(0,0,0,0.3), 0 0 0 3px var(--accent-dim); }
     .input-left { display: flex; gap: 4px; margin-bottom: 2px; }
@@ -433,20 +355,35 @@
     .pricing-title { font-size: 2rem; font-weight: 800; letter-spacing: -0.04em; margin-bottom: 10px; }
     .pricing-sub { font-size: 0.9rem; color: var(--text-2); line-height: 1.6; }
     .pricing-free-note { display: inline-flex; align-items: center; gap: 6px; margin-top: 10px; background: rgba(61,220,132,0.1); border: 1px solid rgba(61,220,132,0.25); border-radius: 99px; padding: 5px 14px; font-size: 0.75rem; font-family: var(--font-code); color: var(--green); }
-    .pricing-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 14px; }
-    .plan-card { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 22px 18px 20px; display: flex; flex-direction: column; gap: 14px; cursor: pointer; transition: all 0.22s; position: relative; overflow: hidden; }
-    .plan-card:hover { border-color: var(--accent); transform: translateY(-3px); box-shadow: 0 12px 32px rgba(124,106,255,0.15); }
-    .plan-card.plan-popular { border-color: var(--accent); background: var(--bg-active); }
+
+    /* ══ PRICING TOGGLE ══ */
+    .billing-toggle-wrapper { display: flex; align-items: center; justify-content: center; gap: 14px; margin-top: 24px; }
+    .billing-label { font-size: 0.88rem; font-weight: 600; color: var(--text-2); cursor: pointer; transition: color 0.2s; }
+    .billing-label.active { color: var(--text-1); }
+    .switch-track { width: 46px; height: 26px; background: var(--bg-active); border: 1px solid var(--border); border-radius: 99px; position: relative; cursor: pointer; transition: all 0.3s ease; }
+    .switch-track:hover { border-color: var(--border-glow); }
+    .switch-track.yearly { background: var(--accent); border-color: var(--accent); }
+    .switch-thumb { width: 18px; height: 18px; background: white; border-radius: 50%; position: absolute; top: 3px; left: 3px; transition: transform 0.3s cubic-bezier(.4, 0, .2, 1); box-shadow: 0 2px 6px rgba(0,0,0,0.2); }
+    .switch-track.yearly .switch-thumb { transform: translateX(20px); }
+    .save-badge { background: rgba(61,220,132,0.15); color: var(--green); padding: 3px 8px; border-radius: 99px; font-size: 0.65rem; margin-left: 6px; font-family: var(--font-code); font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; }
+
+    /* ══ REDESIGNED PRICING CARDS ══ */
+    .pricing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; margin-top: 20px; }
+    .plan-card { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: var(--radius-xl); padding: 28px 24px; display: flex; flex-direction: column; gap: 16px; cursor: pointer; transition: all 0.3s cubic-bezier(.16,1,.3,1); position: relative; overflow: hidden; }
+    .plan-card:hover { border-color: var(--border-glow); transform: translateY(-4px); box-shadow: 0 16px 40px rgba(0,0,0,0.2); }
+    .plan-card.plan-popular { border-color: var(--accent-bright); background: linear-gradient(180deg, var(--bg-hover) 0%, var(--bg-elevated) 100%); box-shadow: 0 8px 32px var(--accent-dim); }
+    .plan-card.plan-popular:hover { border-color: var(--accent); box-shadow: 0 16px 48px var(--accent-glow); }
     .plan-card.plan-enterprise { cursor: default; }
-    .plan-badge { position: absolute; top: 14px; right: 14px; font-size: 0.6rem; font-family: var(--font-code); font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; background: var(--accent); color: white; padding: 2px 8px; border-radius: 99px; }
-    .plan-name { font-size: 0.82rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; font-family: var(--font-code); color: var(--text-3); }
-    .plan-price-row { display: flex; align-items: flex-end; gap: 4px; }
-    .plan-price { font-size: 1.8rem; font-weight: 800; letter-spacing: -0.04em; line-height: 1; }
-    .plan-price-unit { font-size: 0.75rem; color: var(--text-3); font-family: var(--font-code); margin-bottom: 2px; }
-    .plan-yearly { font-size: 0.72rem; color: var(--green); font-family: var(--font-code); }
-    .plan-target { font-size: 0.78rem; color: var(--text-2); line-height: 1.4; }
-    .plan-credits { font-size: 0.72rem; font-family: var(--font-code); color: var(--accent-bright); background: var(--accent-dim); border: 1px solid var(--accent-glow); border-radius: 6px; padding: 4px 10px; display: inline-block; }
-    .plan-cta { margin-top: auto; width: 100%; padding: 10px 14px; border-radius: var(--radius-md); border: none; font-family: var(--font-ui); font-size: 0.85rem; font-weight: 700; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px; }
+    .plan-badge { position: absolute; top: 0; left: 50%; transform: translateX(-50%); font-size: 0.65rem; font-family: var(--font-code); font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; background: var(--accent); color: white; padding: 4px 16px; border-bottom-left-radius: 8px; border-bottom-right-radius: 8px; }
+    .plan-name { font-size: 1.1rem; font-weight: 800; letter-spacing: -0.02em; color: var(--text-1); }
+    .plan-price-wrap { display: flex; flex-direction: column; gap: 2px; height: 64px; justify-content: center; }
+    .plan-price-row { display: flex; align-items: baseline; gap: 6px; }
+    .plan-price { font-size: 2.2rem; font-weight: 800; letter-spacing: -0.04em; line-height: 1; color: var(--text-1); }
+    .plan-price-unit { font-size: 0.85rem; color: var(--text-3); font-weight: 500; }
+    .plan-yearly-total { font-size: 0.75rem; color: var(--green); font-family: var(--font-code); display: none; }
+    .plan-target { font-size: 0.85rem; color: var(--text-2); line-height: 1.5; flex: 1; }
+    .plan-credits { font-size: 0.75rem; font-family: var(--font-code); font-weight: 600; color: var(--accent-bright); background: var(--accent-dim); border-radius: 6px; padding: 6px 12px; margin-top: auto; display: inline-block; text-align: center; }
+    .plan-cta { width: 100%; padding: 12px 14px; border-radius: var(--radius-md); border: none; font-family: var(--font-ui); font-size: 0.9rem; font-weight: 700; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 8px; }
     .cta-accent { background: var(--accent); color: white; box-shadow: 0 4px 14px var(--accent-glow); }
     .cta-accent:hover { background: var(--accent-bright); transform: translateY(-1px); }
     .cta-outline { background: transparent; color: var(--text-1); border: 1px solid var(--border); }
@@ -454,6 +391,7 @@
     .cta-muted { background: var(--bg-hover); color: var(--text-2); border: 1px solid var(--border); cursor: default; }
     .plan-current-badge { font-size: 0.65rem; font-family: var(--font-code); font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--green); border: 1px solid rgba(61,220,132,0.3); border-radius: 99px; padding: 2px 8px; display: inline-block; background: rgba(61,220,132,0.08); }
     @media (max-width: 600px) { .pricing-grid { grid-template-columns: 1fr; } .pricing-box { padding: 28px 16px 32px; } .pricing-title { font-size: 1.5rem; } }
+
 
     /* Syntax highlight */
     .tok-kw { color: var(--accent-bright); }
@@ -466,10 +404,10 @@
     /* Scrollbar */
     ::-webkit-scrollbar { width: 5px; }
     ::-webkit-scrollbar-track { background: transparent; }
-    ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 99px; }
-    ::-webkit-scrollbar-thumb:hover { background: var(--border-glow); }
+    ::-webkit-scrollbar-thumb { background: var(--bg-elevated); border-radius: 10px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--bg-active); }
 
-    /* Responsive adjustments */
+    /* ══ RESPONSIVE ══ */
     @media (max-width: 768px) {
       .sidebar { position: fixed; top: 0; bottom: 0; left: 0; transform: translateX(-100%); }
       .sidebar.open { transform: translateX(0); box-shadow: 8px 0 40px rgba(0,0,0,0.4); }
@@ -478,7 +416,9 @@
       .welcome-headline { font-size: 1.8rem; }
     }
 
-    /* ═══ MOBILE SIMULATOR ═══ */
+    /* ══════════════════════════════════════
+       MOBILE SIMULATOR
+    ══════════════════════════════════════ */
     .sim-toggle-btn {
       position: fixed; right: 20px; bottom: 88px; z-index: 500;
       width: 44px; height: 44px; border-radius: 50%;
@@ -491,22 +431,49 @@
     .sim-toggle-btn.active { background: var(--accent-dim); border-color: var(--accent-glow); color: var(--accent-bright); box-shadow: 0 4px 20px var(--accent-glow); }
 
     .sim-panel {
-      position: fixed; top: 0; right: -380px; width: 360px; height: 100svh; z-index: 400;
-      display: flex; flex-direction: column; background: var(--bg-base); border-left: 1px solid var(--border);
+      position: fixed; top: 0; right: -380px; width: 360px; height: 100svh;
+      z-index: 400; display: flex; flex-direction: column;
+      background: var(--bg-base); border-left: 1px solid var(--border);
       transition: right 0.35s cubic-bezier(.4,0,.2,1); overflow: hidden;
     }
     .sim-panel.open { right: 0; }
 
-    .sim-topbar { height: 50px; display: flex; align-items: center; justify-content: space-between; padding: 0 16px; border-bottom: 1px solid var(--border); background: var(--bg-surface); flex-shrink: 0; }
-    .sim-title { font-size: 0.78rem; font-weight: 700; font-family: var(--font-code); color: var(--text-1); display: flex; align-items: center; gap: 8px; letter-spacing: 0.02em; text-transform: uppercase; }
-    .sim-actions { display: flex; gap: 4px; }
-    .sim-btn { background: none; border: none; cursor: pointer; color: var(--text-3); padding: 6px; border-radius: var(--radius-sm); transition: all 0.15s; display: flex; }
-    .sim-btn:hover { color: var(--text-1); background: var(--bg-hover); }
+    .sim-topbar {
+      height: 50px; display: flex; align-items: center; gap: 8px;
+      padding: 0 14px; border-bottom: 1px solid var(--border);
+      flex-shrink: 0; background: var(--bg-base);
+    }
+    .sim-title { font-size: 0.7rem; font-family: var(--font-code); font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-3); flex: 1; }
+    .sim-topbar-btn { background: none; border: none; cursor: pointer; color: var(--text-3); padding: 6px; border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; transition: all 0.15s; }
+    .sim-topbar-btn:hover { color: var(--text-1); background: var(--bg-hover); }
 
-    .sim-iframe-wrap { flex: 1; background: #000; position: relative; overflow: hidden; display: flex; flex-direction: column; }
-    .sim-iframe { width: 100%; height: 100%; border: none; background: #FFFFFF; }
+    .sim-phone-wrap {
+      flex: 1; display: flex; align-items: center; justify-content: center;
+      padding: 20px 16px 16px; overflow: hidden; background: var(--bg-void);
+    }
+    .sim-phone {
+      width: 260px; height: 500px;
+      background: var(--bg-void);
+      border-radius: 40px; border: 8px solid var(--bg-elevated);
+      box-shadow: 0 0 0 1px var(--border), 0 24px 60px rgba(0,0,0,0.5), inset 0 0 0 1px rgba(255,255,255,0.03);
+      overflow: hidden; position: relative; flex-shrink: 0;
+    }
+    .sim-phone-notch {
+      position: absolute; top: 0; left: 50%; transform: translateX(-50%);
+      width: 78px; height: 22px; background: var(--bg-elevated);
+      border-radius: 0 0 14px 14px; z-index: 10;
+      display: flex; align-items: center; justify-content: center; gap: 7px;
+    }
+    .sim-notch-cam { width: 7px; height: 7px; background: var(--bg-active); border-radius: 50%; }
+    .sim-notch-speaker { width: 26px; height: 3px; background: var(--bg-active); border-radius: 99px; }
+    .sim-iframe-wrap { width: 100%; height: 100%; position: relative; }
+    .sim-iframe { width: 100%; height: 100%; border: none; display: block; background: white; }
 
-    .sim-empty-state { position: absolute; inset: 0; background: var(--bg-void); display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 32px; text-align: center; gap: 12px; z-index: 10; transition: opacity 0.2s; }
+    .sim-empty-state {
+      position: absolute; inset: 0;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 12px; padding: 28px; text-align: center;
+    }
     .sim-empty-icon { width: 44px; height: 44px; border-radius: 50%; background: var(--bg-surface); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; color: var(--text-3); }
     .sim-empty-title { font-size: 0.76rem; font-weight: 600; color: var(--text-2); }
     .sim-empty-sub { font-size: 0.66rem; color: var(--text-3); font-family: var(--font-code); line-height: 1.55; }
@@ -520,997 +487,1002 @@
     .sim-status-text { font-size: 0.68rem; font-family: var(--font-code); color: var(--text-3); flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 
     .sim-run-bar { display: flex; gap: 8px; }
-    .sim-run-full-btn { flex: 1; padding: 9px 12px; background: var(--accent-dim); border: 1px solid var(--accent-glow); border-radius: var(--radius-md); color: var(--accent-bright); font-family: var(--font-code); font-size: 0.72rem; font-weight: 700; letter-spacing: 0.04em; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 7px; }
+    .sim-run-full-btn {
+      flex: 1; padding: 9px 12px;
+      background: var(--accent-dim); border: 1px solid var(--accent-glow);
+      border-radius: var(--radius-md); color: var(--accent-bright);
+      font-family: var(--font-code); font-size: 0.72rem; font-weight: 700;
+      letter-spacing: 0.04em; cursor: pointer; transition: all 0.2s;
+      display: flex; align-items: center; justify-content: center; gap: 7px;
+    }
     .sim-run-full-btn:hover { background: var(--accent-glow); border-color: var(--accent); }
-    .sim-clear-btn { padding: 9px 10px; background: var(--bg-surface); border: 1px solid var(--border); border-radius: var(--radius-md); color: var(--text-2); cursor: pointer; transition: all 0.15s; display: flex; align-items: center; }
-    .sim-clear-btn:hover { border-color: var(--border-glow); color: var(--text-1); }
-    .sim-hint-text { font-size: 0.62rem; color: var(--text-3); font-family: var(--font-ui); text-align: center; }
+    .sim-clear-btn {
+      padding: 9px 10px;
+      background: none; border: 1px solid var(--border);
+      border-radius: var(--radius-md); color: var(--text-3);
+      cursor: pointer; transition: all 0.15s; display: flex; align-items: center;
+    }
+    .sim-clear-btn:hover { color: var(--red); border-color: rgba(255,95,109,0.4); background: rgba(255,95,109,0.06); }
+    .sim-hint-text { font-size: 0.62rem; font-family: var(--font-code); color: var(--text-3); text-align: center; }
 
-    body.sim-open .input-zone { right: 360px; }
-    body.sim-open .chat-scroll .chat-inner { max-width: 740px; }
+    /* Pulse badge on sim toggle when code is ready */
+    .sim-toggle-btn .sim-badge {
+      position: absolute; top: 2px; right: 2px;
+      width: 10px; height: 10px; border-radius: 50%;
+      background: var(--green); border: 2px solid var(--bg-void);
+      display: none;
+    }
+    .sim-toggle-btn.has-code .sim-badge { display: block; animation: badgePulse 2s infinite; }
+    @keyframes badgePulse { 0%,100%{transform:scale(1);opacity:1} 50%{transform:scale(1.3);opacity:0.7} }
+
+    @media (min-width: 769px) {
+      body.sim-open .main-wrapper { margin-right: 360px; transition: margin-right 0.35s cubic-bezier(.4,0,.2,1); }
+      body.sim-open .input-zone { right: 360px; transition: right 0.35s cubic-bezier(.4,0,.2,1); }
+      .main-wrapper { transition: margin-right 0.35s cubic-bezier(.4,0,.2,1); }
+    }
+    @media (max-width: 768px) {
+      .sim-toggle-btn { display: none !important; }
+      .sim-panel { display: none !important; }
+    }
   </style>
+  <base target="_blank">
 </head>
 <body>
 
-  <div id="splash">
-    <img src="https://i.postimg.cc/tRMK3mNK/Steward-logo.png" alt="Steward" class="splash-logo">
-    <div class="splash-bar"><div class="splash-bar-fill" id="splashBar"></div></div>
-  </div>
+<div id="splash">
+  <img src="https://i.postimg.cc/tRMK3mNK/Steward-logo.png" alt="Steward" class="splash-logo">
+  <div class="splash-bar"><div class="splash-bar-fill"></div></div>
+</div>
 
-  <div class="dialog-overlay" id="dialogOverlay">
-    <div class="dialog-box" id="dialogBox">
-      <div class="dialog-title" id="dialogTitle"></div>
-      <div class="dialog-msg" id="dialogMsg"></div>
-      <div class="dialog-btns" id="dialogBtns"></div>
-    </div>
+<div class="dialog-overlay" id="dialogOverlay">
+  <div class="dialog-box" id="dialogBox">
+    <div class="dialog-title" id="dialogTitle"></div>
+    <div class="dialog-msg" id="dialogMsg"></div>
+    <div class="dialog-btns" id="dialogBtns"></div>
   </div>
+</div>
 
-  <div class="auth-overlay" id="authOverlay">
-    <div class="auth-box" id="authBox">
-      <button class="auth-close" id="authClose"><i data-feather="x" style="width:18px;height:18px;"></i></button>
-      <div class="auth-icon"><i data-feather="code" style="width:24px;height:24px;"></i></div>
-      <div class="auth-title">Sign in to Steward</div>
-      <div class="auth-sub">Unlock unlimited conversations, saved threads, and the full power of Grok Build.</div>
-      <button class="google-btn" id="googleSignInBtn">
-        <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="20" height="20" alt="Google"> Continue with Google
-      </button>
-    </div>
+<div class="auth-overlay" id="authOverlay">
+  <div class="auth-box" id="authBox">
+    <button class="auth-close" id="authClose"><i data-feather="x" style="width:18px;height:18px;"></i></button>
+    <div class="auth-icon"><i data-feather="code" style="width:24px;height:24px;"></i></div>
+    <div class="auth-title">Sign in to Steward</div>
+    <div class="auth-sub">Unlock unlimited conversations, saved threads, and the full power of Grok Build.</div>
+    <button class="google-btn" id="googleSignInBtn">
+      <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" width="20" height="20" alt="Google">
+      Continue with Google
+    </button>
   </div>
+</div>
 
-  <div class="pricing-overlay" id="pricingOverlay">
-    <div class="pricing-box" id="pricingBox">
-      <button class="pricing-close" id="pricingClose"><i data-feather="x" style="width:18px;height:18px;"></i></button>
-      <div class="pricing-header">
-        <div class="pricing-eyebrow">Steward Plans</div>
-        <div class="pricing-title">Build without limits</div>
-        <div class="pricing-sub">Every account gets free daily credits. Upgrade anytime to unlock more power.</div>
-        <div class="pricing-free-note">
-          <i data-feather="gift" style="width:12px;height:12px;"></i> Free users get <strong id="freeLimitLabel">10 messages/day</strong> — no card required
+<div class="pricing-overlay" id="pricingOverlay">
+  <div class="pricing-box" id="pricingBox">
+    <button class="pricing-close" id="pricingClose"><i data-feather="x" style="width:18px;height:18px;"></i></button>
+
+    <div class="pricing-header">
+      <div class="pricing-eyebrow">Steward Plans</div>
+      <div class="pricing-title">Build without limits</div>
+      <div class="pricing-sub">Every account gets free daily credits. Upgrade anytime to unlock more power.</div>
+      
+      <div class="billing-toggle-wrapper">
+        <span class="billing-label active" id="label-mo" onclick="window.setBilling(false)">Monthly</span>
+        <div class="switch-track" id="billingSwitch" onclick="window.toggleBilling()">
+          <div class="switch-thumb"></div>
         </div>
+        <span class="billing-label" id="label-yr" onclick="window.setBilling(true)">
+          Yearly <span class="save-badge">Save 20%</span>
+        </span>
       </div>
-      <div class="pricing-grid" id="pricingGrid">
-        <div class="plan-card" id="plan-free" onclick="window.selectPlan('free')">
-          <div class="plan-name">Free / Hobby</div>
-          <div class="plan-price-row"><div class="plan-price">R0</div><div class="plan-price-unit">/mo</div></div>
-          <div class="plan-target">Students, casual users</div>
-          <div class="plan-credits">R80–R165 credits</div>
-          <button class="plan-cta cta-outline" onclick="window.selectPlan('free');event.stopPropagation()">Continue Free</button>
-        </div>
-        <div class="plan-card plan-popular" id="plan-pro" onclick="window.selectPlan('pro')">
-          <div class="plan-badge">Sweet Spot</div>
-          <div class="plan-name">Pro</div>
-          <div class="plan-price-row"><div class="plan-price">R330</div><div class="plan-price-unit">/mo</div></div>
-          <div class="plan-yearly">R2,640/yr · save ~20%</div>
-          <div class="plan-target">Individual developers</div>
-          <div class="plan-credits">R330 credits included</div>
-          <button class="plan-cta cta-accent" onclick="window.selectPlan('pro');event.stopPropagation()">Upgrade to Pro</button>
-        </div>
-      </div>
-    </div>
-  </div>
 
-  <button class="sim-toggle-btn" id="simToggleBtn" title="Toggle Live Preview Simulator">
-    <i data-feather="smartphone" style="width:18px;height:18px;"></i>
-  </button>
+      <div class="pricing-free-note">
+        <i data-feather="gift" style="width:12px;height:12px;"></i>
+        Free users get <strong id="freeLimitLabel">10 messages/day</strong> — no card required
+      </div>
+    </div>
 
-  <div class="sim-panel" id="simPanel">
-    <div class="sim-topbar">
-      <div class="sim-title">
-        <i data-feather="cpu" style="width:14px;height:14px;color:var(--accent-bright);"></i>
-        Live Simulator
+    <div class="pricing-grid" id="pricingGrid">
+      <div class="plan-card" id="plan-free" onclick="window.selectPlan('free')">
+        <div class="plan-name">Hobby</div>
+        <div class="plan-price-wrap">
+          <div class="plan-price-row">
+            <div class="plan-price">R0</div>
+          </div>
+          <div class="plan-price-unit">Forever free</div>
+        </div>
+        <div class="plan-target">Perfect for students and casual exploration.</div>
+        <div class="plan-credits">R80–R165 credits/mo</div>
+        <button class="plan-cta cta-outline" onclick="window.selectPlan('free');event.stopPropagation()">Current Plan</button>
       </div>
-      <div class="sim-actions">
-        <button class="sim-btn" id="simRefreshBtn" title="Refresh preview container"><i data-feather="refresh-cw" style="width:14px;height:14px;"></i></button>
-        <button class="sim-btn" id="simOpenExtBtn" title="Open preview in new browser tab"><i data-feather="external-link" style="width:14px;height:14px;"></i></button>
-        <button class="sim-btn" id="simCloseBtn" title="Close preview panel"><i data-feather="x" style="width:15px;height:15px;"></i></button>
-      </div>
-    </div>
-    <div class="sim-iframe-wrap" id="simIframeWrap">
-      <div class="sim-empty-state" id="simEmptyState">
-        <div class="sim-empty-icon"><i data-feather="layers" style="width:18px;height:18px;"></i></div>
-        <div class="sim-empty-title">Simulator Sandbox Empty</div>
-        <div class="sim-empty-sub">Ask Steward to generate standard HTML, CSS, or JS — then click "Run Code Block" to verify changes instantly</div>
-      </div>
-    </div>
-    <div class="sim-footer">
-      <div class="sim-status-bar">
-        <div class="sim-status-dot" id="simStatusDot"></div>
-        <span class="sim-status-text" id="simStatusText">Ready to preview</span>
-      </div>
-      <div class="sim-run-bar">
-        <button class="sim-run-full-btn" id="simRunLastBtn">
-          <i data-feather="play" style="width:13px;height:13px;"></i> Run Latest Code
-        </button>
-        <button class="sim-clear-btn" id="simClearBtn" title="Clear preview">
-          <i data-feather="trash-2" style="width:14px;height:14px;"></i>
+
+      <div class="plan-card plan-popular" id="plan-pro" onclick="window.selectPlan('pro')">
+        <div class="plan-badge">Most Popular</div>
+        <div class="plan-name">Pro</div>
+        <div class="plan-price-wrap">
+          <div class="plan-price-row">
+            <div class="plan-price" data-mo="R330" data-yr="R220">R330</div>
+            <div class="plan-price-unit">/mo</div>
+          </div>
+          <div class="plan-yearly-total" data-total="Billed R2,640 annually"></div>
+        </div>
+        <div class="plan-target">For individual developers building applications.</div>
+        <div class="plan-credits">R330 credits included</div>
+        <button class="plan-cta cta-accent" onclick="window.selectPlan('pro');event.stopPropagation()">
+          <i data-feather="zap" style="width:14px;height:14px;"></i> Get Pro
         </button>
       </div>
-      <div class="sim-hint-text">Runs the last HTML / CSS / JS code block from chat</div>
+
+      <div class="plan-card" id="plan-proplus" onclick="window.selectPlan('proplus')">
+        <div class="plan-name">Pro+</div>
+        <div class="plan-price-wrap">
+          <div class="plan-price-row">
+            <div class="plan-price" data-mo="R825" data-yr="R660">R825</div>
+            <div class="plan-price-unit">/mo</div>
+          </div>
+          <div class="plan-yearly-total" data-total="Billed R7,920 annually"></div>
+        </div>
+        <div class="plan-target">For power users and full-time developers.</div>
+        <div class="plan-credits">R990 credits included</div>
+        <button class="plan-cta cta-accent" onclick="window.selectPlan('proplus');event.stopPropagation()">Get Pro+</button>
+      </div>
+
+      <div class="plan-card" id="plan-teams" onclick="window.selectPlan('teams')">
+        <div class="plan-name">Teams</div>
+        <div class="plan-price-wrap">
+          <div class="plan-price-row">
+            <div class="plan-price" data-mo="R580" data-yr="R440">R580</div>
+            <div class="plan-price-unit">/user/mo</div>
+          </div>
+          <div class="plan-yearly-total" data-total="Billed R5,280/user annually"></div>
+        </div>
+        <div class="plan-target">For small teams and startups scaling rapidly.</div>
+        <div class="plan-credits">R660/user credits</div>
+        <button class="plan-cta cta-accent" onclick="window.selectPlan('teams');event.stopPropagation()">Get Teams</button>
+      </div>
+      
+      <div class="plan-card plan-enterprise" id="plan-enterprise">
+        <div class="plan-name">Enterprise</div>
+        <div class="plan-price-wrap">
+          <div class="plan-price-row">
+            <div class="plan-price" style="font-size:1.8rem;">Custom</div>
+          </div>
+          <div class="plan-price-unit">Contact us</div>
+        </div>
+        <div class="plan-target">Companies & larger teams. Pooled credits, SSO, SLAs.</div>
+        <div class="plan-credits">Pooled credits</div>
+        <button class="plan-cta cta-outline" onclick="window.contactSales()">Contact Sales</button>
+      </div>
     </div>
   </div>
+</div>
 
-  <aside class="sidebar" id="sidebar">
-    <div class="sidebar-top">
-      <div class="wordmark">
-        <img src="https://i.postimg.cc/tRMK3mNK/Steward-logo.png" alt="Steward" class="wordmark-logo">
+<button class="sim-toggle-btn" id="simToggleBtn" title="Toggle mobile preview">
+  <div class="sim-badge"></div>
+  <i data-feather="smartphone" style="width:18px;height:18px;"></i>
+</button>
+
+<div class="sim-panel" id="simPanel">
+  <div class="sim-topbar">
+    <span class="sim-title">
+      <i data-feather="smartphone" style="width:12px;height:12px;margin-right:4px;vertical-align:-1px;"></i>
+      Preview
+    </span>
+    <button class="sim-topbar-btn" id="simRefreshBtn" title="Reload preview">
+      <i data-feather="refresh-cw" style="width:14px;height:14px;"></i>
+    </button>
+    <button class="sim-topbar-btn" id="simOpenExtBtn" title="Open in new tab">
+      <i data-feather="external-link" style="width:14px;height:14px;"></i>
+    </button>
+    <button class="sim-topbar-btn" id="simCloseBtn" title="Close simulator">
+      <i data-feather="x" style="width:14px;height:14px;"></i>
+    </button>
+  </div>
+
+  <div class="sim-phone-wrap">
+    <div class="sim-phone" id="simPhone">
+      <div class="sim-phone-notch">
+        <div class="sim-notch-speaker"></div>
+        <div class="sim-notch-cam"></div>
       </div>
-      <button class="new-thread-btn" id="newThreadBtn">
-        <i data-feather="plus" style="width:16px;height:16px;"></i> New Thread
-      </button>
-    </div>
-    
-    <div class="sidebar-section-threads">
-      <div class="sidebar-label">Recent Threads</div>
-      <div id="threadList"></div>
-    </div>
-
-    <div class="workspace-section">
-      <div class="sidebar-label">Project Workspace</div>
-      <button class="workspace-btn" id="openWorkspaceBtn">
-        <i data-feather="folder-plus" style="width:14px;height:14px;"></i> Open Directory
-      </button>
-      <div class="tree-container" id="workspaceTree"></div>
-    </div>
-
-    <div class="sidebar-footer">
-      <div class="user-chip" id="userChip">
-        <div class="user-avatar" id="userAvatar">
-          <i data-feather="user" style="width:16px;height:16px;"></i>
-        </div>
-        <div class="user-info">
-          <div class="user-name" id="userName">Guest</div>
-          <div class="user-status">grok-build · ready</div>
-        </div>
-        <i data-feather="more-horizontal" style="width:16px;height:16px;color:var(--text-3);"></i>
-      </div>
-    </div>
-  </aside>
-
-  <div class="main-wrapper">
-    <div class="topbar">
-      <button class="menu-toggle" id="menuToggle"><i data-feather="menu" style="width:18px;height:18px;"></i></button>
-      <div class="model-selector">
-        <div class="model-dot"></div>
-        <span id="modelLabel">grok build</span>
-        <i data-feather="chevron-down" style="width:12px;height:12px;"></i>
-      </div>
-      <div class="topbar-spacer"></div>
-      <div class="topbar-actions">
-        <button class="topbar-btn upgrade-btn" id="upgradeBtn">View Plans</button>
-      </div>
-    </div>
-
-    <div class="chat-scroll" id="chatScroll">
-      <div class="chat-inner">
-        <div class="welcome" id="welcomeScreen">
-          <h1 class="welcome-headline">I'm <span class="hl">Steward</span>, your local<br>coding assistant.</h1>
-          <p class="welcome-sub">Integrated AI architecture tuned for code engineering. Index local paths or type questions to start production builds.</p>
-          
-          <div class="starter-grid">
-            <div class="starter-card" data-prompt="Design an elegant modern landing page dashboard template with HTML and inline Tailwind CSS setup:">
-              <div class="starter-icon ic-purple"><i data-feather="layout" style="width:18px;height:18px;"></i></div>
-              <p>Build a responsive UI layout</p>
-              <div class="starter-tag">design · preview</div>
-            </div>
-            <div class="starter-card" data-prompt="Write a high-performance JavaScript function to parse multi-line deep directory paths and organize them into an index:">
-              <div class="starter-icon ic-green"><i data-feather="terminal" style="width:18px;height:18px;"></i></div>
-              <p>Optimize recursive algorithms</p>
-              <div class="starter-tag">logic · optimize</div>
-            </div>
-            <div class="starter-card" data-prompt="Write a complete HTML page that I can preview — build me a beautiful landing page for a SaaS product called Steward:">
-              <div class="starter-icon ic-orange"><i data-feather="monitor" style="width:18px;height:18px;"></i></div>
-              <p>Generate & preview HTML</p>
-              <div class="starter-tag">build · preview</div>
-            </div>
+      <div class="sim-iframe-wrap" id="simIframeWrap">
+        <div class="sim-empty-state" id="simEmptyState">
+          <div class="sim-empty-icon">
+            <i data-feather="monitor" style="width:18px;height:18px;"></i>
           </div>
-        </div>
-
-        <div id="messagesContainer" class="chat-messages"></div>
-        <div id="scrollAnchor"></div>
-      </div>
-    </div>
-
-    <div class="input-zone" id="inputZone">
-      <div class="input-panel">
-        <div class="input-context-bar">
-          <div class="ctx-pill" id="langCtx">
-            <i data-feather="hash" style="width:11px;height:11px;"></i>
-            <span id="langLabel">general</span>
-          </div>
-          <div class="ctx-spacer"></div>
-          <div class="input-hint"><span class="kbd">⌘↵</span> send &nbsp;·&nbsp; <span class="kbd">⇧↵</span> newline</div>
-        </div>
-        <div class="input-box" id="inputBox">
-          <div class="autocomplete-panel" id="autocompletePanel"></div>
-          
-          <div class="input-left">
-            <button class="input-tool-btn" title="Attach file" id="attachBtn"><i data-feather="paperclip" style="width:17px;height:17px;"></i></button>
-          </div>
-          <textarea class="chat-textarea" id="chatTextarea" placeholder="Ask anything about your code... Use @filename for workspace context" rows="1"></textarea>
-          <button class="send-btn" id="sendBtn" disabled>
-            <i data-feather="arrow-up" style="width:16px;height:16px;"></i>
-          </button>
+          <div class="sim-empty-title">No preview yet</div>
+          <div class="sim-empty-sub">Ask Steward to write HTML, CSS, or JS — then hit Run to see it here</div>
         </div>
       </div>
     </div>
   </div>
 
-  <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-    import { getAuth, onAuthStateChanged, GoogleAuthProvider, signInWithPopup, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
-    import { getDatabase, ref, get, push, set, serverTimestamp, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
-    import { getRemoteConfig, fetchAndActivate, getString } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-remote-config.js";
+  <div class="sim-footer">
+    <div class="sim-status-bar">
+      <div class="sim-status-dot" id="simStatusDot"></div>
+      <span class="sim-status-text" id="simStatusText">Ready to preview</span>
+    </div>
+    <div class="sim-run-bar">
+      <button class="sim-run-full-btn" id="simRunLastBtn">
+        <i data-feather="play" style="width:13px;height:13px;"></i>
+        Run Latest Code
+      </button>
+      <button class="sim-clear-btn" id="simClearBtn" title="Clear preview">
+        <i data-feather="trash-2" style="width:14px;height:14px;"></i>
+      </button>
+    </div>
+    <div class="sim-hint-text">Runs the last HTML / CSS / JS code block from chat</div>
+  </div>
+</div>
 
-    // Fallback configurations
-    const firebaseConfig = { apiKey: "", authDomain: "", databaseURL: "", projectId: "", storageBucket: "", messagingSenderId: "", appId: "" };
-    const app = initializeApp(firebaseConfig);
-    const auth = getAuth(app);
-    const db = getDatabase(app);
 
-    let XAI_KEY = "xai-grok-pro-platform-key-here"; 
-    let API_BASE = "https://api.x.ai/v1";
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-top">
+    <div class="wordmark">
+      <img src="https://i.postimg.cc/tRMK3mNK/Steward-logo.png" alt="Steward" class="wordmark-logo">
+    </div>
+    <button class="new-thread-btn" id="newThreadBtn">
+      <i data-feather="plus" style="width:16px;height:16px;"></i>
+      New Thread
+    </button>
+  </div>
+  <div class="sidebar-section">
+    <div class="sidebar-label">Recent Threads</div>
+    <div id="threadList"></div>
+  </div>
+  <div class="sidebar-footer">
+    <div class="user-chip" id="userChip">
+      <div class="user-avatar" id="userAvatar">
+        <i data-feather="user" style="width:16px;height:16px;"></i>
+      </div>
+      <div class="user-info">
+        <div class="user-name" id="userName">Guest</div>
+        <div class="user-status">grok-build · ready</div>
+      </div>
+      <i data-feather="more-horizontal" style="width:16px;height:16px;color:var(--text-3);"></i>
+    </div>
+  </div>
+</aside>
 
-    let currentUser = null;
-    let currentThreadId = null;
-    let chatHistory = [];
-    let guestCount = 0;
-    let todayUsage = 0;
-    let userPlan = 'free';
+<div class="main-wrapper">
+  <div class="topbar">
+    <button class="menu-toggle" id="menuToggle"><i data-feather="menu" style="width:18px;height:18px;"></i></button>
+    <div class="model-selector">
+      <div class="model-dot"></div>
+      <span id="modelLabel">grok build</span>
+      <i data-feather="chevron-down" style="width:14px;height:14px;opacity:0.5;"></i>
+    </div>
+    <div class="topbar-spacer"></div>
+    <div class="topbar-actions">
+      <button class="topbar-btn" id="themeToggle" title="Toggle theme">
+        <i data-feather="sun" id="themeIcon" style="width:18px;height:18px;"></i>
+      </button>
+      <button class="topbar-btn" title="Keyboard shortcuts" onclick="window.showShortcuts()">
+        <i data-feather="command" style="width:18px;height:18px;"></i>
+      </button>
+      <button class="topbar-btn upgrade-btn" id="pricingBtn" title="Upgrade plan">Upgrade</button>
+    </div>
+  </div>
 
-    const PLAN_DAILY_LIMITS = { guest: 5, free: 15, pro: 150, proplus: 500, teams: 9999, enterprise: 9999 };
-
-    const SYSTEM_PROMPT = `You are Steward, an advanced expert AI coding assistant. You specialize in full-stack engineering, robust hardware diagnostics protocols, and building clean production-grade user frameworks. Always return correct, clean programming representations.
-ROLE GUIDELINES:
-- Build complete functional components directly.
-- Use explicit markdown code blocks with matching language tags.
-- For multi-file requests, title files explicitly.
-- Prioritize concise, scannable explanations over verbose descriptions.`;
-
-    const sidebar = document.getElementById('sidebar');
-    const menuToggle = document.getElementById('menuToggle');
-    const welcomeScreen = document.getElementById('welcomeScreen');
-    const messagesContainer = document.getElementById('messagesContainer');
-    const chatScroll = document.getElementById('chatScroll');
-    const threadList = document.getElementById('threadList');
-    const chatTextarea = document.getElementById('chatTextarea');
-    const sendBtn = document.getElementById('sendBtn');
-    const inputZone = document.getElementById('inputZone');
-    const langLabel = document.getElementById('langLabel');
-
-    // Project workspace states
-    let projectFiles = [];
-    let indexedWorkspaceText = "";
-    let selectedAutocompleteIndex = 0;
-    let filteredFilesForAutocomplete = [];
-
-    const openWorkspaceBtn = document.getElementById('openWorkspaceBtn');
-    const workspaceTree = document.getElementById('workspaceTree');
-    const autocompletePanel = document.getElementById('autocompletePanel');
-
-    // Workspace Folder Processing Functionality
-    if (openWorkspaceBtn) {
-      openWorkspaceBtn.addEventListener('click', async () => {
-        try {
-          if (!window.showDirectoryPicker) {
-            window.showDialog('Browser Support Notice', 'Your current browser environment does not support directory picking natively. Try Chrome, Edge, or Opera.', [{ text: 'Got it', cls: 'btn-primary' }]);
-            return;
-          }
-          const dirHandle = await window.showDirectoryPicker();
-          projectFiles = [];
-          workspaceTree.innerHTML = '';
-          openWorkspaceBtn.innerHTML = `<i data-feather="folder" style="width:14px;height:14px;"></i> ${dirHandle.name}`;
-          feather.replace();
-
-          await parseDirectory(dirHandle, "");
-          renderWorkspaceTree();
-          buildCodebaseContextIndex();
-          
-          window.showDialog('Workspace Synced', `Successfully indexed ${projectFiles.length} readable assets from workspace [${dirHandle.name}]. Mention them anytime using @filename.`, [{ text: 'Awesome', cls: 'btn-primary' }]);
-        } catch (err) {
-          console.warn("Directory parsing discarded or failed:", err);
-        }
-      });
-    }
-
-    async function parseDirectory(dirHandle, pathPrefix) {
-      for await (const node of dirHandle.values()) {
-        const fullNodePath = pathPrefix ? `${pathPrefix}/${node.name}` : node.name;
-        if (['node_modules', '.git', 'dist', 'build', '.next', '.DS_Store'].includes(node.name)) continue;
-
-        if (node.kind === 'file') {
-          try {
-            const rawFile = await node.getFile();
-            const textExtensions = ['.js', '.jsx', '.ts', '.tsx', '.html', '.css', '.json', '.md', '.txt', '.py', '.dart', '.java', '.yaml'];
-            const readable = textExtensions.some(ext => node.name.endsWith(ext));
-            
-            let fileBody = "";
-            if (readable && rawFile.size < 800000) { 
-              fileBody = await rawFile.text();
-            }
-            projectFiles.push({ name: node.name, path: fullNodePath, content: fileBody, handle: node });
-          } catch (e) {
-            console.warn("Error indexing path context:", fullNodePath, e);
-          }
-        } else if (node.kind === 'directory') {
-          await parseDirectory(node, fullNodePath);
-        }
-      }
-    }
-
-    function renderWorkspaceTree() {
-      workspaceTree.innerHTML = '';
-      const items = [...projectFiles].sort((a, b) => a.path.localeCompare(b.path));
-      items.forEach(file => {
-        const row = document.createElement('div');
-        row.className = 'tree-node file';
-        row.innerHTML = `<i data-feather="file" class="node-icon"></i><span>${file.path}</span>`;
-        row.onclick = () => {
-          chatTextarea.value += `@${file.name} `;
-          chatTextarea.focus();
-          chatTextarea.dispatchEvent(new Event('input'));
-        };
-        workspaceTree.appendChild(row);
-      });
-      feather.replace();
-    }
-
-    function buildCodebaseContextIndex() {
-      let coreIndexStr = "=== CODEBASE WORKSPACE SUMMARY ===\n";
-      projectFiles.forEach(f => {
-        if (f.content) {
-          coreIndexStr += `\n--- SOURCE FILE PATH: ${f.path} ---\n${f.content}\n`;
-        } else {
-          coreIndexStr += `\n--- SOURCE FILE PATH: ${f.path} (Binary context hidden) ---\n`;
-        }
-      });
-      indexedWorkspaceText = coreIndexStr;
-    }
-
-    // Autocomplete UI handling
-    chatTextarea.addEventListener('input', () => {
-      const inputStr = chatTextarea.value;
-      const caret = chatTextarea.selectionStart;
-      const sliceBefore = inputStr.substring(0, caret);
-      const splitTerms = sliceBefore.split(/\s+/);
-      const trailingWord = splitTerms[splitTerms.length - 1];
-
-      if (trailingWord && trailingWord.startsWith('@') && projectFiles.length > 0) {
-        const subFilter = trailingWord.substring(1).toLowerCase();
-        filteredFilesForAutocomplete = projectFiles.filter(f => f.name.toLowerCase().includes(subFilter));
-        if (filteredFilesForAutocomplete.length > 0) {
-          renderAutocompleteDropup(filteredFilesForAutocomplete);
-        } else {
-          dismissAutocomplete();
-        }
-      } else {
-        dismissAutocomplete();
-      }
-    });
-
-    function renderAutocompleteDropup(matchList) {
-      autocompletePanel.innerHTML = '';
-      autocompletePanel.style.display = 'flex';
-      selectedAutocompleteIndex = 0;
-      
-      matchList.forEach((file, idx) => {
-        const itemNode = document.createElement('div');
-        itemNode.className = `autocomplete-item ${idx === 0 ? 'selected' : ''}`;
-        itemNode.innerHTML = `<i data-feather="file" style="width:12px;height:12px;"></i> <span>${file.name} <small style="opacity:0.4;font-size:0.65rem;">(${file.path})</small></span>`;
-        itemNode.onclick = () => completeTokenWithFile(file);
-        autocompletePanel.appendChild(itemNode);
-      });
-      feather.replace();
-    }
-
-    function dismissAutocomplete() {
-      autocompletePanel.style.display = 'none';
-    }
-
-    function completeTokenWithFile(file) {
-      const currentVal = chatTextarea.value;
-      const pos = chatTextarea.selectionStart;
-      const before = currentVal.substring(0, pos);
-      const chunks = before.split(/\s+/);
-      chunks[chunks.length - 1] = `@${file.name}`;
-      
-      const tail = currentVal.substring(pos);
-      chatTextarea.value = chunks.join(' ') + ' ' + tail;
-      dismissAutocomplete();
-      chatTextarea.focus();
-    }
-
-    chatTextarea.addEventListener('keydown', (e) => {
-      if (autocompletePanel.style.display === 'flex') {
-        const listItems = autocompletePanel.querySelectorAll('.autocomplete-item');
-        if (e.key === 'ArrowDown') {
-          e.preventDefault();
-          listItems[selectedAutocompleteIndex]?.classList.remove('selected');
-          selectedAutocompleteIndex = (selectedAutocompleteIndex + 1) % listItems.length;
-          listItems[selectedAutocompleteIndex]?.classList.add('selected');
-          listItems[selectedAutocompleteIndex]?.scrollIntoView({ block: 'nearest' });
-        } else if (e.key === 'ArrowUp') {
-          e.preventDefault();
-          listItems[selectedAutocompleteIndex]?.classList.remove('selected');
-          selectedAutocompleteIndex = (selectedAutocompleteIndex - 1 + listItems.length) % listItems.length;
-          listItems[selectedAutocompleteIndex]?.classList.add('selected');
-          listItems[selectedAutocompleteIndex]?.scrollIntoView({ block: 'nearest' });
-        } else if (e.key === 'Enter') {
-          e.preventDefault();
-          if (filteredFilesForAutocomplete[selectedAutocompleteIndex]) {
-            completeTokenWithFile(filteredFilesForAutocomplete[selectedAutocompleteIndex]);
-          }
-        } else if (e.key === 'Escape') {
-          dismissAutocomplete();
-        }
-      }
-    });
-
-    menuToggle.addEventListener('click', () => sidebar.classList.toggle('open'));
-    document.addEventListener('click', (e) => {
-      if (window.innerWidth <= 768 && !sidebar.contains(e.target) && !menuToggle.contains(e.target))
-        sidebar.classList.remove('open');
-    });
-
-    window.showDialog = (title, msg, btns) => {
-      const overlay = document.getElementById('dialogOverlay');
-      const box = document.getElementById('dialogBox');
-      document.getElementById('dialogTitle').textContent = title;
-      document.getElementById('dialogMsg').textContent = msg;
-      const btnsCont = document.getElementById('dialogBtns');
-      btnsCont.innerHTML = '';
-      btns.forEach(b => {
-        const el = document.createElement('button');
-        el.className = `dialog-btn ${b.cls || 'btn-secondary'}`;
-        el.textContent = b.text;
-        el.onclick = () => {
-          window.closeDialog();
-          if (b.fn) b.fn();
-        };
-        btnsCont.appendChild(el);
-      });
-      overlay.style.display = 'flex';
-      setTimeout(() => { overlay.style.opacity = '1'; box.style.transform = 'scale(1)'; }, 10);
-    };
-
-    window.closeDialog = () => {
-      const overlay = document.getElementById('dialogOverlay');
-      const box = document.getElementById('dialogBox');
-      overlay.style.opacity = '0';
-      box.style.transform = 'scale(0.95)';
-      setTimeout(() => { overlay.style.display = 'none'; }, 200);
-    };
-
-    function updatePlanStatusUI() {
-      const isPremium = ['pro', 'proplus', 'teams', 'enterprise'].includes(userPlan);
-      document.getElementById('upgradeBtn').style.display = isPremium ? 'none' : 'block';
-    }
-
-    async function loadTodayUsage(uid) {
-      const dStr = new Date().toISOString().split('T')[0];
-      const snap = await get(ref(db, `cf_usage/${uid}/${dStr}`));
-      todayUsage = snap.exists() ? snap.val().count || 0 : 0;
-    }
-
-    async function incrementUsage(uid) {
-      const dStr = new Date().toISOString().split('T')[0];
-      todayUsage++;
-      await set(ref(db, `cf_usage/${uid}/${dStr}`), { count: todayUsage, updatedAt: serverTimestamp() });
-    }
-
-    function isAtDailyLimit() {
-      const limit = PLAN_DAILY_LIMITS[userPlan] || 10;
-      return todayUsage >= limit;
-    }
-
-    function getDailyLimit() { return PLAN_DAILY_LIMITS[userPlan] || 10; }
-
-    function showAuthGate() {
-      document.getElementById('auth-gate')?.remove();
-      const div = document.createElement('div');
-      div.id = 'auth-gate';
-      div.className = 'auth-gate';
-      div.innerHTML = `<div class="gate-icon"><i data-feather="lock"></i></div><div class="gate-title">Sign in to continue building</div><div class="gate-sub">You've hit the sandbox query limit allowed for guests. Authenticate safely to fetch more context tracks.</div><button class="gate-btn" onclick="window.openAuth()"><img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" style="width:18px;height:18px;" alt=""> Sign in with Google</button></div>`;
-      messagesContainer.appendChild(div);
-      feather.replace();
-      scrollToBottom();
-    }
-
-    function showUpgradeGate() {
-      document.getElementById('upgrade-gate')?.remove();
-      const div = document.createElement('div');
-      div.id = 'upgrade-gate';
-      div.className = 'auth-gate';
-      div.innerHTML = `<div class="gate-icon" style="background:rgba(255,210,96,0.15);color:var(--yellow);"><i data-feather="zap"></i></div><div class="gate-title">Daily plan limit reached</div><div class="gate-sub">Upgrade your account allocation to unlock uninterrupted high-token context pipelines and faster responses.</div><button class="gate-btn" style="background:var(--accent);" onclick="window.openPricing()"><i data-feather="sliders" style="width:16px;height:16px;"></i> Review Pro Plans</button></div>`;
-      messagesContainer.appendChild(div);
-      feather.replace();
-      scrollToBottom();
-    }
-
-    async function handleSend() {
-      const prompt = chatTextarea.value.trim();
-      if (!prompt || !XAI_KEY) return;
-      if (!currentUser && guestCount >= PLAN_DAILY_LIMITS.guest) { showAuthGate(); return; }
-      if (currentUser && isAtDailyLimit()) { showUpgradeGate(); return; }
-
-      appendUserMsg(prompt);
-      chatTextarea.value = '';
-      chatTextarea.style.height = 'auto';
-      sendBtn.disabled = true;
-      langLabel.textContent = detectLang(prompt);
-      
-      const clearThinking = appendThinking();
-      
-      // Inject Workspace context files dynamically if keywords are hit or files are referenced explicitly
-      let liveWorkspacePayloadContext = "";
-      if (indexedWorkspaceText) {
-        const lookupPromptLower = prompt.toLowerCase();
-        let targetFilesFound = [];
-        
-        projectFiles.forEach(f => {
-          if (prompt.includes(`@${f.name}`)) {
-            targetFilesFound.push(f);
-          }
-        });
-
-        if (targetFilesFound.length > 0) {
-          liveWorkspacePayloadContext = "\n\n[Explicit Workspace File Targets]:\n";
-          targetFilesFound.forEach(f => {
-            liveWorkspacePayloadContext += `\n--- Path: ${f.path} ---\n${f.content || "(Empty or structural directory layout)"}\n`;
-          });
-        } else if (lookupPromptLower.includes('project') || lookupPromptLower.includes('workspace') || lookupPromptLower.includes('app') || lookupPromptLower.includes('codebase')) {
-          liveWorkspacePayloadContext = "\n\n[Active Full Project Workspace Map Index]:\n" + indexedWorkspaceText;
-        }
-      }
-
-      const msgs = [{ role: 'system', content: SYSTEM_PROMPT + liveWorkspacePayloadContext }, ...chatHistory, { role: 'user', content: prompt }];
-
-      try {
-        const res = await fetch(`${API_BASE}/chat/completions`, {
-          method: 'POST',
-          headers: { 'Authorization': `Bearer ${XAI_KEY}`, 'Content-Type': 'application/json' },
-          body: JSON.stringify({ model: 'grok-build-0.1', messages: msgs })
-        });
-        if (!res.ok) throw new Error(await res.text());
-        const data = await res.json();
-        clearThinking();
-        document.getElementById('thinking-block')?.remove();
-        
-        const aiText = data.choices[0].message.content;
-        chatHistory.push({ role: 'user', content: prompt });
-        chatHistory.push({ role: 'assistant', content: aiText });
-        
-        appendAIMsg(aiText);
-        feather.replace();
-        saveThread();
-
-        if (!currentUser) {
-          guestCount++;
-          if (guestCount >= PLAN_DAILY_LIMITS.guest) showAuthGate();
-        } else {
-          await incrementUsage(currentUser.uid);
-          const limit = getDailyLimit();
-          if (limit < 999 && todayUsage >= limit - 2 && todayUsage < limit) {
-            const remaining = limit - todayUsage;
-            window.showDialog('Token Track Limit Notice', `You have ${remaining} query cycles left today on your active account.`, [{ text: 'OK', cls: 'btn-secondary' }]);
-          }
-        }
-      } catch (err) {
-        clearThinking();
-        document.getElementById('thinking-block')?.remove();
-        const errBlock = document.createElement('div');
-        errBlock.className = 'msg-block';
-        errBlock.innerHTML = `<div style="color:var(--red);font-family:var(--font-code);font-size:0.82rem;padding:12px;background:rgba(255,95,109,0.08);border:1px solid rgba(255,95,109,0.2);border-radius:var(--radius-md)">Error connecting to Grok Build: ${err.message}</div>`;
-        messagesContainer.appendChild(errBlock);
-        scrollToBottom();
-      }
-    }
-
-    sendBtn.onclick = handleSend;
-    chatTextarea.oninput = () => {
-      chatTextarea.style.height = 'auto';
-      chatTextarea.style.height = Math.min(chatTextarea.scrollHeight - 16, 240) + 'px';
-      sendBtn.disabled = !chatTextarea.value.trim();
-    };
-    chatTextarea.onkeydown = (e) => {
-      if (e.key === 'Enter' && !e.shiftKey && autocompletePanel.style.display !== 'flex') {
-        e.preventDefault();
-        handleSend();
-      }
-    };
-
-    document.querySelectorAll('.starter-card').forEach(c => {
-      c.onclick = () => {
-        chatTextarea.value = c.dataset.prompt;
-        chatTextarea.focus();
-        chatTextarea.dispatchEvent(new Event('input'));
-      };
-    });
-
-    const windowPricingOverlay = document.getElementById('pricingOverlay');
-    const windowPricingBox = document.getElementById('pricingBox');
-    window.openPricing = () => {
-      windowPricingOverlay.style.display = 'flex';
-      setTimeout(() => { windowPricingOverlay.classList.add('visible'); windowPricingBox.style.transform = 'translateY(0)'; }, 10);
-    };
-    window.closePricing = () => {
-      windowPricingOverlay.classList.remove('visible');
-      setTimeout(() => { windowPricingOverlay.style.display = 'none'; }, 300);
-    };
-    document.getElementById('pricingClose').onclick = window.closePricing;
-    document.getElementById('upgradeBtn').onclick = window.openPricing;
-
-    function updatePricingUI() {
-      ['free', 'pro'].forEach(id => {
-        const card = document.getElementById(`plan-${id}`);
-        if (!card) return;
-        card.querySelector('.plan-current-badge')?.remove();
-        const cta = card.querySelector('.plan-cta');
-        if (id === userPlan && id !== 'free') {
-          const badge = document.createElement('div');
-          badge.className = 'plan-current-badge';
-          badge.textContent = 'Current Plan';
-          card.querySelector('.plan-name').after(badge);
-          if (cta) { cta.textContent = 'Active Plan'; cta.className = 'plan-cta cta-muted'; cta.onclick = null; }
-        }
-      });
-    }
-
-    window.selectPlan = (planId) => {
-      if (planId === 'free') { window.closePricing(); return; }
-      if (!currentUser) { window.closePricing(); window.openAuth(); return; }
-      window.location.href = `payment.html?plan=${planId}&uid=${currentUser.uid}`;
-    };
-
-    async function loadSubscription(uid) {
-      const snap = await get(ref(db, `cf_subscriptions/${uid}`));
-      userPlan = snap.exists() ? snap.val().plan || 'free' : 'free';
-      updatePlanStatusUI();
-      updatePricingUI();
-    }
-
-    const authOverlay = document.getElementById('authOverlay');
-    const authBox = document.getElementById('authBox');
-    window.openAuth = () => {
-      authOverlay.style.display = 'flex';
-      setTimeout(() => { authOverlay.style.opacity = '1'; authBox.style.transform = 'translateY(0)'; }, 10);
-    };
-    window.closeAuth = () => {
-      authOverlay.style.opacity = '0'; authBox.style.transform = 'translateY(20px)';
-      setTimeout(() => { authOverlay.style.display = 'none'; }, 300);
-    };
-    document.getElementById('authClose').onclick = window.closeAuth;
-
-    document.getElementById('googleSignInBtn').addEventListener('click', async () => {
-      try {
-        await signInWithPopup(auth, new GoogleAuthProvider());
-        window.closeAuth();
-      } catch {
-        window.showDialog('Sign In Failed', 'Could not complete Firebase validation pipeline.', [{ text: 'OK', cls: 'btn-primary' }]);
-      }
-    });
-
-    document.getElementById('userChip').addEventListener('click', () => {
-      if (currentUser) window.showDialog('Sign Out', 'Sign out of Steward session tracker?', [{ text: 'Cancel', cls: 'btn-secondary' }, { text: 'Sign Out', cls: 'btn-danger', fn: () => signOut(auth) }]);
-      else window.openAuth();
-    });
-
-    onAuthStateChanged(auth, async user => {
-      currentUser = user;
-      const avatarEl = document.getElementById('userAvatar');
-      const nameEl = document.getElementById('userName');
-      if (user) {
-        nameEl.textContent = user.displayName?.split(' ')[0] || 'User';
-        avatarEl.innerHTML = user.photoURL ? `<img src="${user.photoURL}" alt="">` : `<span>${(user.displayName || 'U')[0].toUpperCase()}</span>`;
-        guestCount = 0;
-        document.getElementById('auth-gate')?.remove();
-        document.getElementById('upgrade-gate')?.remove();
-        await loadSubscription(user.uid);
-        await loadTodayUsage(user.uid);
-        loadThreads(user.uid);
-      } else {
-        nameEl.textContent = 'Guest';
-        avatarEl.innerHTML = `<i data-feather="user" style="width:16px;height:16px;"></i>`;
-        threadList.innerHTML = '';
-        startNewThread();
-        feather.replace();
-      }
-    });
-
-    async function loadThreads(uid) {
-      const snap = await get(ref(db, `cf_threads/${uid}`));
-      threadList.innerHTML = '';
-      if (!snap.exists()) return;
-      const sorted = Object.entries(snap.val()).sort((a, b) => (b[1].updatedAt || 0) - (a[1].updatedAt || 0));
-      
-      sorted.forEach(([threadId, t]) => {
-        const isCurrent = threadId === currentThreadId;
-        const item = document.createElement('div');
-        item.className = `thread-item ${isCurrent ? 'active' : ''}`;
-        item.id = `thread-${threadId}`;
-        
-        item.innerHTML = `
-          <div class="thread-meta-row">
-            <i data-feather="message-square" class="t-icon" style="width:14px;height:14px;"></i>
-            <div class="thread-actions">
-              <button class="t-action-btn delete-thread" data-id="${threadId}">
-                <i data-feather="trash-2" style="width:13px;height:13px;"></i>
-              </button>
-            </div>
+  <div class="chat-scroll" id="chatScroll">
+    <div class="chat-inner">
+      <div class="welcome" id="welcomeScreen">
+        <div class="welcome-headline">What are we<br><span class="hl">building today?</span></div>
+        <div class="welcome-sub">Powered by Grok Build Code. Ask anything: debug code, write functions, review PRs, explain algorithms, or architect entire systems.</div>
+        <div class="starter-grid">
+          <div class="starter-card" data-prompt="Review this code for bugs, performance issues, and best practice violations. Provide specific fixes.">
+            <div class="starter-icon ic-red"><i data-feather="alert-circle" style="width:18px;height:18px;"></i></div>
+            <p>Debug & code review</p>
+            <div class="starter-tag">inspect · fix</div>
           </div>
-          <div class="thread-text">${escapeHtml(t.title || 'Untitled Grid Track')}</div>
-        `;
-        
-        item.onclick = (e) => {
-          if (e.target.closest('.delete-thread')) {
-            e.stopPropagation();
-            const id = e.target.closest('.delete-thread').dataset.id;
-            window.showDialog('Delete Thread', 'Permanently drop this recorded thread container from your dashboard grid profile?', [
-              { text: 'Cancel', cls: 'btn-secondary' },
-              { text: 'Delete', cls: 'btn-danger', fn: async () => {
-                  await set(ref(db, `cf_threads/${uid}/${id}`), null);
-                  if (currentThreadId === id) startNewThread();
-                  loadThreads(uid);
-                }
-              }
-            ]);
-            return;
-          }
-          currentThreadId = threadId;
-          chatHistory = t.messages || [];
-          welcomeScreen.style.display = 'none';
-          messagesContainer.innerHTML = '';
-          chatHistory.forEach(msg => {
-            if (msg.role !== 'system') {
-              if (msg.role === 'user') appendUserMsg(msg.content, false);
-              else appendAIMsg(msg.content, false);
-            }
-          });
-          updateActiveThread();
-          scrollToBottom();
-        };
-        threadList.appendChild(item);
-      });
-      feather.replace();
-    }
-
-    async function saveThread() {
-      if (!currentUser) return;
-      if (!currentThreadId) {
-        const r = push(ref(db, `cf_threads/${currentUser.uid}`));
-        currentThreadId = r.key;
-      }
-      const first = chatHistory.find(m => m.role === 'user');
-      let title = first ? first.content.substring(0, 24) + (first.content.length > 24 ? '…' : '') : 'New Thread';
-      await set(ref(db, `cf_threads/${currentUser.uid}/${currentThreadId}`), { title, updatedAt: serverTimestamp(), messages: chatHistory });
-      loadThreads(currentUser.uid);
-    }
-
-    function updateActiveThread() {
-      document.querySelectorAll('.thread-item').forEach(el => el.classList.remove('active'));
-      document.getElementById(`thread-${currentThreadId}`)?.classList.add('active');
-    }
-
-    function startNewThread() {
-      currentThreadId = null;
-      chatHistory = [];
-      messagesContainer.innerHTML = '';
-      welcomeScreen.style.display = 'block';
-      chatTextarea.value = '';
-      chatTextarea.style.height = 'auto';
-      sendBtn.disabled = true;
-      langLabel.textContent = 'general';
-      updateActiveThread();
-      if (window.innerWidth <= 768) sidebar.classList.remove('open');
-    }
-    document.getElementById('newThreadBtn').onclick = startNewThread;
-
-    function escapeHtml(t) { return !t ? '' : t.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;'); }
-    function scrollToBottom() { chatScroll.scrollTop = chatScroll.scrollHeight; }
-
-    function detectLang(text) {
-      if (/\b(function|const|let|var|=>|async|await)\b/.test(text)) return 'js/ts';
-      if (/\b(def |import |print\()\b/.test(text)) return 'python';
-      if (/<\/?[a-z][^>]*>/i.test(text)) return 'html/css';
-      return 'general';
-    }
-
-    function parseMarkdown(text) {
-      const codeBlocks = [];
-      let match;
-      const regex = /```([a-zA-Z0-9_\-\+]+)?\n([\s\S]*?)```/g;
-      while ((match = regex.exec(text)) !== null) {
-        const lang = match[1] || 'code';
-        const rawCode = match[2];
-        const ph = `CODEBLOCK_${Math.random().toString(36).substr(2, 9)}`;
-        const blockId = 'code_' + Math.random().toString(36).substr(2, 9);
-        
-        const html = `<div class="code-block">
-          <div class="code-block-header">
-            <span class="code-lang-badge">${lang}</span>
-            <div class="code-actions">
-              <button class="code-action-btn run-in-sim" onclick="window.runInSim('${blockId}','${lang}')"><i data-feather="play" style="width:11px;height:11px;"></i> Run in Sim</button>
-              <button class="code-action-btn" onclick="window.copyBlock('${blockId}')"><i data-feather="copy" style="width:11px;height:11px;"></i> copy</button>
-            </div>
+          <div class="starter-card" data-prompt="Write a well-structured, production-ready function with error handling, JSDoc comments, and edge case coverage for:">
+            <div class="starter-icon ic-green"><i data-feather="feather" style="width:18px;height:18px;"></i></div>
+            <p>Write production-ready code</p>
+            <div class="starter-tag">generate · document</div>
           </div>
-          <pre><code id="${blockId}">${escapeHtml(rawCode)}</code></pre>
-        </div>`;
-        codeBlocks.push({ ph, html, lang, code: rawCode });
-      }
+          <div class="starter-card" data-prompt="Explain how this works step by step, like I'm an intermediate developer. Include mental models and diagrams if needed:">
+            <div class="starter-icon ic-cyan"><i data-feather="book-open" style="width:18px;height:18px;"></i></div>
+            <p>Explain a concept deeply</p>
+            <div class="starter-tag">learn · understand</div>
+          </div>
+          <div class="starter-card" data-prompt="Design the architecture and data model for a full-stack app that does:">
+            <div class="starter-icon ic-purple"><i data-feather="layers" style="width:18px;height:18px;"></i></div>
+            <p>Architect a full system</p>
+            <div class="starter-tag">design · plan</div>
+          </div>
+          <div class="starter-card" data-prompt="Refactor this code to be more readable, maintainable, and follow SOLID principles:">
+            <div class="starter-icon ic-yellow"><i data-feather="refresh-cw" style="width:18px;height:18px;"></i></div>
+            <p>Refactor & improve</p>
+            <div class="starter-tag">clean · optimize</div>
+          </div>
+          <div class="starter-card" data-prompt="Write a complete HTML page that I can preview — build me a beautiful landing page for a SaaS product called Steward:">
+            <div class="starter-icon ic-orange"><i data-feather="monitor" style="width:18px;height:18px;"></i></div>
+            <p>Generate & preview HTML</p>
+            <div class="starter-tag">build · preview</div>
+          </div>
+        </div>
+      </div>
+      <div id="messagesContainer" class="chat-messages"></div>
+      <div id="scrollAnchor"></div>
+    </div>
+  </div>
 
-      let outText = text;
-      codeBlocks.forEach(b => { outText = outText.replace(b.ph, b.html); });
-      
-      let processed = escapeHtml(outText);
-      codeBlocks.forEach(b => { processed = processed.replace(escapeHtml(b.html), b.html); });
-      
-      processed = processed.replace(/`([^`]+)`/g, '<code>$1</code>');
-      
-      // Notify simulator of runnable blocks found
-      if (codeBlocks.length > 0) {
-        const target = codeBlocks[codeBlocks.length - 1];
-        if (window._notifyNewCode) window._notifyNewCode(target.lang, target.code);
-      }
+  <div class="input-zone" id="inputZone">
+    <div class="input-panel">
+      <div class="input-context-bar">
+        <div class="ctx-pill" id="langCtx">
+          <i data-feather="hash" style="width:11px;height:11px;"></i>
+          <span id="langLabel">general</span>
+        </div>
+        <div class="ctx-spacer"></div>
+        <div class="input-hint"><span class="kbd">⌘↵</span> send &nbsp;·&nbsp; <span class="kbd">⇧↵</span> newline</div>
+      </div>
+      <div class="input-box" id="inputBox">
+        <div class="input-left">
+          <button class="input-tool-btn" title="Attach file" id="attachBtn"><i data-feather="paperclip" style="width:17px;height:17px;"></i></button>
+        </div>
+        <textarea class="chat-textarea" id="chatTextarea" placeholder="Ask anything about your code..." rows="1"></textarea>
+        <button class="send-btn" id="sendBtn" disabled>
+          <i data-feather="arrow-up" style="width:16px;height:16px;"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
 
-      return processed.split('\n\n').map(p => p.trim() ? `<p>${p}</p>` : '').join('\n');
-    }
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+  import { getAuth, onAuthStateChanged, GoogleAuthProvider, signInWithPopup, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+  import { getDatabase, ref, get, push, set, serverTimestamp, onValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
+  import { getRemoteConfig, fetchAndActivate, getValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-remote-config.js";
 
-    window.copyBlock = (id) => {
-      const pre = document.getElementById(id);
-      if (pre) navigator.clipboard.writeText(pre.innerText).then(() => window.showDialog('Copied', 'Block string cached to operational clipboard.', [{ text: 'OK', cls: 'btn-primary' }]));
-    };
+  const splash = document.getElementById('splash');
+  setTimeout(() => { splash.classList.add('hide'); setTimeout(() => splash.remove(), 500); }, 1400);
+  feather.replace();
 
-    function appendUserMsg(text, animate = true) {
-      welcomeScreen.style.display = 'none';
-      const block = document.createElement('div');
-      block.className = 'msg-block';
-      if (animate) block.style.opacity = '0';
-      block.innerHTML = `<div class="msg-user"><div class="msg-user-bubble">${escapeHtml(text)}</div></div>`;
-      messagesContainer.appendChild(block);
-      if (animate) requestAnimationFrame(() => { block.style.transition = 'opacity 0.2s'; block.style.opacity = '1'; });
-      scrollToBottom();
-      return block;
-    }
-
-    function appendAIMsg(content, animate = true) {
-      const block = document.createElement('div');
-      block.className = 'msg-block';
-      const mid = 'ai_' + Math.random().toString(36).substr(2, 9);
-      block.innerHTML = `<div class="msg-ai-header"><div class="ai-badge"><div class="ai-badge-dot"></div>Steward</div></div><div class="msg-ai-content" id="${mid}">${parseMarkdown(content)}</div>`;
-      messagesContainer.appendChild(block);
-      scrollToBottom();
-      return { mid };
-    }
-
-    function appendThinking() {
-      const block = document.createElement('div');
-      block.id = 'thinking-block';
-      block.className = 'thinking-row';
-      block.innerHTML = `<div class="thinking-content"><div class="thinking-label">Steward processing pipeline <div class="thinking-dots"><div class="thinking-dot"></div><div class="thinking-dot"></div><div class="thinking-dot"></div></div></div><div class="thinking-skeleton"><div class="skeleton-line" style="width:85%"></div><div class="skeleton-line" style="width:60%"></div></div></div>`;
-      messagesContainer.appendChild(block);
-      scrollToBottom();
-      return () => block.remove();
-    }
-
-    // ══════════════════════════════════════
-    // LIVE SIMULATOR CORE ACTIONS
-    // ══════════════════════════════════════
-    const simPanel = document.getElementById('simPanel');
-    const simToggleBtn = document.getElementById('simToggleBtn');
-    const simCloseBtn = document.getElementById('simCloseBtn');
-    const simRefreshBtn = document.getElementById('simRefreshBtn');
-    const simOpenExtBtn = document.getElementById('simOpenExtBtn');
-    const simRunLastBtn = document.getElementById('simRunLastBtn');
-    const simClearBtn = document.getElementById('simClearBtn');
-    const simIframeWrap = document.getElementById('simIframeWrap');
-    const simEmptyState = document.getElementById('simEmptyState');
-    const simStatusDot = document.getElementById('simStatusDot');
-    const simStatusText = document.getElementById('simStatusText');
-    
-    let simOpen = false;
-    let lastCodeContent = null;
-
-    function setSimStatus(state, msg) {
-      simStatusDot.className = 'sim-status-dot ' + state;
-      simStatusText.textContent = msg;
-    }
-
-    function openSim() {
-      simOpen = true;
-      simPanel.classList.add('open');
-      simToggleBtn.classList.add('active');
-      if (window.innerWidth >= 769) document.body.classList.add('sim-open');
-      feather.replace();
-    }
-
-    function closeSim() {
-      simOpen = false;
-      simPanel.classList.remove('open');
-      simToggleBtn.classList.remove('active');
-      document.body.classList.remove('sim-open');
-    }
-
-    simToggleBtn.addEventListener('click', () => simOpen ? closeSim() : openSim());
-    simCloseBtn.addEventListener('click', closeSim);
-
-    function buildSimDoc(rawCode) {
-      if (rawCode.trim().toLowerCase().startsWith('<!doctype html>') || rawCode.trim().toLowerCase().startsWith('<html')) {
-        return rawCode;
-      }
-      return `<!DOCTYPE html><html><head><meta charset="UTF-8"><style>body { font-family: system-ui, sans-serif; padding: 20px; background: #fff; color: #000; }</style></head><body>${rawCode}</body></html>`;
-    }
-
-    function runCodeInSim(contentObj) {
-      if (!contentObj || !contentObj.code) return;
-      simEmptyState.style.opacity = '0';
-      setTimeout(() => simEmptyState.style.display = 'none', 200);
-
-      // Remove existing frame
-      const oldFrame = simIframeWrap.querySelector('.sim-iframe');
-      if (oldFrame) oldFrame.remove();
-
-      const iframe = document.createElement('iframe');
-      iframe.className = 'sim-iframe';
-      simIframeWrap.appendChild(iframe);
-
-      setSimStatus('running', 'Compiling sandboxed simulation runtime...');
-      
-      try {
-        const doc = iframe.contentWindow.document;
-        doc.open();
-        doc.write(buildSimDoc(contentObj.code));
-        doc.close();
-        setSimStatus('ready', 'Active preview rendering successfully');
-        if (!simOpen) openSim();
-      } catch (err) {
-        setSimStatus('error', 'Execution compilation fault');
-      }
-    }
-
-    window.runInSim = (id, lang) => {
-      const pre = document.getElementById(id);
-      if (!pre) return;
-      runCodeInSim({ lang, code: pre.innerText });
-    };
-
-    simRunLastBtn.addEventListener('click', () => {
-      if (!lastCodeContent) {
-        window.showDialog('Sandbox Empty', 'No runnable code block was intercepted in this discussion flow yet.', [{ text: 'OK', cls: 'btn-primary' }]);
-        return;
-      }
-      runCodeInSim(lastCodeContent);
-    });
-
-    simClearBtn.addEventListener('click', () => {
-      const oldFrame = simIframeWrap.querySelector('.sim-iframe');
-      if (oldFrame) oldFrame.remove();
-      simEmptyState.style.display = 'flex';
-      setTimeout(() => simEmptyState.style.opacity = '1', 10);
-      setSimStatus('', 'Sandbox cleared');
-    });
-
-    simRefreshBtn.addEventListener('click', () => {
-      if (lastCodeContent) runCodeInSim(lastCodeContent);
-    });
-
-    simOpenExtBtn.addEventListener('click', () => {
-      if (!lastCodeContent) return;
-      const win = window.open();
-      if (win) {
-        win.document.open();
-        win.document.write(buildSimDoc(lastCodeContent.code));
-        win.document.close();
-      }
-    });
-
-    window._notifyNewCode = function(lang, code) {
-      const executable = ['html', 'css', 'javascript', 'js'];
-      if (executable.some(r => lang.toLowerCase().startsWith(r))) {
-        lastCodeContent = { lang, code };
-      }
-    };
-
-    document.getElementById('splash').classList.add('hide');
+  const saved = localStorage.getItem('cf_theme') || 'dark';
+  document.documentElement.setAttribute('data-theme', saved);
+  const themeToggle = document.getElementById('themeToggle');
+  const themeIcon = document.getElementById('themeIcon');
+  function updateThemeIcon() {
+    const dark = document.documentElement.getAttribute('data-theme') === 'dark';
+    themeIcon.setAttribute('data-feather', dark ? 'sun' : 'moon');
     feather.replace();
-  </script>
+  }
+  updateThemeIcon();
+  themeToggle.addEventListener('click', () => {
+    const next = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', next);
+    localStorage.setItem('cf_theme', next);
+    updateThemeIcon();
+  });
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyCh7Ute6LeSAxcNDEQwZg5m0cA4ujnLCfg",
+    authDomain: "test-17881.firebaseapp.com",
+    databaseURL: "https://test-17881-default-rtdb.firebaseio.com",
+    projectId: "test-17881",
+    storageBucket: "test-17881.firebasestorage.app",
+    messagingSenderId: "1057428047643",
+    appId: "1:1057428047643:web:f3801c0d933225a5cd35be"
+  };
+  const app = initializeApp(firebaseConfig);
+  const auth = getAuth(app);
+  const db = getDatabase(app);
+  const rc = getRemoteConfig(app);
+  rc.settings.minimumFetchIntervalMillis = 0;
+
+  let XAI_KEY = '';
+  async function loadKey() {
+    try { await fetchAndActivate(rc); XAI_KEY = getValue(rc, 'xai_api_key').asString(); }
+    catch(e) { console.error('Remote config:', e); }
+  }
+  loadKey();
+
+  let currentUser = null;
+  let currentThreadId = null;
+  let guestCount = 0;
+  let chatHistory = [];
+  const API_BASE = "https://api.x.ai/v1";
+
+  let userPlan = 'free';
+  const PLAN_DAILY_LIMITS = { guest: 5, free: 10, pro: 999, proplus: 9999, teams: 999, enterprise: 9999 };
+  let todayUsage = 0;
+
+  const SYSTEM_PROMPT = `You are CodeForge, an expert AI coding assistant with deep knowledge across all programming languages, frameworks, algorithms, system design, and software engineering best practices.
+
+CAPABILITIES:
+- Debug, review, and fix code across any language
+- Generate production-ready code with proper error handling, types, and docs
+- Explain complex concepts clearly with examples and analogies
+- Design system architectures and data models
+- Write comprehensive tests (unit, integration, e2e)
+- Refactor and optimize existing code
+- Review PRs and suggest improvements
+
+RESPONSE STYLE:
+- Lead with the most important insight or fix
+- Use code blocks with the correct language tag (e.g. \`\`\`javascript)
+- For multi-step solutions, number each step clearly
+- Always explain *why*, not just *what*
+- Prefer concise, scannable output over verbose prose
+- If the code has bugs, fix them AND explain what was wrong
+
+Keep responses technically precise, modern, and directly actionable.`;
+
+  const sidebar = document.getElementById('sidebar');
+  const menuToggle = document.getElementById('menuToggle');
+  const welcomeScreen = document.getElementById('welcomeScreen');
+  const messagesContainer = document.getElementById('messagesContainer');
+  const chatScroll = document.getElementById('chatScroll');
+  const threadList = document.getElementById('threadList');
+  const chatTextarea = document.getElementById('chatTextarea');
+  const sendBtn = document.getElementById('sendBtn');
+  const inputZone = document.getElementById('inputZone');
+  const langLabel = document.getElementById('langLabel');
+
+  menuToggle.addEventListener('click', () => sidebar.classList.toggle('open'));
+  document.addEventListener('click', (e) => {
+    if (window.innerWidth <= 768 && !sidebar.contains(e.target) && !menuToggle.contains(e.target)) sidebar.classList.remove('open');
+  });
+
+  window.showDialog = (title, msg, btns) => {
+    const overlay = document.getElementById('dialogOverlay');
+    const box = document.getElementById('dialogBox');
+    document.getElementById('dialogTitle').textContent = title;
+    document.getElementById('dialogMsg').textContent = msg;
+    const btnsCont = document.getElementById('dialogBtns');
+    btnsCont.innerHTML = '';
+    btns.forEach(b => {
+      const el = document.createElement('button');
+      el.className = `dialog-btn ${b.cls || 'btn-secondary'}`;
+      el.textContent = b.text;
+      el.onclick = () => { window.closeDialog(); if (b.fn) b.fn(); };
+      btnsCont.appendChild(el);
+    });
+    overlay.style.display = 'flex';
+    setTimeout(() => { overlay.style.opacity = '1'; box.style.transform = 'scale(1)'; }, 10);
+  };
+  window.closeDialog = () => {
+    const overlay = document.getElementById('dialogOverlay');
+    const box = document.getElementById('dialogBox');
+    overlay.style.opacity = '0'; box.style.transform = 'scale(0.95)';
+    setTimeout(() => { overlay.style.display = 'none'; }, 250);
+  };
+  window.showShortcuts = () => {
+    window.showDialog('Keyboard Shortcuts', '/ — focus input · Cmd+Enter — send · Esc — close · Cmd+K — new thread · P — toggle preview', [{ text: 'Got it', cls: 'btn-primary' }]);
+  };
+
+  const pricingOverlay = document.getElementById('pricingOverlay');
+  window.openPricing = () => {
+    updatePricingUI();
+    pricingOverlay.style.display = 'flex';
+    setTimeout(() => pricingOverlay.classList.add('visible'), 10);
+    feather.replace();
+  };
+  window.closePricing = () => {
+    pricingOverlay.classList.remove('visible');
+    setTimeout(() => { pricingOverlay.style.display = 'none'; }, 300);
+  };
+  document.getElementById('pricingClose').onclick = window.closePricing;
+  document.getElementById('pricingBtn').onclick = window.openPricing;
+  pricingOverlay.addEventListener('click', e => { if (e.target === pricingOverlay) window.closePricing(); });
+
+  function updatePricingUI() {
+    ['free','pro','proplus','teams','enterprise'].forEach(id => {
+      const card = document.getElementById(`plan-${id}`);
+      if (!card) return;
+      card.querySelector('.plan-current-badge')?.remove();
+      const cta = card.querySelector('.plan-cta');
+      if (id === userPlan && id !== 'free') {
+        const badge = document.createElement('div');
+        badge.className = 'plan-current-badge'; badge.textContent = 'Current Plan';
+        card.querySelector('.plan-name').after(badge);
+        if (cta && id !== 'enterprise') { cta.textContent = 'Current Plan'; cta.className = 'plan-cta cta-muted'; cta.onclick = null; }
+      }
+    });
+    if (userPlan === 'free') {
+      const ctaFree = document.getElementById('plan-free')?.querySelector('.plan-cta');
+      if (ctaFree) { ctaFree.textContent = '✓ Current Plan'; ctaFree.className = 'plan-cta cta-muted'; }
+    }
+    const limit = currentUser ? PLAN_DAILY_LIMITS[userPlan] || 10 : PLAN_DAILY_LIMITS.guest;
+    const label = document.getElementById('freeLimitLabel');
+    if (label) label.textContent = limit >= 999 ? 'Unlimited messages/day' : `${PLAN_DAILY_LIMITS.free} messages/day`;
+  }
+
+  window.selectPlan = (planId) => {
+    if (planId === 'free') { window.closePricing(); return; }
+    if (!currentUser) { window.closePricing(); window.openAuth(); return; }
+    const params = new URLSearchParams({ plan: planId, uid: currentUser.uid, email: currentUser.email || '' });
+    window.location.href = `payment.html?${params.toString()}`;
+  };
+  window.contactSales = () => {
+    window.showDialog('Enterprise Sales', 'Contact us at sales@steward.dev to discuss custom enterprise pricing, pooled credits, SSO, and SLAs.', [{ text: 'Got it', cls: 'btn-primary' }]);
+  };
+
+  async function loadSubscription(uid) {
+    const snap = await get(ref(db, `cf_subscriptions/${uid}`));
+    if (snap.exists()) { userPlan = snap.val().plan || 'free'; }
+    else { userPlan = 'free'; await set(ref(db, `cf_subscriptions/${uid}`), { plan: 'free', createdAt: serverTimestamp() }); }
+    updatePlanStatus();
+  }
+  async function loadTodayUsage(uid) {
+    const today = new Date().toISOString().slice(0,10);
+    const snap = await get(ref(db, `cf_usage/${uid}/${today}`));
+    todayUsage = snap.exists() ? (snap.val().count || 0) : 0;
+  }
+  async function incrementUsage(uid) {
+    const today = new Date().toISOString().slice(0,10);
+    todayUsage++;
+    await set(ref(db, `cf_usage/${uid}/${today}`), { count: todayUsage, updatedAt: serverTimestamp() });
+  }
+  function getDailyLimit() { return !currentUser ? PLAN_DAILY_LIMITS.guest : PLAN_DAILY_LIMITS[userPlan] || PLAN_DAILY_LIMITS.free; }
+  function isAtDailyLimit() { return todayUsage >= getDailyLimit(); }
+  function updatePlanStatus() {
+    const statusEl = document.querySelector('.user-status');
+    if (statusEl) { const pl = { free:'free plan',pro:'pro plan',proplus:'pro+ plan',teams:'teams plan',enterprise:'enterprise' }; statusEl.textContent = `grok-build · ${pl[userPlan] || 'free plan'}`; }
+  }
+
+  function showUpgradeGate() {
+    if (document.getElementById('upgrade-gate')) return;
+    const limit = getDailyLimit();
+    const div = document.createElement('div'); div.id = 'upgrade-gate';
+    div.innerHTML = `<div class="auth-gate" style="border-color:rgba(255,210,96,0.25);background:rgba(255,210,96,0.06);"><div class="gate-icon" style="background:rgba(255,210,96,0.1);border-color:rgba(255,210,96,0.3);"><i data-feather="zap-off" style="width:20px;height:20px;color:var(--yellow);"></i></div><div class="gate-title">Daily limit reached</div><div class="gate-sub">You've used all ${limit} free messages for today. Upgrade for more daily credits, or come back tomorrow.</div><button class="gate-btn" style="background:var(--accent);" onclick="window.openPricing()"><i data-feather="star" style="width:14px;height:14px;"></i> View Plans</button></div>`;
+    messagesContainer.appendChild(div); feather.replace(); scrollToBottom();
+  }
+
+  const authOverlay = document.getElementById('authOverlay');
+  const authBox = document.getElementById('authBox');
+  window.openAuth = () => { authOverlay.style.display = 'flex'; setTimeout(() => { authOverlay.style.opacity = '1'; authBox.style.transform = 'translateY(0)'; }, 10); };
+  window.closeAuth = () => { authOverlay.style.opacity = '0'; authBox.style.transform = 'translateY(20px)'; setTimeout(() => { authOverlay.style.display = 'none'; }, 300); };
+  document.getElementById('authClose').onclick = window.closeAuth;
+  authOverlay.addEventListener('click', e => { if (e.target === authOverlay) window.closeAuth(); });
+  document.getElementById('googleSignInBtn').addEventListener('click', async () => {
+    try { await signInWithPopup(auth, new GoogleAuthProvider()); window.closeAuth(); }
+    catch { window.showDialog('Sign In Failed', 'Could not sign you in. Please try again.', [{ text: 'OK', cls: 'btn-primary' }]); }
+  });
+  document.getElementById('userChip').addEventListener('click', () => {
+    if (currentUser) window.showDialog('Sign Out', 'Sign out of CodeForge?', [{ text: 'Cancel', cls: 'btn-secondary' }, { text: 'Sign Out', cls: 'btn-danger', fn: () => signOut(auth) }]);
+    else window.openAuth();
+  });
+
+  onAuthStateChanged(auth, async user => {
+    currentUser = user;
+    const avatarEl = document.getElementById('userAvatar');
+    const nameEl = document.getElementById('userName');
+    if (user) {
+      nameEl.textContent = user.displayName?.split(' ')[0] || 'User';
+      if (user.photoURL) avatarEl.innerHTML = `<img src="${user.photoURL}" alt="">`;
+      else avatarEl.innerHTML = `<span>${(user.displayName||'U')[0].toUpperCase()}</span>`;
+      guestCount = 0;
+      document.getElementById('auth-gate')?.remove();
+      document.getElementById('upgrade-gate')?.remove();
+      await loadSubscription(user.uid);
+      await loadTodayUsage(user.uid);
+      loadThreads(user.uid);
+    } else {
+      nameEl.textContent = 'Guest';
+      avatarEl.innerHTML = `<i data-feather="user" style="width:16px;height:16px;"></i>`;
+      threadList.innerHTML = ''; startNewThread(); feather.replace();
+    }
+  });
+
+  async function loadThreads(uid) {
+    const snap = await get(ref(db, `cf_threads/${uid}`));
+    threadList.innerHTML = '';
+    if (snap.exists()) {
+      const threads = [];
+      snap.forEach(c => threads.push({ id: c.key, ...c.val() }));
+      threads.sort((a,b) => (b.updatedAt||0) - (a.updatedAt||0));
+      threads.forEach(t => addThreadToSidebar(t));
+    }
+    feather.replace();
+  }
+
+  function addThreadToSidebar(t) {
+    const div = document.createElement('div');
+    div.className = `thread-item${t.id === currentThreadId ? ' active' : ''}`;
+    div.id = `thread-${t.id}`;
+    div.innerHTML = `<i data-feather="message-square" class="t-icon" style="width:14px;height:14px;"></i><span class="thread-text">${escapeHtml(t.title || 'New Thread')}</span><div class="thread-actions"><button class="t-action-btn" title="Delete" onclick="window.deleteThread('${t.id}',event)"><i data-feather="trash-2" style="width:12px;height:12px;"></i></button></div>`;
+    div.onclick = () => loadThread(t.id, currentUser.uid);
+    threadList.appendChild(div); feather.replace();
+  }
+
+  window.deleteThread = async (tid, e) => {
+    if (e) e.stopPropagation();
+    window.showDialog('Delete Thread', 'Permanently delete this conversation?', [
+      { text: 'Cancel', cls: 'btn-secondary' },
+      { text: 'Delete', cls: 'btn-danger', fn: async () => {
+        if (currentUser) { await set(ref(db, `cf_threads/${currentUser.uid}/${tid}`), null); loadThreads(currentUser.uid); if (currentThreadId === tid) startNewThread(); }
+      }}
+    ]);
+  };
+
+  async function loadThread(tid, uid) {
+    if (window.innerWidth <= 768) sidebar.classList.remove('open');
+    const snap = await get(ref(db, `cf_threads/${uid}/${tid}`));
+    if (!snap.exists()) return;
+    const data = snap.val();
+    currentThreadId = tid; chatHistory = data.messages || [];
+    welcomeScreen.style.display = 'none'; messagesContainer.innerHTML = '';
+    for (const msg of chatHistory) {
+      if (msg.role === 'system') continue;
+      if (msg.role === 'user') appendUserMsg(msg.content, false);
+      else if (msg.role === 'assistant') appendAIMsg(msg.content, false);
+    }
+    updateActiveThread(); scrollToBottom();
+  }
+
+  async function saveThread() {
+    if (!currentUser) return;
+    if (!currentThreadId) { const r = push(ref(db, `cf_threads/${currentUser.uid}`)); currentThreadId = r.key; }
+    const first = chatHistory.find(m => m.role === 'user');
+    let title = first ? first.content.substring(0,38) + (first.content.length > 38 ? '…' : '') : 'New Thread';
+    await set(ref(db, `cf_threads/${currentUser.uid}/${currentThreadId}`), { title, updatedAt: serverTimestamp(), messages: chatHistory });
+    loadThreads(currentUser.uid);
+  }
+
+  function updateActiveThread() {
+    document.querySelectorAll('.thread-item').forEach(el => el.classList.remove('active'));
+    document.getElementById(`thread-${currentThreadId}`)?.classList.add('active');
+  }
+
+  function startNewThread() {
+    currentThreadId = null; chatHistory = []; messagesContainer.innerHTML = '';
+    welcomeScreen.style.display = 'block';
+    chatTextarea.value = ''; chatTextarea.style.height = 'auto'; sendBtn.disabled = true;
+    langLabel.textContent = 'general'; updateActiveThread();
+    if (window.innerWidth <= 768) sidebar.classList.remove('open');
+  }
+  document.getElementById('newThreadBtn').onclick = startNewThread;
+
+  function escapeHtml(t) { return !t ? '' : t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+  function scrollToBottom() { document.getElementById('scrollAnchor')?.scrollIntoView({ behavior:'smooth' }); }
+
+  function detectLang(text) {
+    if (/\b(function|const|let|var|=>|async|await|import|export)\b/.test(text)) return 'js/ts';
+    if (/\b(def |import |print\(|class |if __name__)\b/.test(text)) return 'python';
+    if (/\b(public class|System\.out|void main|package )\b/.test(text)) return 'java';
+    if (/\b(fn |let mut|impl |use std|println!)\b/.test(text)) return 'rust';
+    if (/<\/?[a-z][^>]*>/i.test(text)) return 'html/css';
+    if (/\bSELECT\b|\bFROM\b|\bWHERE\b/i.test(text)) return 'sql';
+    return 'general';
+  }
+
+  function parseMarkdown(raw) {
+    if (!raw) return '';
+    let text = escapeHtml(raw);
+    const codeBlocks = [];
+    text = text.replace(/```(\w*)\n?([\s\S]*?)```/gm, (_, lang, code) => {
+      const ph = 'CODEBLOCK_' + codeBlocks.length;
+      const l = lang || 'code';
+      const id = 'cb_' + Math.random().toString(36).substr(2,8);
+      const isRunnable = ['html','css','javascript','js','jsx','tsx','vue','svelte'].includes(l.toLowerCase());
+      const runBtn = isRunnable ? `<button class="code-action-btn run-in-sim" onclick="window.runInSim('${id}','${l}')"><i data-feather="play" style="width:12px;height:12px;"></i> preview</button>` : '';
+      codeBlocks.push({ ph, html:
+        `<div class="code-block"><div class="code-block-header"><span class="code-lang-badge">${l}</span><div class="code-actions">${runBtn}<button class="code-action-btn" onclick="window.copyBlock('${id}')"><i data-feather="copy" style="width:12px;height:12px;"></i> copy</button><button class="code-action-btn" onclick="window.insertToInput('${id}')"><i data-feather="corner-down-left" style="width:12px;height:12px;"></i> use</button></div></div><pre id="${id}"><code>${code.trim()}</code></pre></div>` });
+      // Notify simulator of new runnable code
+      if (isRunnable) { setTimeout(() => window._notifyNewCode && window._notifyNewCode(l, code.trim()), 50); }
+      return ph;
+    });
+    text = text.replace(/^### (.+)$/gm,'<h3>$1</h3>').replace(/^## (.+)$/gm,'<h2>$1</h2>').replace(/^# (.+)$/gm,'<h1>$1</h1>');
+    text = text.replace(/\*\*\*(.+?)\*\*\*/g,'<strong><em>$1</em></strong>').replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/\*(.+?)\*/g,'<em>$1</em>').replace(/_(.+?)_/g,'<em>$1</em>');
+    const lines = text.split('\n'); let out = []; let inUl = false;
+    for (const line of lines) {
+      const lm = line.match(/^\s*[-*] (.+)/); const nm = line.match(/^\s*\d+\. (.+)/);
+      if (lm) { if (!inUl) { out.push('<ul>'); inUl = true; } out.push(`<li>${lm[1]}</li>`); }
+      else { if (inUl) { out.push('</ul>'); inUl = false; } out.push(line); }
+    }
+    if (inUl) out.push('</ul>');
+    text = out.join('\n');
+    text = text.replace(/`([^`]+)`/g,'<code>$1</code>');
+    text = text.split('\n\n').map(p => {
+      p = p.trim(); if (!p) return '';
+      if (p.startsWith('<h') || p.startsWith('<ul') || p.startsWith('</ul') || p.startsWith('<li') || p.startsWith('CODEBLOCK_')) return p;
+      if (p.startsWith('<') && !p.startsWith('<code') && !p.startsWith('<em') && !p.startsWith('<strong')) return p;
+      return `<p>${p}</p>`;
+    }).join('\n');
+    codeBlocks.forEach(({ ph, html }) => { text = text.replace(ph, html); });
+    return text;
+  }
+
+  window.copyBlock = (id) => {
+    const pre = document.getElementById(id);
+    if (pre) navigator.clipboard.writeText(pre.innerText).then(() => window.showDialog('Copied', 'Code block copied to clipboard.', [{ text: 'OK', cls: 'btn-primary' }]));
+  };
+  window.insertToInput = (id) => {
+    const pre = document.getElementById(id);
+    if (pre) { chatTextarea.value = pre.innerText; chatTextarea.dispatchEvent(new Event('input')); chatTextarea.focus(); }
+  };
+
+  function appendUserMsg(text, animate = true) {
+    welcomeScreen.style.display = 'none';
+    const block = document.createElement('div'); block.className = 'msg-block'; block.style.opacity = animate ? '0' : '1';
+    block.innerHTML = `<div class="msg-user"><div class="msg-user-bubble">${escapeHtml(text)}</div></div>`;
+    messagesContainer.appendChild(block);
+    if (animate) requestAnimationFrame(() => { block.style.transition = 'opacity 0.2s'; block.style.opacity = '1'; });
+    scrollToBottom(); return block;
+  }
+
+  function appendAIMsg(content, animate = true) {
+    const block = document.createElement('div'); block.className = 'msg-block'; block.style.opacity = animate ? '0' : '1';
+    const mid = 'ai_' + Math.random().toString(36).substr(2,9);
+    block.innerHTML = `<div class="msg-ai-header"><div class="ai-badge"><div class="ai-badge-dot"></div>Steward</div></div><div class="msg-ai-content" id="${mid}"></div><div class="msg-actions"><button class="msg-action" onclick="window.copyAIMsg('${mid}')"><i data-feather="copy" style="width:12px;height:12px;"></i> copy</button><button class="msg-action" onclick="window.retryLast()"><i data-feather="refresh-cw" style="width:12px;height:12px;"></i> retry</button></div>`;
+    messagesContainer.appendChild(block);
+    if (animate) requestAnimationFrame(() => { block.style.transition = 'opacity 0.2s'; block.style.opacity = '1'; });
+    if (content) { document.getElementById(mid).innerHTML = parseMarkdown(content); feather.replace(); }
+    scrollToBottom(); return { block, mid };
+  }
+
+  function appendThinking() {
+    const block = document.createElement('div'); block.className = 'msg-block thinking-row'; block.id = 'thinking-block';
+    block.innerHTML = `<div class="thinking-content"><div class="thinking-label"><div class="thinking-dots"><div class="thinking-dot"></div><div class="thinking-dot"></div><div class="thinking-dot"></div></div><span id="thinkingLabel">Analysing...</span></div><div class="thinking-skeleton"><div class="skeleton-line" style="width:80%"></div><div class="skeleton-line" style="width:60%"></div><div class="skeleton-line" style="width:72%"></div></div></div>`;
+    messagesContainer.appendChild(block); scrollToBottom();
+    const labels = ['Analysing...','Reviewing context...','Writing response...','Finalising...'];
+    let i = 0;
+    const interval = setInterval(() => {
+      const el = document.getElementById('thinkingLabel');
+      if (el) el.textContent = labels[Math.min(++i, labels.length-1)]; else clearInterval(interval);
+    }, 2500);
+    return () => clearInterval(interval);
+  }
+
+  window.copyAIMsg = (mid) => { const el = document.getElementById(mid); if (el) navigator.clipboard.writeText(el.innerText); };
+  window.retryLast = () => { const last = [...chatHistory].reverse().find(m => m.role === 'user'); if (last) { chatTextarea.value = last.content; sendBtn.disabled = false; handleSend(); } };
+
+  function showAuthGate() {
+    if (document.getElementById('auth-gate')) return;
+    const div = document.createElement('div'); div.id = 'auth-gate';
+    div.innerHTML = `<div class="auth-gate"><div class="gate-icon"><i data-feather="lock" style="width:20px;height:20px;"></i></div><div class="gate-title">Free limit reached</div><div class="gate-sub">Sign in to keep building. Unlimited threads, full history, and faster responses.</div><button class="gate-btn" onclick="window.openAuth()"><img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" style="width:18px;height:18px;" alt=""> Sign in with Google</button></div>`;
+    messagesContainer.appendChild(div); feather.replace(); scrollToBottom();
+  }
+
+  async function handleSend() {
+    const prompt = chatTextarea.value.trim();
+    if (!prompt || !XAI_KEY) return;
+    if (!currentUser && guestCount >= PLAN_DAILY_LIMITS.guest) { showAuthGate(); return; }
+    if (currentUser && isAtDailyLimit()) { showUpgradeGate(); return; }
+
+    appendUserMsg(prompt);
+    chatTextarea.value = ''; chatTextarea.style.height = 'auto'; sendBtn.disabled = true;
+    langLabel.textContent = detectLang(prompt);
+    const clearThinking = appendThinking();
+    const msgs = [{ role:'system', content: SYSTEM_PROMPT }, ...chatHistory, { role:'user', content: prompt }];
+
+    try {
+      const res = await fetch(`${API_BASE}/chat/completions`, {
+        method: 'POST',
+        headers: { 'Authorization': `Bearer ${XAI_KEY}`, 'Content-Type': 'application/json' },
+        body: JSON.stringify({ model:'grok-build-0.1', messages: msgs })
+      });
+      if (!res.ok) throw new Error(await res.text());
+      const data = await res.json();
+      clearThinking(); document.getElementById('thinking-block')?.remove();
+
+      const aiText = data.choices[0].message.content;
+      chatHistory.push({ role:'user', content:prompt });
+      chatHistory.push({ role:'assistant', content:aiText });
+
+      const { mid } = appendAIMsg(aiText);
+      feather.replace(); saveThread();
+
+      if (!currentUser) {
+        guestCount++;
+        if (guestCount >= PLAN_DAILY_LIMITS.guest) showAuthGate();
+      } else {
+        await incrementUsage(currentUser.uid);
+        const limit = getDailyLimit();
+        if (limit < 999 && todayUsage >= limit - 2 && todayUsage < limit) {
+          const remaining = limit - todayUsage;
+          window.showDialog('Almost at daily limit', `You have ${remaining} message${remaining===1?'':'s'} left today on your ${userPlan} plan.`, [
+            { text: 'Maybe Later', cls: 'btn-secondary' },
+            { text: 'View Plans', cls: 'btn-primary', fn: () => window.openPricing() }
+          ]);
+        }
+      }
+    } catch (err) {
+      clearThinking(); document.getElementById('thinking-block')?.remove();
+      const errBlock = document.createElement('div'); errBlock.className = 'msg-block';
+      errBlock.innerHTML = `<div class="auth-gate" style="border-color:rgba(255,95,109,0.25);background:rgba(255,95,109,0.06);"><div class="gate-title" style="color:var(--red)">Connection error</div><div class="gate-sub">${escapeHtml(err.message)}</div><button class="gate-btn" style="background:var(--red);box-shadow:0 4px 14px rgba(255,95,109,0.3);" onclick="this.closest('.msg-block').remove();window.retryLast()">Retry</button></div>`;
+      messagesContainer.appendChild(errBlock); scrollToBottom();
+    }
+  }
+  window.handleSend = handleSend;
+
+  chatTextarea.addEventListener('input', function() {
+    this.style.height = 'auto';
+    this.style.height = Math.min(this.scrollHeight, 260) + 'px';
+    sendBtn.disabled = this.value.trim().length === 0;
+  });
+  chatTextarea.addEventListener('keydown', e => {
+    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); if (!sendBtn.disabled) handleSend(); }
+  });
+  sendBtn.addEventListener('click', handleSend);
+
+  document.querySelectorAll('.starter-card').forEach(card => {
+    card.addEventListener('click', () => {
+      const p = card.getAttribute('data-prompt');
+      if (p) { chatTextarea.value = p; chatTextarea.dispatchEvent(new Event('input')); chatTextarea.focus(); }
+    });
+  });
+
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') { window.closeDialog(); window.closeAuth(); sidebar.classList.remove('open'); }
+    if (e.key === '/' && document.activeElement !== chatTextarea && !e.ctrlKey && !e.metaKey) { e.preventDefault(); chatTextarea.focus(); }
+    if ((e.metaKey || e.ctrlKey) && e.key === 'k') { e.preventDefault(); startNewThread(); chatTextarea.focus(); }
+    if (e.key === 'p' && document.activeElement !== chatTextarea && !e.ctrlKey && !e.metaKey) { simOpen ? closeSim() : openSim(); }
+  });
+
+  // ══════════════════════════════════════
+  // MOBILE SIMULATOR
+  // ══════════════════════════════════════
+  const simPanel      = document.getElementById('simPanel');
+  const simToggleBtn  = document.getElementById('simToggleBtn');
+  const simCloseBtn   = document.getElementById('simCloseBtn');
+  const simRefreshBtn = document.getElementById('simRefreshBtn');
+  const simOpenExtBtn = document.getElementById('simOpenExtBtn');
+  const simRunLastBtn = document.getElementById('simRunLastBtn');
+  const simClearBtn   = document.getElementById('simClearBtn');
+  const simIframeWrap = document.getElementById('simIframeWrap');
+  const simEmptyState = document.getElementById('simEmptyState');
+  const simStatusDot  = document.getElementById('simStatusDot');
+  const simStatusText = document.getElementById('simStatusText');
+
+  let simOpen = false;
+  let lastCodeContent = null;
+
+  function setSimStatus(state, msg) {
+    simStatusDot.className = 'sim-status-dot ' + state;
+    simStatusText.textContent = msg;
+  }
+
+  function openSim() {
+    simOpen = true;
+    simPanel.classList.add('open');
+    simToggleBtn.classList.add('active');
+    if (window.innerWidth >= 769) document.body.classList.add('sim-open');
+    feather.replace();
+  }
+  function closeSim() {
+    simOpen = false;
+    simPanel.classList.remove('open');
+    simToggleBtn.classList.remove('active');
+    document.body.classList.remove('sim-open');
+  }
+
+  simToggleBtn.addEventListener('click', () => simOpen ? closeSim() : openSim());
+  simCloseBtn.addEventListener('click', closeSim);
+
+  simRefreshBtn.addEventListener('click', () => {
+    if (!lastCodeContent) return;
+    const old = simIframeWrap.querySelector('iframe');
+    if (old) old.remove();
+    runCodeInSim(lastCodeContent);
+  });
+
+  simOpenExtBtn.addEventListener('click', () => {
+    if (!lastCodeContent) return;
+    const blob = new Blob([buildSimDoc(lastCodeContent)], { type: 'text/html' });
+    const url = URL.createObjectURL(blob);
+    window.open(url, '_blank');
+    setTimeout(() => URL.revokeObjectURL(url), 10000);
+  });
+
+  simClearBtn.addEventListener('click', () => {
+    const old = simIframeWrap.querySelector('iframe');
+    if (old) old.remove();
+    if (simEmptyState) simEmptyState.style.display = 'flex';
+    lastCodeContent = null;
+    simToggleBtn.classList.remove('has-code');
+    setSimStatus('', 'Ready to preview');
+  });
+
+  function buildSimDoc(content) {
+    const isFullDoc = /<!doctype|<html/i.test(content.code);
+    if (isFullDoc) return content.code;
+    if (content.lang === 'css') {
+      return '<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>*{box-sizing:border-box;margin:0;padding:0}' + content.code + '</style></head><body></body></html>';
+    }
+    if (content.lang === 'javascript' || content.lang === 'js') {
+      return '<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head><body><script>' + content.code + '<\/script></body></html>';
+    }
+    return '<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>*{box-sizing:border-box;margin:0;padding:0}body{font-family:system-ui,sans-serif;background:#fff;color:#111}</style></head><body>' + content.code + '</body></html>';
+  }
+
+  function runCodeInSim(content) {
+    if (!content) return;
+    lastCodeContent = content;
+    if (simEmptyState) simEmptyState.style.display = 'none';
+    const old = simIframeWrap.querySelector('iframe');
+    if (old) old.remove();
+    setSimStatus('running', 'Loading...');
+    const iframe = document.createElement('iframe');
+    iframe.className = 'sim-iframe';
+    iframe.setAttribute('sandbox', 'allow-scripts allow-same-origin allow-forms allow-modals');
+    iframe.setAttribute('title', 'Code Preview');
+    iframe.onload = () => setSimStatus('ready', content.lang.toUpperCase() + ' · preview ready');
+    iframe.onerror = () => setSimStatus('error', 'Failed to load');
+    simIframeWrap.appendChild(iframe);
+    const doc = iframe.contentDocument || iframe.contentWindow.document;
+    doc.open(); doc.write(buildSimDoc(content)); doc.close();
+    if (!simOpen) openSim();
+  }
+  window.runInSim = (id, lang) => {
+    const pre = document.getElementById(id);
+    if (!pre) return;
+    runCodeInSim({ lang, code: pre.innerText });
+  };
+
+  function extractLastCode() {
+    const codeBlocks = messagesContainer.querySelectorAll('.code-block');
+    if (!codeBlocks.length) return null;
+    const last = codeBlocks[codeBlocks.length - 1];
+    const langEl = last.querySelector('.code-lang-badge');
+    const codeEl = last.querySelector('pre code');
+    if (!codeEl) return null;
+    const lang = langEl ? langEl.textContent.toLowerCase().trim() : 'html';
+    return { lang, code: codeEl.innerText };
+  }
+
+  simRunLastBtn.addEventListener('click', () => {
+    const content = extractLastCode();
+    if (!content) {
+      window.showDialog('No code found', 'Ask Steward to write some HTML, CSS, or JavaScript first — then run it here.', [{ text: 'Got it', cls: 'btn-primary' }]);
+      return;
+    }
+    runCodeInSim(content);
+  });
+
+  // Called from parseMarkdown when a runnable code block is found
+  window._notifyNewCode = function(lang, code) {
+    const runnable = ['html','css','javascript','js','jsx','tsx','vue','svelte'];
+    if (runnable.some(r => lang.toLowerCase().startsWith(r))) {
+      lastCodeContent = { lang, code };
+      setSimStatus('ready', lang.toUpperCase() + ' code ready — click Run or Preview');
+      simToggleBtn.classList.add('has-code');
+    }
+  };
+
+  // ══════════════════════════════════════
+  // BILLING TOGGLE LOGIC
+  // ══════════════════════════════════════
+  window.isYearly = false;
+
+  window.toggleBilling = () => {
+    window.setBilling(!window.isYearly);
+  };
+
+  window.setBilling = (yearly) => {
+    window.isYearly = yearly;
+    
+    const track = document.getElementById('billingSwitch');
+    const lblMo = document.getElementById('label-mo');
+    const lblYr = document.getElementById('label-yr');
+
+    // Update UI Toggle classes
+    if (window.isYearly) {
+      track.classList.add('yearly');
+      lblMo.classList.remove('active');
+      lblYr.classList.add('active');
+    } else {
+      track.classList.remove('yearly');
+      lblMo.classList.add('active');
+      lblYr.classList.remove('active');
+    }
+
+    // Update Prices
+    document.querySelectorAll('.plan-price').forEach(el => {
+      if (el.dataset.mo && el.dataset.yr) {
+        el.textContent = window.isYearly ? el.dataset.yr : el.dataset.mo;
+      }
+    });
+
+    // Toggle Annual Subtext
+    document.querySelectorAll('.plan-yearly-total').forEach(el => {
+      if (el.dataset.total) {
+        el.textContent = el.dataset.total;
+        el.style.display = window.isYearly ? 'block' : 'none';
+      }
+    });
+  };
+</script>
 </body>
 </html>
