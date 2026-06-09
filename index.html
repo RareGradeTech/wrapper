@@ -183,9 +183,43 @@
 
     /* Welcome */
     .welcome { padding: 48px 0 32px; }
-    .welcome-headline { font-size: 2.4rem; font-weight: 800; letter-spacing: -0.04em; line-height: 1.1; margin-bottom: 10px; }
+    .welcome-eyebrow {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: 0.68rem; font-family: var(--font-code); font-weight: 600;
+      letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-3);
+      margin-bottom: 16px;
+    }
+    .welcome-eyebrow-dot {
+      width: 6px; height: 6px; border-radius: 50%; background: var(--green);
+      box-shadow: 0 0 6px var(--green); animation: blink 2s infinite;
+    }
+    .welcome-headline { font-size: 2.6rem; font-weight: 800; letter-spacing: -0.04em; line-height: 1.1; margin-bottom: 12px; }
     .welcome-headline .hl { color: var(--accent-bright); }
-    .welcome-sub { font-size: 0.95rem; color: var(--text-2); margin-bottom: 36px; font-weight: 400; line-height: 1.6; max-width: 480px; }
+    .welcome-sub { font-size: 0.95rem; color: var(--text-2); margin-bottom: 24px; font-weight: 400; line-height: 1.65; max-width: 520px; }
+
+    .welcome-pro-highlight {
+      display: flex; align-items: center; gap: 14px;
+      background: linear-gradient(135deg, rgba(124,106,255,0.08), rgba(124,106,255,0.04));
+      border: 1px solid var(--accent-glow); border-radius: var(--radius-lg);
+      padding: 14px 18px; margin-bottom: 32px; max-width: 580px;
+    }
+    .pro-highlight-icon {
+      width: 32px; height: 32px; border-radius: var(--radius-sm);
+      background: var(--accent-dim); border: 1px solid var(--accent-glow);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--accent-bright); flex-shrink: 0;
+    }
+    .pro-highlight-content { flex: 1; min-width: 0; }
+    .pro-highlight-title { font-size: 0.82rem; font-weight: 700; color: var(--text-1); margin-bottom: 2px; }
+    .pro-highlight-sub { font-size: 0.72rem; color: var(--text-3); font-family: var(--font-code); }
+    .pro-highlight-cta {
+      background: var(--accent); color: white; border: none;
+      padding: 7px 16px; border-radius: var(--radius-md);
+      font-family: var(--font-ui); font-size: 0.78rem; font-weight: 700;
+      cursor: pointer; white-space: nowrap; transition: all 0.2s;
+      box-shadow: 0 4px 12px var(--accent-glow);
+    }
+    .pro-highlight-cta:hover { background: var(--accent-bright); transform: translateY(-1px); }
 
     .starter-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 10px; margin-bottom: 28px; }
     .starter-card {
@@ -347,35 +381,72 @@
     /* ══ PRICING MODAL ══ */
     .pricing-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.75); backdrop-filter: blur(8px); z-index: 2500; display: none; align-items: flex-start; justify-content: center; opacity: 0; transition: opacity 0.3s; overflow-y: auto; padding: 24px 16px 40px; }
     .pricing-overlay.visible { opacity: 1; }
-    .pricing-box { background: var(--bg-surface); border: 1px solid var(--border); border-radius: var(--radius-xl); width: 100%; max-width: 860px; padding: 36px 28px 40px; position: relative; box-shadow: 0 32px 80px rgba(0,0,0,0.5); margin: auto; }
+    .pricing-box { background: var(--bg-surface); border: 1px solid var(--border); border-radius: var(--radius-xl); width: 100%; max-width: 920px; padding: 40px 32px 44px; position: relative; box-shadow: 0 32px 80px rgba(0,0,0,0.5); margin: auto; }
     .pricing-close { position: absolute; top: 16px; right: 16px; background: none; border: none; cursor: pointer; color: var(--text-3); padding: 6px; border-radius: var(--radius-sm); transition: all 0.15s; }
     .pricing-close:hover { color: var(--text-1); background: var(--bg-hover); }
-    .pricing-header { text-align: center; margin-bottom: 32px; }
+    .pricing-header { text-align: center; margin-bottom: 36px; }
     .pricing-eyebrow { font-size: 0.7rem; font-family: var(--font-code); font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: var(--accent-bright); margin-bottom: 10px; }
-    .pricing-title { font-size: 2rem; font-weight: 800; letter-spacing: -0.04em; margin-bottom: 10px; }
-    .pricing-sub { font-size: 0.9rem; color: var(--text-2); line-height: 1.6; }
-    .pricing-free-note { display: inline-flex; align-items: center; gap: 6px; margin-top: 10px; background: rgba(61,220,132,0.1); border: 1px solid rgba(61,220,132,0.25); border-radius: 99px; padding: 5px 14px; font-size: 0.75rem; font-family: var(--font-code); color: var(--green); }
-    .pricing-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 14px; }
-    .plan-card { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 22px 18px 20px; display: flex; flex-direction: column; gap: 14px; cursor: pointer; transition: all 0.22s; position: relative; overflow: hidden; }
-    .plan-card:hover { border-color: var(--accent); transform: translateY(-3px); box-shadow: 0 12px 32px rgba(124,106,255,0.15); }
-    .plan-card.plan-popular { border-color: var(--accent); background: var(--bg-active); }
+    .pricing-title { font-size: 2.2rem; font-weight: 800; letter-spacing: -0.04em; margin-bottom: 10px; }
+    .pricing-sub { font-size: 0.9rem; color: var(--text-2); line-height: 1.6; max-width: 480px; margin: 0 auto; }
+    .pricing-toggle-row { display: flex; align-items: center; justify-content: center; gap: 12px; margin-top: 18px; }
+    .pricing-toggle-label { font-size: 0.78rem; font-family: var(--font-code); color: var(--text-3); }
+    .pricing-toggle-label.active { color: var(--text-1); font-weight: 600; }
+    .pricing-save-badge { background: rgba(61,220,132,0.12); border: 1px solid rgba(61,220,132,0.3); color: var(--green); font-size: 0.65rem; font-family: var(--font-code); font-weight: 700; padding: 2px 8px; border-radius: 99px; letter-spacing: 0.06em; }
+
+    .pricing-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 14px; align-items: start; }
+
+    .plan-card {
+      background: var(--bg-elevated); border: 1px solid var(--border);
+      border-radius: var(--radius-lg); padding: 24px 20px 22px;
+      display: flex; flex-direction: column; gap: 0;
+      cursor: pointer; transition: all 0.22s; position: relative; overflow: hidden;
+    }
+    .plan-card:hover { border-color: var(--border-glow); transform: translateY(-4px); box-shadow: 0 16px 40px rgba(0,0,0,0.25); }
+    .plan-card.plan-popular {
+      border-color: var(--accent);
+      background: linear-gradient(160deg, rgba(124,106,255,0.1), var(--bg-active));
+      box-shadow: 0 0 0 1px var(--accent-glow), 0 8px 32px rgba(124,106,255,0.15);
+    }
+    .plan-card.plan-popular:hover { transform: translateY(-5px); box-shadow: 0 0 0 1px var(--accent), 0 20px 48px rgba(124,106,255,0.25); }
     .plan-card.plan-enterprise { cursor: default; }
-    .plan-badge { position: absolute; top: 14px; right: 14px; font-size: 0.6rem; font-family: var(--font-code); font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; background: var(--accent); color: white; padding: 2px 8px; border-radius: 99px; }
-    .plan-name { font-size: 0.82rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; font-family: var(--font-code); color: var(--text-3); }
-    .plan-price-row { display: flex; align-items: flex-end; gap: 4px; }
-    .plan-price { font-size: 1.8rem; font-weight: 800; letter-spacing: -0.04em; line-height: 1; }
-    .plan-price-unit { font-size: 0.75rem; color: var(--text-3); font-family: var(--font-code); margin-bottom: 2px; }
-    .plan-yearly { font-size: 0.72rem; color: var(--green); font-family: var(--font-code); }
-    .plan-target { font-size: 0.78rem; color: var(--text-2); line-height: 1.4; }
-    .plan-credits { font-size: 0.72rem; font-family: var(--font-code); color: var(--accent-bright); background: var(--accent-dim); border: 1px solid var(--accent-glow); border-radius: 6px; padding: 4px 10px; display: inline-block; }
-    .plan-cta { margin-top: auto; width: 100%; padding: 10px 14px; border-radius: var(--radius-md); border: none; font-family: var(--font-ui); font-size: 0.85rem; font-weight: 700; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px; }
+
+    .plan-badge {
+      position: absolute; top: -1px; right: 16px;
+      font-size: 0.6rem; font-family: var(--font-code); font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+      background: var(--accent); color: white; padding: 4px 10px;
+      border-radius: 0 0 var(--radius-sm) var(--radius-sm);
+      box-shadow: 0 4px 12px var(--accent-glow);
+    }
+    .plan-card.plan-popular .plan-badge { background: linear-gradient(135deg, var(--accent), var(--accent-bright)); }
+
+    .plan-name { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; font-family: var(--font-code); color: var(--text-3); margin-bottom: 14px; }
+    .plan-price-row { display: flex; align-items: flex-end; gap: 4px; margin-bottom: 4px; }
+    .plan-price { font-size: 2rem; font-weight: 800; letter-spacing: -0.04em; line-height: 1; }
+    .plan-price-unit { font-size: 0.72rem; color: var(--text-3); font-family: var(--font-code); margin-bottom: 3px; }
+    .plan-yearly { font-size: 0.7rem; color: var(--green); font-family: var(--font-code); margin-bottom: 12px; min-height: 17px; }
+    .plan-tagline { font-size: 0.82rem; color: var(--text-2); line-height: 1.4; margin-bottom: 16px; font-weight: 500; }
+
+    .plan-divider { height: 1px; background: var(--border); margin-bottom: 16px; }
+
+    .plan-features { display: flex; flex-direction: column; gap: 9px; margin-bottom: 20px; flex: 1; }
+    .plan-feature { display: flex; align-items: flex-start; gap: 9px; font-size: 0.78rem; color: var(--text-2); line-height: 1.35; }
+    .plan-feature-icon { width: 14px; height: 14px; flex-shrink: 0; margin-top: 1px; }
+    .plan-feature-icon.check { color: var(--green); }
+    .plan-feature-icon.cross { color: var(--text-3); }
+    .plan-feature-icon.star  { color: var(--accent-bright); }
+    .plan-feature strong { color: var(--text-1); font-weight: 600; }
+
+    .plan-cta { margin-top: auto; width: 100%; padding: 11px 14px; border-radius: var(--radius-md); border: none; font-family: var(--font-ui); font-size: 0.85rem; font-weight: 700; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px; }
     .cta-accent { background: var(--accent); color: white; box-shadow: 0 4px 14px var(--accent-glow); }
     .cta-accent:hover { background: var(--accent-bright); transform: translateY(-1px); }
+    .cta-accent-strong { background: linear-gradient(135deg, var(--accent), var(--accent-bright)); color: white; box-shadow: 0 6px 20px var(--accent-glow); }
+    .cta-accent-strong:hover { opacity: 0.92; transform: translateY(-1px); }
     .cta-outline { background: transparent; color: var(--text-1); border: 1px solid var(--border); }
     .cta-outline:hover { border-color: var(--accent); color: var(--accent-bright); background: var(--accent-dim); }
     .cta-muted { background: var(--bg-hover); color: var(--text-2); border: 1px solid var(--border); cursor: default; }
     .plan-current-badge { font-size: 0.65rem; font-family: var(--font-code); font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--green); border: 1px solid rgba(61,220,132,0.3); border-radius: 99px; padding: 2px 8px; display: inline-block; background: rgba(61,220,132,0.08); }
-    @media (max-width: 600px) { .pricing-grid { grid-template-columns: 1fr; } .pricing-box { padding: 28px 16px 32px; } .pricing-title { font-size: 1.5rem; } }
+    .plan-credits-note { font-size: 0.68rem; font-family: var(--font-code); color: var(--text-3); text-align: center; margin-top: 8px; }
+    @media (max-width: 600px) { .pricing-grid { grid-template-columns: 1fr; } .pricing-box { padding: 28px 16px 32px; } .pricing-title { font-size: 1.6rem; } }
 
     /* Syntax highlight */
     .tok-kw { color: var(--accent-bright); }
@@ -397,7 +468,9 @@
       .sidebar.open { transform: translateX(0); box-shadow: 8px 0 40px rgba(0,0,0,0.4); }
       .menu-toggle { display: flex; }
       .input-zone { left: 0; }
-      .welcome-headline { font-size: 1.8rem; }
+      .welcome-headline { font-size: 1.85rem; }
+      .welcome-pro-highlight { flex-wrap: wrap; }
+      .pro-highlight-cta { width: 100%; }
     }
 
     /* ══════════════════════════════════════
@@ -547,55 +620,103 @@
   <div class="pricing-box" id="pricingBox">
     <button class="pricing-close" id="pricingClose"><i data-feather="x" style="width:18px;height:18px;"></i></button>
     <div class="pricing-header">
-      <div class="pricing-eyebrow">Steward Plans</div>
-      <div class="pricing-title">Build without limits</div>
-      <div class="pricing-sub">Every account gets free daily credits. Upgrade anytime to unlock more power.</div>
-      <div class="pricing-free-note">
-        <i data-feather="gift" style="width:12px;height:12px;"></i>
-        Free users get <strong id="freeLimitLabel">10 messages/day</strong> — no card required
+      <div class="pricing-eyebrow">⚡ Steward Plans</div>
+      <div class="pricing-title">The AI dev that pays for itself</div>
+      <div class="pricing-sub">Ship faster. Debug smarter. Build more ambitious projects — with an AI that understands your entire codebase.</div>
+      <div class="pricing-toggle-row">
+        <span class="pricing-toggle-label active">Monthly</span>
+        <span class="pricing-save-badge">Annual saves 20%</span>
       </div>
     </div>
     <div class="pricing-grid" id="pricingGrid">
+
+      <!-- FREE -->
       <div class="plan-card" id="plan-free" onclick="window.selectPlan('free')">
-        <div class="plan-name">Free / Hobby</div>
+        <div class="plan-name">Free</div>
         <div class="plan-price-row"><div class="plan-price">R0</div><div class="plan-price-unit">/mo</div></div>
-        <div class="plan-target">Students, casual users</div>
-        <div class="plan-credits">R80–R165 credits</div>
+        <div class="plan-yearly">Always free · no card needed</div>
+        <div class="plan-tagline">For students and casual coding questions.</div>
+        <div class="plan-divider"></div>
+        <div class="plan-features">
+          <div class="plan-feature"><i data-feather="check" class="plan-feature-icon check"></i><span><strong>10 messages</strong> per day</span></div>
+          <div class="plan-feature"><i data-feather="check" class="plan-feature-icon check"></i><span>Grok Build model</span></div>
+          <div class="plan-feature"><i data-feather="check" class="plan-feature-icon check"></i><span>Code preview simulator</span></div>
+          <div class="plan-feature"><i data-feather="x" class="plan-feature-icon cross"></i><span style="color:var(--text-3)">Thread history</span></div>
+          <div class="plan-feature"><i data-feather="x" class="plan-feature-icon cross"></i><span style="color:var(--text-3)">Priority speed</span></div>
+        </div>
         <button class="plan-cta cta-outline" onclick="window.selectPlan('free');event.stopPropagation()">Continue Free</button>
       </div>
+
+      <!-- PRO — BEST VALUE -->
       <div class="plan-card plan-popular" id="plan-pro" onclick="window.selectPlan('pro')">
-        <div class="plan-badge">Sweet Spot</div>
+        <div class="plan-badge">Best Value</div>
         <div class="plan-name">Pro</div>
-        <div class="plan-price-row"><div class="plan-price">R330</div><div class="plan-price-unit">/mo</div></div>
-        <div class="plan-yearly">R2,640/yr · save ~20%</div>
-        <div class="plan-target">Individual developers</div>
-        <div class="plan-credits">R330 credits included</div>
-        <button class="plan-cta cta-accent" onclick="window.selectPlan('pro');event.stopPropagation()"><i data-feather="zap" style="width:14px;height:14px;"></i> Get Pro</button>
+        <div class="plan-price-row"><div class="plan-price">R299</div><div class="plan-price-unit">/mo</div></div>
+        <div class="plan-yearly">R2,390/yr · save R300</div>
+        <div class="plan-tagline">For developers who build seriously.</div>
+        <div class="plan-divider"></div>
+        <div class="plan-features">
+          <div class="plan-feature"><i data-feather="zap" class="plan-feature-icon star"></i><span><strong>Unlimited</strong> daily messages</span></div>
+          <div class="plan-feature"><i data-feather="check" class="plan-feature-icon check"></i><span>Grok Build + priority speed</span></div>
+          <div class="plan-feature"><i data-feather="check" class="plan-feature-icon check"></i><span>Full thread history &amp; sync</span></div>
+          <div class="plan-feature"><i data-feather="check" class="plan-feature-icon check"></i><span>Multi-file context support</span></div>
+          <div class="plan-feature"><i data-feather="check" class="plan-feature-icon check"></i><span>Code preview simulator</span></div>
+        </div>
+        <button class="plan-cta cta-accent-strong" onclick="window.selectPlan('pro');event.stopPropagation()"><i data-feather="zap" style="width:14px;height:14px;"></i> Get Pro — R299/mo</button>
+        <div class="plan-credits-note">Less than one hour of freelance dev time</div>
       </div>
+
+      <!-- PRO+ -->
       <div class="plan-card" id="plan-proplus" onclick="window.selectPlan('proplus')">
-        <div class="plan-name">Pro+ / Heavy</div>
-        <div class="plan-price-row"><div class="plan-price">R825</div><div class="plan-price-unit">/mo</div></div>
-        <div class="plan-yearly">R6,600–R7,920/yr</div>
-        <div class="plan-target">Power users &amp; full-time devs</div>
-        <div class="plan-credits">R990 credits included</div>
+        <div class="plan-name">Pro+</div>
+        <div class="plan-price-row"><div class="plan-price">R799</div><div class="plan-price-unit">/mo</div></div>
+        <div class="plan-yearly">R6,390/yr · save R1,200</div>
+        <div class="plan-tagline">For power users and full-time builders.</div>
+        <div class="plan-divider"></div>
+        <div class="plan-features">
+          <div class="plan-feature"><i data-feather="zap" class="plan-feature-icon star"></i><span><strong>Unlimited</strong> messages + highest priority</span></div>
+          <div class="plan-feature"><i data-feather="check" class="plan-feature-icon check"></i><span>Everything in Pro</span></div>
+          <div class="plan-feature"><i data-feather="check" class="plan-feature-icon check"></i><span>Extended context window</span></div>
+          <div class="plan-feature"><i data-feather="check" class="plan-feature-icon check"></i><span>Bulk code operations</span></div>
+          <div class="plan-feature"><i data-feather="check" class="plan-feature-icon check"></i><span>Early access to new features</span></div>
+        </div>
         <button class="plan-cta cta-accent" onclick="window.selectPlan('proplus');event.stopPropagation()">Get Pro+</button>
       </div>
+
+      <!-- TEAMS -->
       <div class="plan-card" id="plan-teams" onclick="window.selectPlan('teams')">
         <div class="plan-name">Teams</div>
-        <div class="plan-price-row"><div class="plan-price">R580</div><div class="plan-price-unit">/user/mo</div></div>
-        <div class="plan-yearly">R4,640–R5,280/user/yr</div>
-        <div class="plan-target">Small teams &amp; startups</div>
-        <div class="plan-credits">R660/user credits</div>
+        <div class="plan-price-row"><div class="plan-price">R549</div><div class="plan-price-unit">/user/mo</div></div>
+        <div class="plan-yearly">R4,390/user/yr · save 33%</div>
+        <div class="plan-tagline">For startups and dev squads.</div>
+        <div class="plan-divider"></div>
+        <div class="plan-features">
+          <div class="plan-feature"><i data-feather="check" class="plan-feature-icon check"></i><span>Everything in Pro</span></div>
+          <div class="plan-feature"><i data-feather="check" class="plan-feature-icon check"></i><span>Shared thread workspace</span></div>
+          <div class="plan-feature"><i data-feather="check" class="plan-feature-icon check"></i><span>Team usage dashboard</span></div>
+          <div class="plan-feature"><i data-feather="check" class="plan-feature-icon check"></i><span>Centralized billing</span></div>
+          <div class="plan-feature"><i data-feather="check" class="plan-feature-icon check"></i><span>Priority support</span></div>
+        </div>
         <button class="plan-cta cta-accent" onclick="window.selectPlan('teams');event.stopPropagation()">Get Teams</button>
       </div>
+
+      <!-- ENTERPRISE -->
       <div class="plan-card plan-enterprise" id="plan-enterprise">
         <div class="plan-name">Enterprise</div>
-        <div class="plan-price-row"><div class="plan-price" style="font-size:1.3rem;">Custom</div></div>
-        <div class="plan-yearly" style="color:var(--text-3);">Custom annual</div>
-        <div class="plan-target">Companies &amp; larger teams. Pooled credits, SSO, SLAs.</div>
-        <div class="plan-credits">Pooled credits</div>
+        <div class="plan-price-row"><div class="plan-price" style="font-size:1.5rem;letter-spacing:-0.02em;">Custom</div></div>
+        <div class="plan-yearly">Custom annual pricing</div>
+        <div class="plan-tagline">For companies that need control at scale.</div>
+        <div class="plan-divider"></div>
+        <div class="plan-features">
+          <div class="plan-feature"><i data-feather="check" class="plan-feature-icon check"></i><span>Everything in Teams</span></div>
+          <div class="plan-feature"><i data-feather="check" class="plan-feature-icon check"></i><span>SSO / SAML authentication</span></div>
+          <div class="plan-feature"><i data-feather="check" class="plan-feature-icon check"></i><span>SLA &amp; uptime guarantees</span></div>
+          <div class="plan-feature"><i data-feather="check" class="plan-feature-icon check"></i><span>Data retention controls</span></div>
+          <div class="plan-feature"><i data-feather="check" class="plan-feature-icon check"></i><span>Dedicated account manager</span></div>
+        </div>
         <button class="plan-cta cta-outline" onclick="window.contactSales()">Contact Sales</button>
       </div>
+
     </div>
   </div>
 </div>
@@ -682,7 +803,7 @@
       </div>
       <div class="user-info">
         <div class="user-name" id="userName">Guest</div>
-        <div class="user-status">grok-build · ready</div>
+        <div class="user-status">steward · grok-3-mini</div>
       </div>
       <i data-feather="more-horizontal" style="width:16px;height:16px;color:var(--text-3);"></i>
     </div>
@@ -695,7 +816,7 @@
     <button class="menu-toggle" id="menuToggle"><i data-feather="menu" style="width:18px;height:18px;"></i></button>
     <div class="model-selector">
       <div class="model-dot"></div>
-      <span id="modelLabel">grok build</span>
+      <span id="modelLabel">grok-3-mini · build</span>
       <i data-feather="chevron-down" style="width:14px;height:14px;opacity:0.5;"></i>
     </div>
     <div class="topbar-spacer"></div>
@@ -713,38 +834,50 @@
   <div class="chat-scroll" id="chatScroll">
     <div class="chat-inner">
       <div class="welcome" id="welcomeScreen">
-        <div class="welcome-headline">What are we<br><span class="hl">building today?</span></div>
-        <div class="welcome-sub">Powered by Grok Build Code. Ask anything: debug code, write functions, review PRs, explain algorithms, or architect entire systems.</div>
+        <div class="welcome-eyebrow">
+          <span class="welcome-eyebrow-dot"></span>
+          Powered by Grok Build · grok-3-mini
+        </div>
+        <div class="welcome-headline">Your senior dev,<br><span class="hl">available 24/7.</span></div>
+        <div class="welcome-sub">Steward doesn't just answer questions — it acts. Write multi-file backends, refactor entire modules, debug production issues, and ship faster with an AI that thinks in systems.</div>
+        <div class="welcome-pro-highlight">
+          <div class="pro-highlight-icon"><i data-feather="zap" style="width:14px;height:14px;"></i></div>
+          <div class="pro-highlight-content">
+            <div class="pro-highlight-title">Pro unlocks unlimited daily messages + priority speed</div>
+            <div class="pro-highlight-sub">From R299/mo — less than one hour of freelance dev time</div>
+          </div>
+          <button class="pro-highlight-cta" onclick="window.openPricing()">See plans</button>
+        </div>
         <div class="starter-grid">
-          <div class="starter-card" data-prompt="Review this code for bugs, performance issues, and best practice violations. Provide specific fixes.">
-            <div class="starter-icon ic-red"><i data-feather="alert-circle" style="width:18px;height:18px;"></i></div>
-            <p>Debug & code review</p>
-            <div class="starter-tag">inspect · fix</div>
+          <div class="starter-card" data-prompt="I have a production bug. Review this code carefully for logic errors, race conditions, memory leaks, and security issues. Give me specific line-by-line fixes:\n\n```\n// paste your code here\n```">
+            <div class="starter-icon ic-red"><i data-feather="alert-triangle" style="width:18px;height:18px;"></i></div>
+            <p>Debug a production issue</p>
+            <div class="starter-tag">diagnose · fix · explain</div>
           </div>
-          <div class="starter-card" data-prompt="Write a well-structured, production-ready function with error handling, JSDoc comments, and edge case coverage for:">
-            <div class="starter-icon ic-green"><i data-feather="feather" style="width:18px;height:18px;"></i></div>
-            <p>Write production-ready code</p>
-            <div class="starter-tag">generate · document</div>
+          <div class="starter-card" data-prompt="Build me a complete REST API backend with the following spec. Include route handlers, middleware, validation, error handling, and a database schema:\n\nStack: Node.js + Express + PostgreSQL\nFeature: ">
+            <div class="starter-icon ic-green"><i data-feather="server" style="width:18px;height:18px;"></i></div>
+            <p>Build a backend API</p>
+            <div class="starter-tag">generate · production-ready</div>
           </div>
-          <div class="starter-card" data-prompt="Explain how this works step by step, like I'm an intermediate developer. Include mental models and diagrams if needed:">
-            <div class="starter-icon ic-cyan"><i data-feather="book-open" style="width:18px;height:18px;"></i></div>
-            <p>Explain a concept deeply</p>
-            <div class="starter-tag">learn · understand</div>
+          <div class="starter-card" data-prompt="Refactor this codebase. Identify all code smells, apply SOLID principles, split into logical modules, and write clean comments. Show me the before and after:\n\n```\n// paste your code here\n```">
+            <div class="starter-icon ic-yellow"><i data-feather="refresh-cw" style="width:18px;height:18px;"></i></div>
+            <p>Refactor a messy codebase</p>
+            <div class="starter-tag">clean · modularize</div>
           </div>
-          <div class="starter-card" data-prompt="Design the architecture and data model for a full-stack app that does:">
+          <div class="starter-card" data-prompt="Design the full system architecture for this app. Include: component diagram, data models, API contracts, auth flow, and deployment topology.\n\nApp idea: ">
             <div class="starter-icon ic-purple"><i data-feather="layers" style="width:18px;height:18px;"></i></div>
             <p>Architect a full system</p>
-            <div class="starter-tag">design · plan</div>
+            <div class="starter-tag">design · plan · diagram</div>
           </div>
-          <div class="starter-card" data-prompt="Refactor this code to be more readable, maintainable, and follow SOLID principles:">
-            <div class="starter-icon ic-yellow"><i data-feather="refresh-cw" style="width:18px;height:18px;"></i></div>
-            <p>Refactor & improve</p>
-            <div class="starter-tag">clean · optimize</div>
+          <div class="starter-card" data-prompt="Write comprehensive tests for this module. Include unit tests, integration tests, edge cases, and mock strategies. Use Jest.\n\n```\n// paste your code here\n```">
+            <div class="starter-icon ic-cyan"><i data-feather="check-square" style="width:18px;height:18px;"></i></div>
+            <p>Write tests for my code</p>
+            <div class="starter-tag">unit · integration · mocks</div>
           </div>
-          <div class="starter-card" data-prompt="Write a complete HTML page that I can preview — build me a beautiful landing page for a SaaS product called Steward:">
+          <div class="starter-card" data-prompt="Build and preview a complete, beautiful HTML/CSS/JS web app for me. Make it mobile-first, polished, and production-ready:\n\nApp: ">
             <div class="starter-icon ic-orange"><i data-feather="monitor" style="width:18px;height:18px;"></i></div>
-            <p>Generate & preview HTML</p>
-            <div class="starter-tag">build · preview</div>
+            <p>Build & preview a web app</p>
+            <div class="starter-tag">html · css · live preview</div>
           </div>
         </div>
       </div>
@@ -920,20 +1053,15 @@ Keep responses technically precise, modern, and directly actionable.`;
       if (!card) return;
       card.querySelector('.plan-current-badge')?.remove();
       const cta = card.querySelector('.plan-cta');
-      if (id === userPlan && id !== 'free') {
+      if (id === userPlan) {
         const badge = document.createElement('div');
-        badge.className = 'plan-current-badge'; badge.textContent = 'Current Plan';
-        card.querySelector('.plan-name').after(badge);
-        if (cta && id !== 'enterprise') { cta.textContent = 'Current Plan'; cta.className = 'plan-cta cta-muted'; cta.onclick = null; }
+        badge.className = 'plan-current-badge'; badge.textContent = '✓ Current Plan';
+        badge.style.cssText = 'margin-bottom:10px;';
+        card.querySelector('.plan-tagline')?.after(badge);
+        if (cta && id !== 'enterprise') { cta.textContent = '✓ Current Plan'; cta.className = 'plan-cta cta-muted'; cta.onclick = null; }
       }
     });
-    if (userPlan === 'free') {
-      const ctaFree = document.getElementById('plan-free')?.querySelector('.plan-cta');
-      if (ctaFree) { ctaFree.textContent = '✓ Current Plan'; ctaFree.className = 'plan-cta cta-muted'; }
-    }
-    const limit = currentUser ? PLAN_DAILY_LIMITS[userPlan] || 10 : PLAN_DAILY_LIMITS.guest;
-    const label = document.getElementById('freeLimitLabel');
-    if (label) label.textContent = limit >= 999 ? 'Unlimited messages/day' : `${PLAN_DAILY_LIMITS.free} messages/day`;
+    feather.replace();
   }
 
   window.selectPlan = (planId) => {
