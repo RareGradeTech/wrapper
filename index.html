@@ -202,7 +202,6 @@
     .chat-scroll {
       flex: 1; overflow-y: auto; padding: 0;
       display: flex; flex-direction: column; align-items: center;
-      /* custom scrollbar */
       scrollbar-width: thin;
       scrollbar-color: var(--bg-active) transparent;
     }
@@ -235,6 +234,7 @@
     .ic-orange { background: rgba(255,140,66,0.12); color: var(--orange); }
     .ic-red    { background: rgba(255,95,109,0.12); color: var(--red); }
     .ic-yellow { background: rgba(255,210,96,0.12); color: var(--yellow); }
+    .ic-pink   { background: rgba(255,120,200,0.12); color: #FF78C8; }
 
     /* ══ MESSAGES ══ */
     .chat-messages { display: flex; flex-direction: column; gap: 0; }
@@ -300,6 +300,72 @@
     .skeleton-line { height: 10px; background: var(--bg-surface); border-radius: 4px; animation: shimmer 1.5s infinite; }
     @keyframes shimmer { 0%,100%{opacity:0.3} 50%{opacity:0.7} }
 
+    /* ══ IMAGE GENERATION ══ */
+    .img-gen-block { margin: 4px 0; }
+    .img-gen-header {
+      display: flex; align-items: center; gap: 8px; margin-bottom: 12px;
+      font-size: 0.72rem; font-family: var(--font-code); color: var(--text-3);
+    }
+    .img-gen-badge {
+      background: rgba(124,106,255,0.12); color: var(--accent-bright);
+      padding: 2px 8px; border-radius: 4px; font-size: 0.68rem; font-weight: 700;
+      letter-spacing: 0.06em; text-transform: uppercase;
+    }
+    .img-gen-card {
+      border-radius: var(--radius-lg); overflow: hidden;
+      border: 1px solid var(--border); background: var(--bg-surface);
+      display: inline-flex; flex-direction: column;
+      max-width: 480px; width: 100%;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    .img-gen-card:hover { border-color: var(--border-glow); box-shadow: 0 8px 32px rgba(0,0,0,0.25); }
+    .img-gen-card img {
+      width: 100%; display: block; object-fit: cover;
+      transition: opacity 0.4s ease;
+    }
+    .img-gen-card img.loading { opacity: 0; }
+    .img-gen-card-footer {
+      display: flex; align-items: center; gap: 8px;
+      padding: 10px 14px; border-top: 1px solid var(--border);
+    }
+    .img-gen-prompt {
+      font-size: 0.72rem; font-family: var(--font-code); color: var(--text-3);
+      flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    }
+    .img-gen-action {
+      background: none; border: none; cursor: pointer; color: var(--text-3);
+      padding: 5px 8px; border-radius: var(--radius-sm);
+      display: flex; align-items: center; gap: 5px;
+      font-size: 0.7rem; font-family: var(--font-code); transition: all 0.15s;
+      white-space: nowrap;
+    }
+    .img-gen-action:hover { color: var(--accent-bright); background: var(--accent-dim); }
+
+    /* Image generation skeleton / loading state */
+    .img-gen-skeleton {
+      width: 100%; aspect-ratio: 1 / 1; max-width: 480px;
+      background: var(--bg-surface); border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: 16px;
+      position: relative; overflow: hidden;
+    }
+    .img-gen-skeleton::before {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(90deg, transparent 0%, rgba(124,106,255,0.06) 50%, transparent 100%);
+      animation: skelShimmer 2s infinite;
+    }
+    @keyframes skelShimmer { 0%{transform:translateX(-100%)} 100%{transform:translateX(100%)} }
+    .img-gen-skeleton-icon { color: var(--accent-bright); opacity: 0.4; }
+    .img-gen-skeleton-label {
+      font-size: 0.78rem; font-family: var(--font-code); color: var(--text-3);
+      animation: skelFade 1.8s infinite;
+    }
+    @keyframes skelFade { 0%,100%{opacity:0.4} 50%{opacity:1} }
+    .img-gen-skeleton-bar { width: 140px; height: 2px; background: var(--bg-active); border-radius: 99px; overflow: hidden; }
+    .img-gen-skeleton-fill { height: 100%; background: var(--accent); border-radius: 99px; animation: imgBarSweep 2.2s ease-in-out infinite; }
+    @keyframes imgBarSweep { 0%{width:0%;opacity:1} 80%{width:100%;opacity:1} 100%{width:100%;opacity:0} }
+
     /* ══ SCROLL TO BOTTOM FAB ══ */
     #scrollToBottomBtn {
       position: fixed;
@@ -319,19 +385,12 @@
       opacity: 0;
       pointer-events: none;
     }
-    #scrollToBottomBtn.visible {
-      opacity: 1;
-      pointer-events: all;
-    }
+    #scrollToBottomBtn.visible { opacity: 1; pointer-events: all; }
     #scrollToBottomBtn:hover {
-      background: var(--bg-active);
-      color: var(--accent-bright);
-      border-color: var(--accent-glow);
-      transform: translateX(-50%) translateY(-2px);
+      background: var(--bg-active); color: var(--accent-bright);
+      border-color: var(--accent-glow); transform: translateX(-50%) translateY(-2px);
     }
-    @media (max-width: 768px) {
-      #scrollToBottomBtn { left: 50%; }
-    }
+    @media (max-width: 768px) { #scrollToBottomBtn { left: 50%; } }
 
     /* ══ INPUT AREA ══ */
     .input-zone {
@@ -529,22 +588,11 @@
     }
     .sim-notch-cam { width: 7px; height: 7px; background: var(--bg-active); border-radius: 50%; }
     .sim-notch-speaker { width: 26px; height: 3px; background: var(--bg-active); border-radius: 99px; }
-   .sim-iframe-wrap {
-  width: 100%;
-  height: 100%;
-  position: relative;
-  overflow: hidden; /* Added to clip the scaled edges */
-}
-
-.sim-iframe {
-  width: 375px; /* Standard mobile width */
-  height: 721px; /* Proportional to 260x500 ( 500 * (375/260) ) */
-  border: none;
-  display: block;
-  background: white;
-  transform: scale(0.6933); /* Scales the 375px iframe down to exactly 260px */
-  transform-origin: top left;
-}
+    .sim-iframe-wrap { width: 100%; height: 100%; position: relative; overflow: hidden; }
+    .sim-iframe {
+      width: 375px; height: 721px; border: none; display: block; background: white;
+      transform: scale(0.6933); transform-origin: top left;
+    }
     .sim-empty-state {
       position: absolute; inset: 0;
       display: flex; flex-direction: column; align-items: center; justify-content: center;
@@ -573,8 +621,7 @@
     }
     .sim-run-full-btn:hover { background: var(--accent-glow); border-color: var(--accent); }
     .sim-clear-btn {
-      padding: 9px 10px;
-      background: none; border: 1px solid var(--border);
+      padding: 9px 10px; background: none; border: 1px solid var(--border);
       border-radius: var(--radius-md); color: var(--text-3);
       cursor: pointer; transition: all 0.15s; display: flex; align-items: center;
     }
@@ -584,8 +631,7 @@
     .sim-toggle-btn .sim-badge {
       position: absolute; top: 2px; right: 2px;
       width: 10px; height: 10px; border-radius: 50%;
-      background: var(--green); border: 2px solid var(--bg-void);
-      display: none;
+      background: var(--green); border: 2px solid var(--bg-void); display: none;
     }
     .sim-toggle-btn.has-code .sim-badge { display: block; animation: badgePulse 2s infinite; }
     @keyframes badgePulse { 0%,100%{transform:scale(1);opacity:1} 50%{transform:scale(1.3);opacity:0.7} }
@@ -846,7 +892,7 @@
     <div class="chat-inner">
       <div class="welcome" id="welcomeScreen">
         <div class="welcome-headline">What are we<br><span class="hl">building today?</span></div>
-        <div class="welcome-sub">Powered by Grok Build Code. Ask anything: debug code, write functions, review PRs, explain algorithms, or architect entire systems.</div>
+        <div class="welcome-sub">Powered by Grok Build Code. Ask anything: debug code, write functions, review PRs, explain algorithms, architect systems, or generate images.</div>
         <div class="starter-grid">
           <div class="starter-card" data-prompt="Review this code for bugs, performance issues, and best practice violations. Provide specific fixes.">
             <div class="starter-icon ic-red"><i data-feather="alert-circle" style="width:18px;height:18px;"></i></div>
@@ -873,10 +919,10 @@
             <p>Refactor & improve</p>
             <div class="starter-tag">clean · optimize</div>
           </div>
-          <div class="starter-card" data-prompt="Write a complete HTML page that I can preview — build me a beautiful landing page for a SaaS product called Steward:">
-            <div class="starter-icon ic-orange"><i data-feather="monitor" style="width:18px;height:18px;"></i></div>
-            <p>Generate & preview HTML</p>
-            <div class="starter-tag">build · preview</div>
+          <div class="starter-card" data-prompt="Generate an image of ">
+            <div class="starter-icon ic-pink"><i data-feather="image" style="width:18px;height:18px;"></i></div>
+            <p>Generate an image</p>
+            <div class="starter-tag">imagine · visualize</div>
           </div>
         </div>
       </div>
@@ -899,7 +945,7 @@
         <div class="input-left">
           <button class="input-tool-btn" title="Attach file" id="attachBtn"><i data-feather="paperclip" style="width:17px;height:17px;"></i></button>
         </div>
-        <textarea class="chat-textarea" id="chatTextarea" placeholder="Ask anything about your code..." rows="1"></textarea>
+        <textarea class="chat-textarea" id="chatTextarea" placeholder="Ask anything about your code, or say 'generate an image of…'" rows="1"></textarea>
         <button class="send-btn" id="sendBtn" disabled>
           <i data-feather="arrow-up" style="width:16px;height:16px;"></i>
         </button>
@@ -967,7 +1013,6 @@
   const PLAN_DAILY_LIMITS = { guest: 5, free: 10, pro: 999, proplus: 9999, teams: 999, enterprise: 9999 };
   let todayUsage = 0;
 
-  // ── UPDATED: Always produce full code ──
   const SYSTEM_PROMPT = `You are Steward, an expert AI coding assistant with deep knowledge across all programming languages, frameworks, algorithms, system design, and software engineering best practices.
 
 CAPABILITIES:
@@ -977,6 +1022,7 @@ CAPABILITIES:
 - Design system architectures and data models
 - Write comprehensive tests (unit, integration, e2e)
 - Refactor and optimize existing code
+- Image generation is handled automatically by the client when the user asks for it
 
 CRITICAL CODE RULES — ALWAYS FOLLOW:
 - ALWAYS provide the COMPLETE, FULL code in every response. Never truncate, abbreviate, or use placeholders like "// ... rest of code", "// previous code here", "// add your existing code", or similar shortcuts.
@@ -1013,24 +1059,16 @@ Keep responses technically precise, modern, and directly actionable.`;
   // SCROLL TO BOTTOM FAB
   // ══════════════════════════════════════
   const scrollToBottomBtn = document.getElementById('scrollToBottomBtn');
-
   function updateScrollFab() {
     const { scrollTop, scrollHeight, clientHeight } = chatScroll;
     const distFromBottom = scrollHeight - scrollTop - clientHeight;
-    if (distFromBottom > 120) {
-      scrollToBottomBtn.classList.add('visible');
-    } else {
-      scrollToBottomBtn.classList.remove('visible');
-    }
+    if (distFromBottom > 120) scrollToBottomBtn.classList.add('visible');
+    else scrollToBottomBtn.classList.remove('visible');
   }
-
   chatScroll.addEventListener('scroll', updateScrollFab, { passive: true });
-
   scrollToBottomBtn.addEventListener('click', () => {
     document.getElementById('scrollAnchor')?.scrollIntoView({ behavior: 'smooth' });
   });
-
-  // Re-init feather for FAB
   feather.replace();
 
   window.showDialog = (title, msg, btns) => {
@@ -1174,7 +1212,6 @@ Keep responses technically precise, modern, and directly actionable.`;
     }
   });
 
-  // ── Format relative time ──
   function relativeTime(ts) {
     if (!ts) return '';
     const diff = Date.now() - ts;
@@ -1239,7 +1276,20 @@ Keep responses technically precise, modern, and directly actionable.`;
     for (const msg of chatHistory) {
       if (msg.role === 'system') continue;
       if (msg.role === 'user') appendUserMsg(msg.content, false);
-      else if (msg.role === 'assistant') appendAIMsg(msg.content, false);
+      else if (msg.role === 'assistant') {
+        // Render image blocks stored as [Image generated: ...] differently
+        if (msg.content.startsWith('[Image generated:')) {
+          // Skip rendering raw placeholder — images can't be replayed from history without URL
+          const prompt = msg.content.replace('[Image generated: ', '').replace(']', '');
+          const block = document.createElement('div');
+          block.className = 'msg-block';
+          block.innerHTML = `<div class="msg-ai-header"><div class="ai-badge"><div class="ai-badge-dot"></div>Steward</div></div><div class="img-gen-block"><div class="img-gen-header"><span class="img-gen-badge">grok-imagine</span><span>Image (not cached — regenerate to view)</span></div><button class="gate-btn" style="background:var(--bg-elevated);color:var(--accent-bright);box-shadow:none;border:1px solid var(--border);" onclick="window.regenerateImage('${escapeHtml(prompt).replace(/'/g,"\\'")}')"><i data-feather="refresh-cw" style="width:13px;height:13px;"></i> Regenerate</button></div>`;
+          messagesContainer.appendChild(block);
+          feather.replace();
+        } else {
+          appendAIMsg(msg.content, false);
+        }
+      }
     }
     updateActiveThread(); scrollToBottom();
   }
@@ -1267,10 +1317,9 @@ Keep responses technically precise, modern, and directly actionable.`;
   }
   document.getElementById('newThreadBtn').onclick = startNewThread;
 
-  function escapeHtml(t) { return !t ? '' : t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+  function escapeHtml(t) { return !t ? '' : t.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
   function scrollToBottom() {
     document.getElementById('scrollAnchor')?.scrollIntoView({ behavior:'smooth' });
-    // After scroll, update FAB state
     setTimeout(updateScrollFab, 350);
   }
 
@@ -1348,11 +1397,13 @@ Keep responses technically precise, modern, and directly actionable.`;
     scrollToBottom(); return { block, mid };
   }
 
-  function appendThinking() {
+  function appendThinking(isImage = false) {
     const block = document.createElement('div'); block.className = 'msg-block thinking-row'; block.id = 'thinking-block';
-    block.innerHTML = `<div class="thinking-content"><div class="thinking-label"><div class="thinking-dots"><div class="thinking-dot"></div><div class="thinking-dot"></div><div class="thinking-dot"></div></div><span id="thinkingLabel">Analysing...</span></div><div class="thinking-skeleton"><div class="skeleton-line" style="width:80%"></div><div class="skeleton-line" style="width:60%"></div><div class="skeleton-line" style="width:72%"></div></div></div>`;
+    block.innerHTML = `<div class="thinking-content"><div class="thinking-label"><div class="thinking-dots"><div class="thinking-dot"></div><div class="thinking-dot"></div><div class="thinking-dot"></div></div><span id="thinkingLabel">${isImage ? 'Preparing prompt…' : 'Analysing...'}</span></div><div class="thinking-skeleton"><div class="skeleton-line" style="width:80%"></div><div class="skeleton-line" style="width:60%"></div><div class="skeleton-line" style="width:72%"></div></div></div>`;
     messagesContainer.appendChild(block); scrollToBottom();
-    const labels = ['Analysing...','Reviewing context...','Writing response...','Finalising...'];
+    const labels = isImage
+      ? ['Preparing prompt…', 'Sending to Grok Imagine…', 'Generating pixels…', 'Almost ready…']
+      : ['Analysing...','Reviewing context...','Writing response...','Finalising...'];
     let i = 0;
     const interval = setInterval(() => {
       const el = document.getElementById('thinkingLabel');
@@ -1371,6 +1422,139 @@ Keep responses technically precise, modern, and directly actionable.`;
     messagesContainer.appendChild(div); feather.replace(); scrollToBottom();
   }
 
+  // ══════════════════════════════════════
+  // IMAGE GENERATION
+  // ══════════════════════════════════════
+  const IMAGE_TRIGGERS = [
+    /\bgenerate (an? )?image\b/i,
+    /\bcreate (an? )?image\b/i,
+    /\bdraw (me |an? )?/i,
+    /\billustrate\b/i,
+    /\bimage of\b/i,
+    /\bpicture of\b/i,
+    /\bvisualiz(e|ation) of\b/i,
+    /\brender (a |an |me )?.*(image|scene|illustration|photo|picture)/i,
+    /\bshow me .*(image|picture|illustration|photo)/i,
+    /\bmake (a |an |me )?.*(image|picture|illustration|photo)\b/i,
+    /\bpaint (a |an |me )?/i,
+    /\bphoto of\b/i,
+    /\bgenerate .*(art|artwork|illustration|portrait|landscape|scene)\b/i,
+  ];
+
+  function isImageRequest(text) {
+    return IMAGE_TRIGGERS.some(rx => rx.test(text));
+  }
+
+  async function generateImage(prompt) {
+    const response = await fetch('https://api.x.ai/v1/images/generations', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${XAI_KEY}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        model: 'grok-2-image-1212',
+        prompt: prompt,
+        n: 1,
+        response_format: 'url'
+      })
+    });
+    if (!response.ok) {
+      const errText = await response.text();
+      throw new Error(errText);
+    }
+    const data = await response.json();
+    return data.data[0].url;
+  }
+
+  function appendImageResult(imageUrl, prompt) {
+    const block = document.createElement('div');
+    block.className = 'msg-block';
+    const imgId = 'img_' + Math.random().toString(36).substr(2, 8);
+    const safePrompt = prompt.replace(/'/g, "\\'").replace(/"/g, '&quot;');
+    block.innerHTML = `
+      <div class="msg-ai-header">
+        <div class="ai-badge"><div class="ai-badge-dot"></div>Steward</div>
+      </div>
+      <div class="img-gen-block">
+        <div class="img-gen-header">
+          <span class="img-gen-badge">grok-imagine</span>
+          <span>Image generated</span>
+        </div>
+        <div class="img-gen-card">
+          <img id="${imgId}" src="${imageUrl}" alt="${escapeHtml(prompt)}" class="loading"
+               onload="this.classList.remove('loading')"
+               onerror="this.parentElement.querySelector('.img-gen-card-footer').insertAdjacentHTML('beforebegin','<div class=\\'img-gen-error\\'>Failed to load image. URL may have expired.</div>')">
+          <div class="img-gen-card-footer">
+            <span class="img-gen-prompt" title="${escapeHtml(prompt)}">${escapeHtml(prompt)}</span>
+            <button class="img-gen-action" onclick="window.downloadGenImage('${imgId}')">
+              <i data-feather="download" style="width:12px;height:12px;"></i> Save
+            </button>
+            <button class="img-gen-action" onclick="window.copyGenImageUrl('${imageUrl}')">
+              <i data-feather="link" style="width:12px;height:12px;"></i> URL
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="msg-actions">
+        <button class="msg-action" onclick="window.regenerateImage('${safePrompt}')">
+          <i data-feather="refresh-cw" style="width:12px;height:12px;"></i> regenerate
+        </button>
+        <button class="msg-action" onclick="window.varyImage('${safePrompt}')">
+          <i data-feather="shuffle" style="width:12px;height:12px;"></i> variation
+        </button>
+      </div>`;
+    messagesContainer.appendChild(block);
+    feather.replace();
+    scrollToBottom();
+    return block;
+  }
+
+  window.downloadGenImage = async (imgId) => {
+    const img = document.getElementById(imgId);
+    if (!img) return;
+    try {
+      const res = await fetch(img.src);
+      const blob = await res.blob();
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'steward_image_' + Date.now() + '.jpg';
+      document.body.appendChild(a); a.click(); document.body.removeChild(a);
+      URL.revokeObjectURL(url);
+    } catch(e) {
+      window.showDialog('Download failed', 'Could not download the image directly. Try right-clicking the image and saving it instead.', [{ text: 'OK', cls: 'btn-primary' }]);
+    }
+  };
+
+  window.copyGenImageUrl = (url) => {
+    navigator.clipboard.writeText(url).then(() =>
+      window.showDialog('URL Copied', 'Image URL copied to clipboard.', [{ text: 'OK', cls: 'btn-primary' }])
+    );
+  };
+
+  window.regenerateImage = (prompt) => {
+    chatTextarea.value = prompt;
+    chatTextarea.dispatchEvent(new Event('input'));
+    handleSend();
+  };
+
+  window.varyImage = (prompt) => {
+    const variations = [
+      'in a different art style',
+      'with different lighting and color palette',
+      'from a different angle or perspective',
+      'with more detail and texture',
+    ];
+    const variation = variations[Math.floor(Math.random() * variations.length)];
+    chatTextarea.value = prompt + ', ' + variation;
+    chatTextarea.dispatchEvent(new Event('input'));
+    handleSend();
+  };
+
+  // ══════════════════════════════════════
+  // SEND / MAIN HANDLER
+  // ══════════════════════════════════════
   async function handleSend() {
     const prompt = chatTextarea.value.trim();
     if (!prompt || !XAI_KEY) return;
@@ -1379,27 +1563,54 @@ Keep responses technically precise, modern, and directly actionable.`;
 
     appendUserMsg(prompt);
     chatTextarea.value = ''; chatTextarea.style.height = 'auto'; sendBtn.disabled = true;
-    langLabel.textContent = detectLang(prompt);
-    const clearThinking = appendThinking();
-    const msgs = [{ role:'system', content: SYSTEM_PROMPT }, ...chatHistory, { role:'user', content: prompt }];
+
+    const imageMode = isImageRequest(prompt);
+    langLabel.textContent = imageMode ? 'imagine' : detectLang(prompt);
+
+    const clearThinking = appendThinking(imageMode);
 
     try {
-      const res = await fetch(`${API_BASE}/chat/completions`, {
-        method: 'POST',
-        headers: { 'Authorization': `Bearer ${XAI_KEY}`, 'Content-Type': 'application/json' },
-        body: JSON.stringify({ model:'grok-build-0.1', messages: msgs })
-      });
-      if (!res.ok) throw new Error(await res.text());
-      const data = await res.json();
-      clearThinking(); document.getElementById('thinking-block')?.remove();
+      if (imageMode) {
+        // ── IMAGE GENERATION PATH ──
+        clearThinking();
+        document.getElementById('thinking-block')?.remove();
 
-      const aiText = data.choices[0].message.content;
-      chatHistory.push({ role:'user', content:prompt });
-      chatHistory.push({ role:'assistant', content:aiText });
+        let imageUrl;
+        try {
+          imageUrl = await generateImage(prompt);
+        } catch(imgErr) {
+          throw imgErr;
+        }
 
-      const { mid } = appendAIMsg(aiText);
-      feather.replace(); saveThread();
+        appendImageResult(imageUrl, prompt);
 
+        chatHistory.push({ role: 'user', content: prompt });
+        chatHistory.push({ role: 'assistant', content: `[Image generated: ${prompt}]` });
+        saveThread();
+
+      } else {
+        // ── TEXT / CODE PATH ──
+        const msgs = [{ role:'system', content: SYSTEM_PROMPT }, ...chatHistory, { role:'user', content: prompt }];
+        const res = await fetch(`${API_BASE}/chat/completions`, {
+          method: 'POST',
+          headers: { 'Authorization': `Bearer ${XAI_KEY}`, 'Content-Type': 'application/json' },
+          body: JSON.stringify({ model:'grok-build-0.1', messages: msgs })
+        });
+        if (!res.ok) throw new Error(await res.text());
+        const data = await res.json();
+        clearThinking();
+        document.getElementById('thinking-block')?.remove();
+
+        const aiText = data.choices[0].message.content;
+        chatHistory.push({ role:'user', content:prompt });
+        chatHistory.push({ role:'assistant', content:aiText });
+
+        const { mid } = appendAIMsg(aiText);
+        feather.replace();
+        saveThread();
+      }
+
+      // ── Usage tracking (shared by both paths) ──
       if (!currentUser) {
         guestCount++;
         if (guestCount >= PLAN_DAILY_LIMITS.guest) showAuthGate();
@@ -1414,11 +1625,14 @@ Keep responses technically precise, modern, and directly actionable.`;
           ]);
         }
       }
+
     } catch (err) {
-      clearThinking(); document.getElementById('thinking-block')?.remove();
+      clearThinking();
+      document.getElementById('thinking-block')?.remove();
       const errBlock = document.createElement('div'); errBlock.className = 'msg-block';
-      errBlock.innerHTML = `<div class="auth-gate" style="border-color:rgba(255,95,109,0.25);background:rgba(255,95,109,0.06);"><div class="gate-title" style="color:var(--red)">Connection error</div><div class="gate-sub">${escapeHtml(err.message)}</div><button class="gate-btn" style="background:var(--red);box-shadow:0 4px 14px rgba(255,95,109,0.3);" onclick="this.closest('.msg-block').remove();window.retryLast()">Retry</button></div>`;
-      messagesContainer.appendChild(errBlock); scrollToBottom();
+      errBlock.innerHTML = `<div class="auth-gate" style="border-color:rgba(255,95,109,0.25);background:rgba(255,95,109,0.06);"><div class="gate-title" style="color:var(--red)">Error</div><div class="gate-sub">${escapeHtml(err.message)}</div><button class="gate-btn" style="background:var(--red);box-shadow:0 4px 14px rgba(255,95,109,0.3);" onclick="this.closest('.msg-block').remove();window.retryLast()">Retry</button></div>`;
+      messagesContainer.appendChild(errBlock);
+      scrollToBottom();
     }
   }
   window.handleSend = handleSend;
@@ -1427,6 +1641,10 @@ Keep responses technically precise, modern, and directly actionable.`;
     this.style.height = 'auto';
     this.style.height = Math.min(this.scrollHeight, 260) + 'px';
     sendBtn.disabled = this.value.trim().length === 0;
+    // Hint in ctx pill when image is detected
+    if (isImageRequest(this.value.trim())) langLabel.textContent = 'imagine';
+    else if (this.value.trim()) langLabel.textContent = detectLang(this.value.trim());
+    else langLabel.textContent = 'general';
   });
   chatTextarea.addEventListener('keydown', e => {
     if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); if (!sendBtn.disabled) handleSend(); }
@@ -1471,16 +1689,12 @@ Keep responses technically precise, modern, and directly actionable.`;
   }
 
   function openSim() {
-    simOpen = true;
-    simPanel.classList.add('open');
-    simToggleBtn.classList.add('active');
+    simOpen = true; simPanel.classList.add('open'); simToggleBtn.classList.add('active');
     if (window.innerWidth >= 769) document.body.classList.add('sim-open');
     feather.replace();
   }
   function closeSim() {
-    simOpen = false;
-    simPanel.classList.remove('open');
-    simToggleBtn.classList.remove('active');
+    simOpen = false; simPanel.classList.remove('open'); simToggleBtn.classList.remove('active');
     document.body.classList.remove('sim-open');
   }
 
@@ -1581,9 +1795,7 @@ Keep responses technically precise, modern, and directly actionable.`;
   // ══════════════════════════════════════
   window.isYearly = false;
 
-  window.toggleBilling = () => {
-    window.setBilling(!window.isYearly);
-  };
+  window.toggleBilling = () => { window.setBilling(!window.isYearly); };
 
   window.setBilling = (yearly) => {
     window.isYearly = yearly;
