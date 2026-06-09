@@ -355,20 +355,35 @@
     .pricing-title { font-size: 2rem; font-weight: 800; letter-spacing: -0.04em; margin-bottom: 10px; }
     .pricing-sub { font-size: 0.9rem; color: var(--text-2); line-height: 1.6; }
     .pricing-free-note { display: inline-flex; align-items: center; gap: 6px; margin-top: 10px; background: rgba(61,220,132,0.1); border: 1px solid rgba(61,220,132,0.25); border-radius: 99px; padding: 5px 14px; font-size: 0.75rem; font-family: var(--font-code); color: var(--green); }
-    .pricing-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 14px; }
-    .plan-card { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 22px 18px 20px; display: flex; flex-direction: column; gap: 14px; cursor: pointer; transition: all 0.22s; position: relative; overflow: hidden; }
-    .plan-card:hover { border-color: var(--accent); transform: translateY(-3px); box-shadow: 0 12px 32px rgba(124,106,255,0.15); }
-    .plan-card.plan-popular { border-color: var(--accent); background: var(--bg-active); }
+
+    /* ══ PRICING TOGGLE ══ */
+    .billing-toggle-wrapper { display: flex; align-items: center; justify-content: center; gap: 14px; margin-top: 24px; }
+    .billing-label { font-size: 0.88rem; font-weight: 600; color: var(--text-2); cursor: pointer; transition: color 0.2s; }
+    .billing-label.active { color: var(--text-1); }
+    .switch-track { width: 46px; height: 26px; background: var(--bg-active); border: 1px solid var(--border); border-radius: 99px; position: relative; cursor: pointer; transition: all 0.3s ease; }
+    .switch-track:hover { border-color: var(--border-glow); }
+    .switch-track.yearly { background: var(--accent); border-color: var(--accent); }
+    .switch-thumb { width: 18px; height: 18px; background: white; border-radius: 50%; position: absolute; top: 3px; left: 3px; transition: transform 0.3s cubic-bezier(.4, 0, .2, 1); box-shadow: 0 2px 6px rgba(0,0,0,0.2); }
+    .switch-track.yearly .switch-thumb { transform: translateX(20px); }
+    .save-badge { background: rgba(61,220,132,0.15); color: var(--green); padding: 3px 8px; border-radius: 99px; font-size: 0.65rem; margin-left: 6px; font-family: var(--font-code); font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; }
+
+    /* ══ REDESIGNED PRICING CARDS ══ */
+    .pricing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; margin-top: 20px; }
+    .plan-card { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: var(--radius-xl); padding: 28px 24px; display: flex; flex-direction: column; gap: 16px; cursor: pointer; transition: all 0.3s cubic-bezier(.16,1,.3,1); position: relative; overflow: hidden; }
+    .plan-card:hover { border-color: var(--border-glow); transform: translateY(-4px); box-shadow: 0 16px 40px rgba(0,0,0,0.2); }
+    .plan-card.plan-popular { border-color: var(--accent-bright); background: linear-gradient(180deg, var(--bg-hover) 0%, var(--bg-elevated) 100%); box-shadow: 0 8px 32px var(--accent-dim); }
+    .plan-card.plan-popular:hover { border-color: var(--accent); box-shadow: 0 16px 48px var(--accent-glow); }
     .plan-card.plan-enterprise { cursor: default; }
-    .plan-badge { position: absolute; top: 14px; right: 14px; font-size: 0.6rem; font-family: var(--font-code); font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; background: var(--accent); color: white; padding: 2px 8px; border-radius: 99px; }
-    .plan-name { font-size: 0.82rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; font-family: var(--font-code); color: var(--text-3); }
-    .plan-price-row { display: flex; align-items: flex-end; gap: 4px; }
-    .plan-price { font-size: 1.8rem; font-weight: 800; letter-spacing: -0.04em; line-height: 1; }
-    .plan-price-unit { font-size: 0.75rem; color: var(--text-3); font-family: var(--font-code); margin-bottom: 2px; }
-    .plan-yearly { font-size: 0.72rem; color: var(--green); font-family: var(--font-code); }
-    .plan-target { font-size: 0.78rem; color: var(--text-2); line-height: 1.4; }
-    .plan-credits { font-size: 0.72rem; font-family: var(--font-code); color: var(--accent-bright); background: var(--accent-dim); border: 1px solid var(--accent-glow); border-radius: 6px; padding: 4px 10px; display: inline-block; }
-    .plan-cta { margin-top: auto; width: 100%; padding: 10px 14px; border-radius: var(--radius-md); border: none; font-family: var(--font-ui); font-size: 0.85rem; font-weight: 700; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px; }
+    .plan-badge { position: absolute; top: 0; left: 50%; transform: translateX(-50%); font-size: 0.65rem; font-family: var(--font-code); font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; background: var(--accent); color: white; padding: 4px 16px; border-bottom-left-radius: 8px; border-bottom-right-radius: 8px; }
+    .plan-name { font-size: 1.1rem; font-weight: 800; letter-spacing: -0.02em; color: var(--text-1); }
+    .plan-price-wrap { display: flex; flex-direction: column; gap: 2px; height: 64px; justify-content: center; }
+    .plan-price-row { display: flex; align-items: baseline; gap: 6px; }
+    .plan-price { font-size: 2.2rem; font-weight: 800; letter-spacing: -0.04em; line-height: 1; color: var(--text-1); }
+    .plan-price-unit { font-size: 0.85rem; color: var(--text-3); font-weight: 500; }
+    .plan-yearly-total { font-size: 0.75rem; color: var(--green); font-family: var(--font-code); display: none; }
+    .plan-target { font-size: 0.85rem; color: var(--text-2); line-height: 1.5; flex: 1; }
+    .plan-credits { font-size: 0.75rem; font-family: var(--font-code); font-weight: 600; color: var(--accent-bright); background: var(--accent-dim); border-radius: 6px; padding: 6px 12px; margin-top: auto; display: inline-block; text-align: center; }
+    .plan-cta { width: 100%; padding: 12px 14px; border-radius: var(--radius-md); border: none; font-family: var(--font-ui); font-size: 0.9rem; font-weight: 700; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 8px; }
     .cta-accent { background: var(--accent); color: white; box-shadow: 0 4px 14px var(--accent-glow); }
     .cta-accent:hover { background: var(--accent-bright); transform: translateY(-1px); }
     .cta-outline { background: transparent; color: var(--text-1); border: 1px solid var(--border); }
@@ -376,6 +391,7 @@
     .cta-muted { background: var(--bg-hover); color: var(--text-2); border: 1px solid var(--border); cursor: default; }
     .plan-current-badge { font-size: 0.65rem; font-family: var(--font-code); font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--green); border: 1px solid rgba(61,220,132,0.3); border-radius: 99px; padding: 2px 8px; display: inline-block; background: rgba(61,220,132,0.08); }
     @media (max-width: 600px) { .pricing-grid { grid-template-columns: 1fr; } .pricing-box { padding: 28px 16px 32px; } .pricing-title { font-size: 1.5rem; } }
+
 
     /* Syntax highlight */
     .tok-kw { color: var(--accent-bright); }
@@ -513,13 +529,11 @@
 </head>
 <body>
 
-<!-- SPLASH -->
 <div id="splash">
   <img src="https://i.postimg.cc/tRMK3mNK/Steward-logo.png" alt="Steward" class="splash-logo">
   <div class="splash-bar"><div class="splash-bar-fill"></div></div>
 </div>
 
-<!-- DIALOG -->
 <div class="dialog-overlay" id="dialogOverlay">
   <div class="dialog-box" id="dialogBox">
     <div class="dialog-title" id="dialogTitle"></div>
@@ -528,7 +542,6 @@
   </div>
 </div>
 
-<!-- AUTH -->
 <div class="auth-overlay" id="authOverlay">
   <div class="auth-box" id="authBox">
     <button class="auth-close" id="authClose"><i data-feather="x" style="width:18px;height:18px;"></i></button>
@@ -542,57 +555,99 @@
   </div>
 </div>
 
-<!-- PRICING MODAL -->
 <div class="pricing-overlay" id="pricingOverlay">
   <div class="pricing-box" id="pricingBox">
     <button class="pricing-close" id="pricingClose"><i data-feather="x" style="width:18px;height:18px;"></i></button>
+
     <div class="pricing-header">
       <div class="pricing-eyebrow">Steward Plans</div>
       <div class="pricing-title">Build without limits</div>
       <div class="pricing-sub">Every account gets free daily credits. Upgrade anytime to unlock more power.</div>
+      
+      <div class="billing-toggle-wrapper">
+        <span class="billing-label active" id="label-mo" onclick="window.setBilling(false)">Monthly</span>
+        <div class="switch-track" id="billingSwitch" onclick="window.toggleBilling()">
+          <div class="switch-thumb"></div>
+        </div>
+        <span class="billing-label" id="label-yr" onclick="window.setBilling(true)">
+          Yearly <span class="save-badge">Save 20%</span>
+        </span>
+      </div>
+
       <div class="pricing-free-note">
         <i data-feather="gift" style="width:12px;height:12px;"></i>
         Free users get <strong id="freeLimitLabel">10 messages/day</strong> — no card required
       </div>
     </div>
+
     <div class="pricing-grid" id="pricingGrid">
       <div class="plan-card" id="plan-free" onclick="window.selectPlan('free')">
-        <div class="plan-name">Free / Hobby</div>
-        <div class="plan-price-row"><div class="plan-price">R0</div><div class="plan-price-unit">/mo</div></div>
-        <div class="plan-target">Students, casual users</div>
-        <div class="plan-credits">R80–R165 credits</div>
-        <button class="plan-cta cta-outline" onclick="window.selectPlan('free');event.stopPropagation()">Continue Free</button>
+        <div class="plan-name">Hobby</div>
+        <div class="plan-price-wrap">
+          <div class="plan-price-row">
+            <div class="plan-price">R0</div>
+          </div>
+          <div class="plan-price-unit">Forever free</div>
+        </div>
+        <div class="plan-target">Perfect for students and casual exploration.</div>
+        <div class="plan-credits">R80–R165 credits/mo</div>
+        <button class="plan-cta cta-outline" onclick="window.selectPlan('free');event.stopPropagation()">Current Plan</button>
       </div>
+
       <div class="plan-card plan-popular" id="plan-pro" onclick="window.selectPlan('pro')">
-        <div class="plan-badge">Sweet Spot</div>
+        <div class="plan-badge">Most Popular</div>
         <div class="plan-name">Pro</div>
-        <div class="plan-price-row"><div class="plan-price">R330</div><div class="plan-price-unit">/mo</div></div>
-        <div class="plan-yearly">R2,640/yr · save ~20%</div>
-        <div class="plan-target">Individual developers</div>
+        <div class="plan-price-wrap">
+          <div class="plan-price-row">
+            <div class="plan-price" data-mo="R330" data-yr="R220">R330</div>
+            <div class="plan-price-unit">/mo</div>
+          </div>
+          <div class="plan-yearly-total" data-total="Billed R2,640 annually"></div>
+        </div>
+        <div class="plan-target">For individual developers building applications.</div>
         <div class="plan-credits">R330 credits included</div>
-        <button class="plan-cta cta-accent" onclick="window.selectPlan('pro');event.stopPropagation()"><i data-feather="zap" style="width:14px;height:14px;"></i> Get Pro</button>
+        <button class="plan-cta cta-accent" onclick="window.selectPlan('pro');event.stopPropagation()">
+          <i data-feather="zap" style="width:14px;height:14px;"></i> Get Pro
+        </button>
       </div>
+
       <div class="plan-card" id="plan-proplus" onclick="window.selectPlan('proplus')">
-        <div class="plan-name">Pro+ / Heavy</div>
-        <div class="plan-price-row"><div class="plan-price">R825</div><div class="plan-price-unit">/mo</div></div>
-        <div class="plan-yearly">R6,600–R7,920/yr</div>
-        <div class="plan-target">Power users &amp; full-time devs</div>
+        <div class="plan-name">Pro+</div>
+        <div class="plan-price-wrap">
+          <div class="plan-price-row">
+            <div class="plan-price" data-mo="R825" data-yr="R660">R825</div>
+            <div class="plan-price-unit">/mo</div>
+          </div>
+          <div class="plan-yearly-total" data-total="Billed R7,920 annually"></div>
+        </div>
+        <div class="plan-target">For power users and full-time developers.</div>
         <div class="plan-credits">R990 credits included</div>
         <button class="plan-cta cta-accent" onclick="window.selectPlan('proplus');event.stopPropagation()">Get Pro+</button>
       </div>
+
       <div class="plan-card" id="plan-teams" onclick="window.selectPlan('teams')">
         <div class="plan-name">Teams</div>
-        <div class="plan-price-row"><div class="plan-price">R580</div><div class="plan-price-unit">/user/mo</div></div>
-        <div class="plan-yearly">R4,640–R5,280/user/yr</div>
-        <div class="plan-target">Small teams &amp; startups</div>
+        <div class="plan-price-wrap">
+          <div class="plan-price-row">
+            <div class="plan-price" data-mo="R580" data-yr="R440">R580</div>
+            <div class="plan-price-unit">/user/mo</div>
+          </div>
+          <div class="plan-yearly-total" data-total="Billed R5,280/user annually"></div>
+        </div>
+        <div class="plan-target">For small teams and startups scaling rapidly.</div>
         <div class="plan-credits">R660/user credits</div>
         <button class="plan-cta cta-accent" onclick="window.selectPlan('teams');event.stopPropagation()">Get Teams</button>
       </div>
+      
       <div class="plan-card plan-enterprise" id="plan-enterprise">
         <div class="plan-name">Enterprise</div>
-        <div class="plan-price-row"><div class="plan-price" style="font-size:1.3rem;">Custom</div></div>
-        <div class="plan-yearly" style="color:var(--text-3);">Custom annual</div>
-        <div class="plan-target">Companies &amp; larger teams. Pooled credits, SSO, SLAs.</div>
+        <div class="plan-price-wrap">
+          <div class="plan-price-row">
+            <div class="plan-price" style="font-size:1.8rem;">Custom</div>
+          </div>
+          <div class="plan-price-unit">Contact us</div>
+        </div>
+        <div class="plan-target">Companies & larger teams. Pooled credits, SSO, SLAs.</div>
         <div class="plan-credits">Pooled credits</div>
         <button class="plan-cta cta-outline" onclick="window.contactSales()">Contact Sales</button>
       </div>
@@ -600,13 +655,11 @@
   </div>
 </div>
 
-<!-- MOBILE SIMULATOR TOGGLE BUTTON -->
 <button class="sim-toggle-btn" id="simToggleBtn" title="Toggle mobile preview">
   <div class="sim-badge"></div>
   <i data-feather="smartphone" style="width:18px;height:18px;"></i>
 </button>
 
-<!-- MOBILE SIMULATOR PANEL -->
 <div class="sim-panel" id="simPanel">
   <div class="sim-topbar">
     <span class="sim-title">
@@ -689,7 +742,6 @@
   </div>
 </aside>
 
-<!-- MAIN -->
 <div class="main-wrapper">
   <div class="topbar">
     <button class="menu-toggle" id="menuToggle"><i data-feather="menu" style="width:18px;height:18px;"></i></button>
@@ -1387,6 +1439,49 @@ Keep responses technically precise, modern, and directly actionable.`;
       setSimStatus('ready', lang.toUpperCase() + ' code ready — click Run or Preview');
       simToggleBtn.classList.add('has-code');
     }
+  };
+
+  // ══════════════════════════════════════
+  // BILLING TOGGLE LOGIC
+  // ══════════════════════════════════════
+  window.isYearly = false;
+
+  window.toggleBilling = () => {
+    window.setBilling(!window.isYearly);
+  };
+
+  window.setBilling = (yearly) => {
+    window.isYearly = yearly;
+    
+    const track = document.getElementById('billingSwitch');
+    const lblMo = document.getElementById('label-mo');
+    const lblYr = document.getElementById('label-yr');
+
+    // Update UI Toggle classes
+    if (window.isYearly) {
+      track.classList.add('yearly');
+      lblMo.classList.remove('active');
+      lblYr.classList.add('active');
+    } else {
+      track.classList.remove('yearly');
+      lblMo.classList.add('active');
+      lblYr.classList.remove('active');
+    }
+
+    // Update Prices
+    document.querySelectorAll('.plan-price').forEach(el => {
+      if (el.dataset.mo && el.dataset.yr) {
+        el.textContent = window.isYearly ? el.dataset.yr : el.dataset.mo;
+      }
+    });
+
+    // Toggle Annual Subtext
+    document.querySelectorAll('.plan-yearly-total').forEach(el => {
+      if (el.dataset.total) {
+        el.textContent = el.dataset.total;
+        el.style.display = window.isYearly ? 'block' : 'none';
+      }
+    });
   };
 </script>
 </body>
