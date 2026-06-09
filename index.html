@@ -529,9 +529,22 @@
     }
     .sim-notch-cam { width: 7px; height: 7px; background: var(--bg-active); border-radius: 50%; }
     .sim-notch-speaker { width: 26px; height: 3px; background: var(--bg-active); border-radius: 99px; }
-    .sim-iframe-wrap { width: 100%; height: 100%; position: relative; }
-    .sim-iframe { width: 100%; height: 100%; border: none; display: block; background: white; }
+   .sim-iframe-wrap {
+  width: 100%;
+  height: 100%;
+  position: relative;
+  overflow: hidden; /* Added to clip the scaled edges */
+}
 
+.sim-iframe {
+  width: 375px; /* Standard mobile width */
+  height: 721px; /* Proportional to 260x500 ( 500 * (375/260) ) */
+  border: none;
+  display: block;
+  background: white;
+  transform: scale(0.6933); /* Scales the 375px iframe down to exactly 260px */
+  transform-origin: top left;
+}
     .sim-empty-state {
       position: absolute; inset: 0;
       display: flex; flex-direction: column; align-items: center; justify-content: center;
@@ -1502,12 +1515,12 @@ Keep responses technically precise, modern, and directly actionable.`;
     const isFullDoc = /<!doctype|<html/i.test(content.code);
     if (isFullDoc) return content.code;
     if (content.lang === 'css') {
-      return '<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>*{box-sizing:border-box;margin:0;padding:0}' + content.code + '</style></head><body></body></html>';
+      return '<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>*{box-sizing:border-box;margin:0;padding:0}body{overflow-x:hidden}' + content.code + '</style></head><body></body></html>';
     }
     if (content.lang === 'javascript' || content.lang === 'js') {
-      return '<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"></head><body><script>' + content.code + '<\/script></body></html>';
+      return '<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>body{overflow-x:hidden;margin:0;padding:0}</style></head><body><script>' + content.code + '<\/script></body></html>';
     }
-    return '<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>*{box-sizing:border-box;margin:0;padding:0}body{font-family:system-ui,sans-serif;background:#fff;color:#111}</style></head><body>' + content.code + '</body></html>';
+    return '<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>*{box-sizing:border-box;margin:0;padding:0}body{font-family:system-ui,sans-serif;background:#fff;color:#111;overflow-x:hidden}</style></head><body>' + content.code + '</body></html>';
   }
 
   function runCodeInSim(content) {
