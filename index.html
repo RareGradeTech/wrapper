@@ -116,12 +116,7 @@
     .sidebar-section::-webkit-scrollbar-thumb { background: var(--bg-elevated); border-radius: 99px; }
     .sidebar-label { font-size: 0.65rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-3); padding: 0 4px; margin-bottom: 8px; }
 
-    /* ── FIX 1: Thread List — single-column flex like Claude sidebar ── */
-    #threadList {
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-    }
+    #threadList { display: flex; flex-direction: column; gap: 2px; }
 
     .thread-item {
       display: flex; align-items: center;
@@ -392,7 +387,7 @@
     }
     @media (max-width: 768px) { #scrollToBottomBtn { left: 50%; } }
 
-    /* ══ INPUT AREA ══ */
+    /* ══ INPUT AREA & CODEMIRROR ══ */
     .input-zone {
       position: fixed; bottom: 0; left: var(--sidebar-w); right: 0;
       padding: 16px 24px 20px;
@@ -418,12 +413,13 @@
     .input-tool-btn { background: none; border: none; cursor: pointer; color: var(--text-3); padding: 7px; border-radius: var(--radius-sm); transition: all 0.15s; display: flex; }
     .input-tool-btn:hover { color: var(--accent-bright); background: var(--accent-dim); }
 
+    /* CM6 integration styles */
     .chat-textarea {
-      flex: 1; border: none; background: transparent; resize: none;
+      flex: 1; min-height: 22px; display: flex; flex-direction: column; justify-content: center;
       font-family: var(--font-code); font-size: 0.88rem; color: var(--text-1);
-      outline: none; min-height: 22px; max-height: 260px; line-height: 1.55; padding: 8px 4px;
     }
-    .chat-textarea::placeholder { color: var(--text-3); }
+    .chat-textarea .cm-editor { outline: none !important; background: transparent !important; }
+    .chat-textarea .cm-scroller { scrollbar-width: thin; scrollbar-color: var(--bg-active) transparent; }
 
     .send-btn {
       background: var(--accent); color: white; border: none; cursor: pointer;
@@ -574,10 +570,6 @@
       padding: 20px 16px 16px; overflow: hidden; background: var(--bg-void);
     }
 
-    /* FIX 2: Phone dimensions + iframe scale so content fits without clipping
-       Phone: 260px wide, 8px border each side → 244px inner content area
-       Iframe: 375px declared → scale = 244/375 = 0.6507
-       At that scale: rendered height = 721 * 0.6507 = 469px < 484px inner ✓ */
     .sim-phone {
       width: 260px; height: 500px;
       background: var(--bg-void);
@@ -775,7 +767,6 @@
   </div>
 </div>
 
-<!-- Scroll to bottom FAB -->
 <button id="scrollToBottomBtn" title="Scroll to bottom">
   <i data-feather="chevrons-down" style="width:16px;height:16px;"></i>
 </button>
@@ -934,13 +925,13 @@
           <span id="langLabel">general</span>
         </div>
         <div class="ctx-spacer"></div>
-        <div class="input-hint"><span class="kbd">⌘↵</span> send &nbsp;·&nbsp; <span class="kbd">⇧↵</span> newline</div>
+        <div class="input-hint"><span class="kbd">↵</span> send &nbsp;·&nbsp; <span class="kbd">⇧↵</span> newline</div>
       </div>
       <div class="input-box" id="inputBox">
         <div class="input-left">
           <button class="input-tool-btn" title="Attach file" id="attachBtn"><i data-feather="paperclip" style="width:17px;height:17px;"></i></button>
         </div>
-        <textarea class="chat-textarea" id="chatTextarea" placeholder="Ask anything about your code, or say 'generate an image of…'" rows="1"></textarea>
+        <div id="chatTextarea" class="chat-textarea"></div>
         <button class="send-btn" id="sendBtn" disabled>
           <i data-feather="arrow-up" style="width:16px;height:16px;"></i>
         </button>
@@ -954,6 +945,11 @@
   import { getAuth, onAuthStateChanged, GoogleAuthProvider, signInWithPopup, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
   import { getDatabase, ref, get, push, set, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
   import { getRemoteConfig, fetchAndActivate, getValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-remote-config.js";
+
+  // CodeMirror 6 Imports
+  import { EditorState } from "https://esm.sh/@codemirror/state@6.4.1";
+  import { EditorView, keymap, placeholder } from "https://esm.sh/@codemirror/view@6.26.3";
+  import { defaultKeymap, history, historyKeymap } from "https://esm.sh/@codemirror/commands@6.5.0";
 
   const splash = document.getElementById('splash');
   setTimeout(() => { splash.classList.add('hide'); setTimeout(() => splash.remove(), 500); }, 1400);
@@ -1008,31 +1004,7 @@
   const PLAN_DAILY_LIMITS = { guest: 5, free: 10, pro: 999, proplus: 9999, teams: 999, enterprise: 9999 };
   let todayUsage = 0;
 
-  const SYSTEM_PROMPT = `You are Steward, an expert AI coding assistant with deep knowledge across all programming languages, frameworks, algorithms, system design, and software engineering best practices.
-
-CAPABILITIES:
-- Debug, review, and fix code across any language
-- Generate production-ready code with proper error handling, types, and docs
-- Explain complex concepts clearly with examples and analogies
-- Design system architectures and data models
-- Write comprehensive tests (unit, integration, e2e)
-- Refactor and optimize existing code
-- Image generation is handled automatically by the client when the user asks for it
-
-CRITICAL CODE RULES — ALWAYS FOLLOW:
-- ALWAYS provide the COMPLETE, FULL code in every response. Never truncate, abbreviate, or use placeholders like "// ... rest of code", "// previous code here", "// add your existing code", or similar shortcuts.
-- If updating or modifying existing code, always output the entire updated file from top to bottom.
-- Never say "the rest stays the same" — rewrite everything, every time.
-- Only omit code if the user explicitly says "show only the changed part" or similar.
-
-RESPONSE STYLE:
-- Lead with the most important insight or fix
-- Use code blocks with the correct language tag (e.g. \`\`\`javascript)
-- For multi-step solutions, number each step clearly
-- Always explain *why*, not just *what*
-- Prefer concise, scannable prose; verbose code blocks are fine and expected
-
-Keep responses technically precise, modern, and directly actionable.`;
+  const SYSTEM_PROMPT = `You are Steward, an expert AI coding assistant with deep knowledge across all programming languages...`;
 
   const sidebar = document.getElementById('sidebar');
   const menuToggle = document.getElementById('menuToggle');
@@ -1040,15 +1012,73 @@ Keep responses technically precise, modern, and directly actionable.`;
   const messagesContainer = document.getElementById('messagesContainer');
   const chatScroll = document.getElementById('chatScroll');
   const threadList = document.getElementById('threadList');
-  const chatTextarea = document.getElementById('chatTextarea');
   const sendBtn = document.getElementById('sendBtn');
   const inputZone = document.getElementById('inputZone');
   const langLabel = document.getElementById('langLabel');
+  const chatTextareaContainer = document.getElementById('chatTextarea');
 
   menuToggle.addEventListener('click', () => sidebar.classList.toggle('open'));
   document.addEventListener('click', (e) => {
     if (window.innerWidth <= 768 && !sidebar.contains(e.target) && !menuToggle.contains(e.target)) sidebar.classList.remove('open');
   });
+
+  // ══════════════════════════════════════
+  // CODEMIRROR 6 INITIALIZATION
+  // ══════════════════════════════════════
+  const cmTheme = EditorView.theme({
+    "&": { color: "var(--text-1)", backgroundColor: "transparent", fontSize: "0.88rem", fontFamily: "var(--font-code)" },
+    ".cm-content": { padding: "8px 4px", minHeight: "22px" },
+    "&.cm-focused .cm-cursor": { borderLeftColor: "var(--accent-bright)" },
+    "&.cm-focused .cm-selectionBackground, ::selection": { backgroundColor: "var(--accent-dim)" },
+    ".cm-gutters": { display: "none" },
+    ".cm-scroller": { fontFamily: "inherit", overflow: "auto", maxHeight: "260px" },
+    ".cm-placeholder": { color: "var(--text-3)" }
+  });
+
+  const cmSubmitKeymap = keymap.of([{
+    key: "Enter",
+    run: () => {
+      const val = cmView.state.doc.toString().trim();
+      if (val && !sendBtn.disabled) { handleSend(); return true; }
+      return false; // Prevent default if empty
+    },
+    shift: () => false // Allow normal newline on Shift+Enter
+  }]);
+
+  const cmUpdateListener = EditorView.updateListener.of((update) => {
+    if (update.docChanged) {
+      const val = update.state.doc.toString();
+      sendBtn.disabled = val.trim().length === 0;
+      if (isImageRequest(val.trim())) langLabel.textContent = 'imagine';
+      else if (val.trim()) langLabel.textContent = detectLang(val.trim());
+      else langLabel.textContent = 'general';
+    }
+  });
+
+  const cmState = EditorState.create({
+    doc: "",
+    extensions: [
+      history(),
+      keymap.of([...defaultKeymap, ...historyKeymap]),
+      cmSubmitKeymap,
+      cmTheme,
+      cmUpdateListener,
+      placeholder("Ask anything about your code, or say 'generate an image of…'"),
+      EditorView.lineWrapping
+    ]
+  });
+
+  const cmView = new EditorView({
+    state: cmState,
+    parent: chatTextareaContainer
+  });
+
+  // Helper function to set CodeMirror value programmatically
+  function setEditorValue(text) {
+    cmView.dispatch({
+      changes: { from: 0, to: cmView.state.doc.length, insert: text }
+    });
+  }
 
   // ══════════════════════════════════════
   // SCROLL TO BOTTOM FAB
@@ -1064,7 +1094,6 @@ Keep responses technically precise, modern, and directly actionable.`;
   scrollToBottomBtn.addEventListener('click', () => {
     document.getElementById('scrollAnchor')?.scrollIntoView({ behavior: 'smooth' });
   });
-  feather.replace();
 
   window.showDialog = (title, msg, btns) => {
     const overlay = document.getElementById('dialogOverlay');
@@ -1090,7 +1119,7 @@ Keep responses technically precise, modern, and directly actionable.`;
     setTimeout(() => { overlay.style.display = 'none'; }, 250);
   };
   window.showShortcuts = () => {
-    window.showDialog('Keyboard Shortcuts', '/ — focus input · Cmd+Enter — send · Esc — close · Cmd+K — new thread · P — toggle preview', [{ text: 'Got it', cls: 'btn-primary' }]);
+    window.showDialog('Keyboard Shortcuts', '/ — focus input · Enter — send · Shift+Enter — newline · Esc — close · Cmd+K — new thread', [{ text: 'Got it', cls: 'btn-primary' }]);
   };
 
   const pricingOverlay = document.getElementById('pricingOverlay');
@@ -1302,7 +1331,7 @@ Keep responses technically precise, modern, and directly actionable.`;
   function startNewThread() {
     currentThreadId = null; chatHistory = []; messagesContainer.innerHTML = '';
     welcomeScreen.style.display = 'block';
-    chatTextarea.value = ''; chatTextarea.style.height = 'auto'; sendBtn.disabled = true;
+    setEditorValue(''); sendBtn.disabled = true;
     langLabel.textContent = 'general'; updateActiveThread();
     if (window.innerWidth <= 768) sidebar.classList.remove('open');
   }
@@ -1364,9 +1393,13 @@ Keep responses technically precise, modern, and directly actionable.`;
     const pre = document.getElementById(id);
     if (pre) navigator.clipboard.writeText(pre.innerText).then(() => window.showDialog('Copied', 'Code block copied to clipboard.', [{ text: 'OK', cls: 'btn-primary' }]));
   };
+
   window.insertToInput = (id) => {
     const pre = document.getElementById(id);
-    if (pre) { chatTextarea.value = pre.innerText; chatTextarea.dispatchEvent(new Event('input')); chatTextarea.focus(); }
+    if (pre) { 
+      setEditorValue(pre.innerText); 
+      cmView.focus(); 
+    }
   };
 
   function appendUserMsg(text, animate = true) {
@@ -1404,7 +1437,15 @@ Keep responses technically precise, modern, and directly actionable.`;
   }
 
   window.copyAIMsg = (mid) => { const el = document.getElementById(mid); if (el) navigator.clipboard.writeText(el.innerText); };
-  window.retryLast = () => { const last = [...chatHistory].reverse().find(m => m.role === 'user'); if (last) { chatTextarea.value = last.content; sendBtn.disabled = false; handleSend(); } };
+  
+  window.retryLast = () => { 
+    const last = [...chatHistory].reverse().find(m => m.role === 'user'); 
+    if (last) { 
+      setEditorValue(last.content);
+      sendBtn.disabled = false; 
+      handleSend(); 
+    } 
+  };
 
   function showAuthGate() {
     if (document.getElementById('auth-gate')) return;
@@ -1525,8 +1566,7 @@ Keep responses technically precise, modern, and directly actionable.`;
   };
 
   window.regenerateImage = (prompt) => {
-    chatTextarea.value = prompt;
-    chatTextarea.dispatchEvent(new Event('input'));
+    setEditorValue(prompt);
     handleSend();
   };
 
@@ -1538,8 +1578,7 @@ Keep responses technically precise, modern, and directly actionable.`;
       'with more detail and texture',
     ];
     const variation = variations[Math.floor(Math.random() * variations.length)];
-    chatTextarea.value = prompt + ', ' + variation;
-    chatTextarea.dispatchEvent(new Event('input'));
+    setEditorValue(prompt + ', ' + variation);
     handleSend();
   };
 
@@ -1547,13 +1586,14 @@ Keep responses technically precise, modern, and directly actionable.`;
   // SEND / MAIN HANDLER
   // ══════════════════════════════════════
   async function handleSend() {
-    const prompt = chatTextarea.value.trim();
+    const prompt = cmView.state.doc.toString().trim();
     if (!prompt || !XAI_KEY) return;
     if (!currentUser && guestCount >= PLAN_DAILY_LIMITS.guest) { showAuthGate(); return; }
     if (currentUser && isAtDailyLimit()) { showUpgradeGate(); return; }
 
     appendUserMsg(prompt);
-    chatTextarea.value = ''; chatTextarea.style.height = 'auto'; sendBtn.disabled = true;
+    setEditorValue(''); 
+    sendBtn.disabled = true;
 
     const imageMode = isImageRequest(prompt);
     langLabel.textContent = imageMode ? 'imagine' : detectLang(prompt);
@@ -1562,25 +1602,16 @@ Keep responses technically precise, modern, and directly actionable.`;
 
     try {
       if (imageMode) {
-        // ── IMAGE GENERATION PATH ──
         clearThinking();
         document.getElementById('thinking-block')?.remove();
-
         let imageUrl;
-        try {
-          imageUrl = await generateImage(prompt);
-        } catch(imgErr) {
-          throw imgErr;
-        }
-
+        try { imageUrl = await generateImage(prompt); } catch(imgErr) { throw imgErr; }
         appendImageResult(imageUrl, prompt);
 
         chatHistory.push({ role: 'user', content: prompt });
         chatHistory.push({ role: 'assistant', content: `[Image generated: ${prompt}]` });
         saveThread();
-
       } else {
-        // ── TEXT / CODE PATH ──
         const msgs = [{ role:'system', content: SYSTEM_PROMPT }, ...chatHistory, { role:'user', content: prompt }];
         const res = await fetch(`${API_BASE}/chat/completions`, {
           method: 'POST',
@@ -1601,7 +1632,6 @@ Keep responses technically precise, modern, and directly actionable.`;
         saveThread();
       }
 
-      // ── Usage tracking (shared by both paths) ──
       if (!currentUser) {
         guestCount++;
         if (guestCount >= PLAN_DAILY_LIMITS.guest) showAuthGate();
@@ -1628,31 +1658,23 @@ Keep responses technically precise, modern, and directly actionable.`;
   }
   window.handleSend = handleSend;
 
-  chatTextarea.addEventListener('input', function() {
-    this.style.height = 'auto';
-    this.style.height = Math.min(this.scrollHeight, 260) + 'px';
-    sendBtn.disabled = this.value.trim().length === 0;
-    if (isImageRequest(this.value.trim())) langLabel.textContent = 'imagine';
-    else if (this.value.trim()) langLabel.textContent = detectLang(this.value.trim());
-    else langLabel.textContent = 'general';
-  });
-  chatTextarea.addEventListener('keydown', e => {
-    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); if (!sendBtn.disabled) handleSend(); }
-  });
   sendBtn.addEventListener('click', handleSend);
 
   document.querySelectorAll('.starter-card').forEach(card => {
     card.addEventListener('click', () => {
       const p = card.getAttribute('data-prompt');
-      if (p) { chatTextarea.value = p; chatTextarea.dispatchEvent(new Event('input')); chatTextarea.focus(); }
+      if (p) { 
+        setEditorValue(p);
+        cmView.focus(); 
+      }
     });
   });
 
   document.addEventListener('keydown', e => {
     if (e.key === 'Escape') { window.closeDialog(); window.closeAuth(); sidebar.classList.remove('open'); }
-    if (e.key === '/' && document.activeElement !== chatTextarea && !e.ctrlKey && !e.metaKey) { e.preventDefault(); chatTextarea.focus(); }
-    if ((e.metaKey || e.ctrlKey) && e.key === 'k') { e.preventDefault(); startNewThread(); chatTextarea.focus(); }
-    if (e.key === 'p' && document.activeElement !== chatTextarea && !e.ctrlKey && !e.metaKey) { simOpen ? closeSim() : openSim(); }
+    if (e.key === '/' && !cmView.hasFocus && !e.ctrlKey && !e.metaKey) { e.preventDefault(); cmView.focus(); }
+    if ((e.metaKey || e.ctrlKey) && e.key === 'k') { e.preventDefault(); startNewThread(); cmView.focus(); }
+    if (e.key === 'p' && !cmView.hasFocus && !e.ctrlKey && !e.metaKey) { simOpen ? closeSim() : openSim(); }
   });
 
   // ══════════════════════════════════════
