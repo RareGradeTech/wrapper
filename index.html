@@ -585,18 +585,7 @@
       box-shadow: 0 0 0 1px var(--border), 0 24px 60px rgba(0,0,0,0.5), inset 0 0 0 1px rgba(255,255,255,0.03);
       overflow: hidden; position: relative; flex-shrink: 0;
     }
-    .sim-phone-notch {
-      position: absolute; top: 0; left: 50%; transform: translateX(-50%);
-      width: 78px; height: 22px; background: var(--bg-elevated);
-      border-radius: 0 0 14px 14px; z-index: 10;
-      display: flex; align-items: center; justify-content: center; gap: 7px;
-    }
-    .sim-notch-cam { width: 7px; height: 7px; background: var(--bg-active); border-radius: 50%; }
-    .sim-notch-speaker { width: 26px; height: 3px; background: var(--bg-active); border-radius: 99px; }
-    .sim-iframe-wrap {
-      width: 100%; height: 100%;
-      position: relative; overflow: hidden;
-    }
+    
     .sim-iframe {
       width: 375px; height: 721px;
       border: none; display: block; background: white;
@@ -815,10 +804,6 @@
 
   <div class="sim-phone-wrap">
     <div class="sim-phone" id="simPhone">
-      <div class="sim-phone-notch">
-        <div class="sim-notch-speaker"></div>
-        <div class="sim-notch-cam"></div>
-      </div>
       <div class="sim-iframe-wrap" id="simIframeWrap">
         <div class="sim-empty-state" id="simEmptyState">
           <div class="sim-empty-icon">
