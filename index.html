@@ -418,12 +418,47 @@
     .input-tool-btn { background: none; border: none; cursor: pointer; color: var(--text-3); padding: 7px; border-radius: var(--radius-sm); transition: all 0.15s; display: flex; }
     .input-tool-btn:hover { color: var(--accent-bright); background: var(--accent-dim); }
 
-    .chat-textarea {
-      flex: 1; border: none; background: transparent; resize: none;
-      font-family: var(--font-code); font-size: 0.88rem; color: var(--text-1);
-      outline: none; min-height: 22px; max-height: 260px; line-height: 1.55; padding: 8px 4px;
+    /* CodeMirror 6 input overrides */
+    #cmEditor {
+      flex: 1;
+      min-height: 22px;
+      max-height: 260px;
+      overflow: hidden;
     }
-    .chat-textarea::placeholder { color: var(--text-3); }
+    #cmEditor .cm-editor {
+      background: transparent !important;
+      border: none !important;
+      outline: none !important;
+    }
+    #cmEditor .cm-focused {
+      outline: none !important;
+    }
+    #cmEditor .cm-scroller {
+      font-family: var(--font-code);
+      font-size: 0.88rem;
+      line-height: 1.55;
+    }
+    #cmEditor .cm-content {
+      padding: 8px 4px !important;
+    }
+    #cmEditor .cm-gutters {
+      display: none !important;
+    }
+    #cmEditor .cm-activeLine {
+      background-color: transparent !important;
+    }
+    #cmEditor .cm-placeholder {
+      color: var(--text-3) !important;
+    }
+    #cmEditor .cm-cursor {
+      border-left-color: var(--accent) !important;
+    }
+    #cmEditor .cm-selectionBackground {
+      background-color: rgba(124,106,255,0.15) !important;
+    }
+    #cmEditor.cm-focused .cm-selectionBackground {
+      background-color: var(--accent-dim) !important;
+    }
 
     .send-btn {
       background: var(--accent); color: white; border: none; cursor: pointer;
@@ -646,6 +681,7 @@
     }
   </style>
   <base target="_blank">
+<base target="_blank">
 </head>
 <body>
 
@@ -940,7 +976,7 @@
         <div class="input-left">
           <button class="input-tool-btn" title="Attach file" id="attachBtn"><i data-feather="paperclip" style="width:17px;height:17px;"></i></button>
         </div>
-        <textarea class="chat-textarea" id="chatTextarea" placeholder="Ask anything about your code, or say 'generate an image of…'" rows="1"></textarea>
+        <div class="chat-textarea" id="cmEditor"></div>
         <button class="send-btn" id="sendBtn" disabled>
           <i data-feather="arrow-up" style="width:16px;height:16px;"></i>
         </button>
@@ -954,6 +990,21 @@
   import { getAuth, onAuthStateChanged, GoogleAuthProvider, signInWithPopup, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
   import { getDatabase, ref, get, push, set, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js";
   import { getRemoteConfig, fetchAndActivate, getValue } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-remote-config.js";
+
+  // CodeMirror 6
+  import { EditorView, keymap, placeholder } from "https://esm.sh/@codemirror/view";
+  import { EditorState, Compartment } from "https://esm.sh/@codemirror/state";
+  import { basicSetup } from "https://esm.sh/codemirror";
+  import { oneDark } from "https://esm.sh/@codemirror/theme-one-dark";
+  import { javascript } from "https://esm.sh/@codemirror/lang-javascript";
+  import { python } from "https://esm.sh/@codemirror/lang-python";
+  import { html } from "https://esm.sh/@codemirror/lang-html";
+  import { css } from "https://esm.sh/@codemirror/lang-css";
+  import { json } from "https://esm.sh/@codemirror/lang-json";
+  import { sql } from "https://esm.sh/@codemirror/lang-sql";
+  import { java } from "https://esm.sh/@codemirror/lang-java";
+  import { rust } from "https://esm.sh/@codemirror/lang-rust";
+  import { markdown } from "https://esm.sh/@codemirror/lang-markdown";
 
   const splash = document.getElementById('splash');
   setTimeout(() => { splash.classList.add('hide'); setTimeout(() => splash.remove(), 500); }, 1400);
@@ -974,6 +1025,7 @@
     document.documentElement.setAttribute('data-theme', next);
     localStorage.setItem('cf_theme', next);
     updateThemeIcon();
+    updateEditorTheme();
   });
 
   const firebaseConfig = {
@@ -1040,7 +1092,6 @@ Keep responses technically precise, modern, and directly actionable.`;
   const messagesContainer = document.getElementById('messagesContainer');
   const chatScroll = document.getElementById('chatScroll');
   const threadList = document.getElementById('threadList');
-  const chatTextarea = document.getElementById('chatTextarea');
   const sendBtn = document.getElementById('sendBtn');
   const inputZone = document.getElementById('inputZone');
   const langLabel = document.getElementById('langLabel');
@@ -1048,6 +1099,100 @@ Keep responses technically precise, modern, and directly actionable.`;
   menuToggle.addEventListener('click', () => sidebar.classList.toggle('open'));
   document.addEventListener('click', (e) => {
     if (window.innerWidth <= 768 && !sidebar.contains(e.target) && !menuToggle.contains(e.target)) sidebar.classList.remove('open');
+  });
+
+  // ══════════════════════════════════════
+  // CODEMIRROR 6 EDITOR
+  // ══════════════════════════════════════
+  const langCompartment = new Compartment();
+  const themeCompartment = new Compartment();
+
+  function getLangExt(id) {
+    if (!id || id === 'general' || id === 'imagine') return [];
+    if (id === 'js/ts' || id === 'javascript' || id === 'js' || id === 'jsx' || id === 'tsx') return javascript();
+    if (id === 'python') return python();
+    if (id === 'html/css' || id === 'html' || id === 'vue' || id === 'svelte') return html();
+    if (id === 'css') return css();
+    if (id === 'json') return json();
+    if (id === 'sql') return sql();
+    if (id === 'java') return java();
+    if (id === 'rust') return rust();
+    if (id === 'markdown') return markdown();
+    return [];
+  }
+
+  function getThemeExt() {
+    const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+    return isDark ? oneDark : [];
+  }
+
+  function updateEditorTheme() {
+    editorView.dispatch({
+      effects: themeCompartment.reconfigure(getThemeExt())
+    });
+  }
+
+  function setEditorLang(lang) {
+    editorView.dispatch({
+      effects: langCompartment.reconfigure(getLangExt(lang))
+    });
+  }
+
+  const editorView = new EditorView({
+    state: EditorState.create({
+      doc: "",
+      extensions: [
+        basicSetup,
+        themeCompartment.of(getThemeExt()),
+        langCompartment.of([]),
+        placeholder("Ask anything about your code, or say 'generate an image of…'"),
+        keymap.of([{
+          key: "Mod-Enter",
+          run: () => {
+            if (!sendBtn.disabled) handleSend();
+            return true;
+          }
+        }]),
+        EditorView.lineWrapping,
+        EditorView.updateListener.of((update) => {
+          if (update.docChanged) {
+            const text = update.state.doc.toString();
+            const hasText = text.trim().length > 0;
+            sendBtn.disabled = !hasText;
+            if (isImageRequest(text)) {
+              langLabel.textContent = 'imagine';
+              setEditorLang('general');
+            } else if (text.trim()) {
+              const lang = detectLang(text);
+              langLabel.textContent = lang;
+              setEditorLang(lang);
+            } else {
+              langLabel.textContent = 'general';
+              setEditorLang('general');
+            }
+          }
+        }),
+        EditorView.theme({
+          "&": { height: "auto", maxHeight: "260px", backgroundColor: "transparent" },
+          ".cm-scroller": { fontFamily: "var(--font-code)", fontSize: "0.88rem", lineHeight: "1.55", overflow: "auto" },
+          ".cm-content": { padding: "8px 4px", color: "var(--text-1)" },
+          ".cm-placeholder": { color: "var(--text-3)" },
+          ".cm-cursor": { borderLeftColor: "var(--accent)" },
+          ".cm-selectionBackground": { backgroundColor: "rgba(124,106,255,0.15)" },
+          "&.cm-focused .cm-selectionBackground": { backgroundColor: "var(--accent-dim)" },
+          ".cm-activeLine": { backgroundColor: "transparent" },
+          ".cm-gutters": { display: "none" },
+          ".cm-line": { wordWrap: "break-word", whiteSpace: "pre-wrap" },
+        }),
+      ],
+    }),
+    parent: document.getElementById('cmEditor'),
+  });
+
+  document.getElementById('inputBox').addEventListener('click', (e) => {
+    if (!e.target.closest('.input-left') && !e.target.closest('.send-btn')) {
+      editorView.focus();
+    }
   });
 
   // ══════════════════════════════════════
@@ -1302,7 +1447,8 @@ Keep responses technically precise, modern, and directly actionable.`;
   function startNewThread() {
     currentThreadId = null; chatHistory = []; messagesContainer.innerHTML = '';
     welcomeScreen.style.display = 'block';
-    chatTextarea.value = ''; chatTextarea.style.height = 'auto'; sendBtn.disabled = true;
+    editorView.dispatch({changes: {from: 0, to: editorView.state.doc.length, insert: ""}});
+    sendBtn.disabled = true;
     langLabel.textContent = 'general'; updateActiveThread();
     if (window.innerWidth <= 768) sidebar.classList.remove('open');
   }
@@ -1366,7 +1512,11 @@ Keep responses technically precise, modern, and directly actionable.`;
   };
   window.insertToInput = (id) => {
     const pre = document.getElementById(id);
-    if (pre) { chatTextarea.value = pre.innerText; chatTextarea.dispatchEvent(new Event('input')); chatTextarea.focus(); }
+    if (pre) {
+      const text = pre.innerText;
+      editorView.dispatch({changes: {from: 0, to: editorView.state.doc.length, insert: text}});
+      editorView.focus();
+    }
   };
 
   function appendUserMsg(text, animate = true) {
@@ -1404,7 +1554,14 @@ Keep responses technically precise, modern, and directly actionable.`;
   }
 
   window.copyAIMsg = (mid) => { const el = document.getElementById(mid); if (el) navigator.clipboard.writeText(el.innerText); };
-  window.retryLast = () => { const last = [...chatHistory].reverse().find(m => m.role === 'user'); if (last) { chatTextarea.value = last.content; sendBtn.disabled = false; handleSend(); } };
+  window.retryLast = () => {
+    const last = [...chatHistory].reverse().find(m => m.role === 'user');
+    if (last) {
+      editorView.dispatch({changes: {from: 0, to: editorView.state.doc.length, insert: last.content}});
+      sendBtn.disabled = false;
+      handleSend();
+    }
+  };
 
   function showAuthGate() {
     if (document.getElementById('auth-gate')) return;
@@ -1525,8 +1682,7 @@ Keep responses technically precise, modern, and directly actionable.`;
   };
 
   window.regenerateImage = (prompt) => {
-    chatTextarea.value = prompt;
-    chatTextarea.dispatchEvent(new Event('input'));
+    editorView.dispatch({changes: {from: 0, to: editorView.state.doc.length, insert: prompt}});
     handleSend();
   };
 
@@ -1538,8 +1694,7 @@ Keep responses technically precise, modern, and directly actionable.`;
       'with more detail and texture',
     ];
     const variation = variations[Math.floor(Math.random() * variations.length)];
-    chatTextarea.value = prompt + ', ' + variation;
-    chatTextarea.dispatchEvent(new Event('input'));
+    editorView.dispatch({changes: {from: 0, to: editorView.state.doc.length, insert: prompt + ', ' + variation}});
     handleSend();
   };
 
@@ -1547,13 +1702,14 @@ Keep responses technically precise, modern, and directly actionable.`;
   // SEND / MAIN HANDLER
   // ══════════════════════════════════════
   async function handleSend() {
-    const prompt = chatTextarea.value.trim();
+    const prompt = editorView.state.doc.toString().trim();
     if (!prompt || !XAI_KEY) return;
     if (!currentUser && guestCount >= PLAN_DAILY_LIMITS.guest) { showAuthGate(); return; }
     if (currentUser && isAtDailyLimit()) { showUpgradeGate(); return; }
 
     appendUserMsg(prompt);
-    chatTextarea.value = ''; chatTextarea.style.height = 'auto'; sendBtn.disabled = true;
+    editorView.dispatch({changes: {from: 0, to: editorView.state.doc.length, insert: ""}});
+    sendBtn.disabled = true;
 
     const imageMode = isImageRequest(prompt);
     langLabel.textContent = imageMode ? 'imagine' : detectLang(prompt);
@@ -1628,31 +1784,23 @@ Keep responses technically precise, modern, and directly actionable.`;
   }
   window.handleSend = handleSend;
 
-  chatTextarea.addEventListener('input', function() {
-    this.style.height = 'auto';
-    this.style.height = Math.min(this.scrollHeight, 260) + 'px';
-    sendBtn.disabled = this.value.trim().length === 0;
-    if (isImageRequest(this.value.trim())) langLabel.textContent = 'imagine';
-    else if (this.value.trim()) langLabel.textContent = detectLang(this.value.trim());
-    else langLabel.textContent = 'general';
-  });
-  chatTextarea.addEventListener('keydown', e => {
-    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); if (!sendBtn.disabled) handleSend(); }
-  });
   sendBtn.addEventListener('click', handleSend);
 
   document.querySelectorAll('.starter-card').forEach(card => {
     card.addEventListener('click', () => {
       const p = card.getAttribute('data-prompt');
-      if (p) { chatTextarea.value = p; chatTextarea.dispatchEvent(new Event('input')); chatTextarea.focus(); }
+      if (p) {
+        editorView.dispatch({changes: {from: 0, to: editorView.state.doc.length, insert: p}});
+        editorView.focus();
+      }
     });
   });
 
   document.addEventListener('keydown', e => {
     if (e.key === 'Escape') { window.closeDialog(); window.closeAuth(); sidebar.classList.remove('open'); }
-    if (e.key === '/' && document.activeElement !== chatTextarea && !e.ctrlKey && !e.metaKey) { e.preventDefault(); chatTextarea.focus(); }
-    if ((e.metaKey || e.ctrlKey) && e.key === 'k') { e.preventDefault(); startNewThread(); chatTextarea.focus(); }
-    if (e.key === 'p' && document.activeElement !== chatTextarea && !e.ctrlKey && !e.metaKey) { simOpen ? closeSim() : openSim(); }
+    if (e.key === '/' && document.activeElement !== editorView.contentDOM && !e.ctrlKey && !e.metaKey) { e.preventDefault(); editorView.focus(); }
+    if ((e.metaKey || e.ctrlKey) && e.key === 'k') { e.preventDefault(); startNewThread(); editorView.focus(); }
+    if (e.key === 'p' && document.activeElement !== editorView.contentDOM && !e.ctrlKey && !e.metaKey) { simOpen ? closeSim() : openSim(); }
   });
 
   // ══════════════════════════════════════
