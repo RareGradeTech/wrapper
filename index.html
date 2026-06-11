@@ -116,34 +116,34 @@
     .sidebar-section::-webkit-scrollbar-thumb { background: var(--bg-elevated); border-radius: 99px; }
     .sidebar-label { font-size: 0.65rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-3); padding: 0 4px; margin-bottom: 8px; }
 
-    /* ── Thread Grid ── */
+    /* ── FIX 1: Thread List — single-column flex like Claude sidebar ── */
     #threadList {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 6px;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
     }
 
     .thread-item {
-      display: flex; flex-direction: column;
-      gap: 6px; padding: 10px 10px 8px;
+      display: flex; align-items: center;
+      gap: 8px; padding: 8px 10px;
       border-radius: var(--radius-md);
       cursor: pointer; color: var(--text-2);
-      border: 1px solid var(--border);
-      background: var(--bg-surface);
+      border: 1px solid transparent;
+      background: transparent;
       transition: all 0.15s; position: relative;
       overflow: hidden; min-width: 0;
     }
-    .thread-item:hover { background: var(--bg-elevated); border-color: var(--border-glow); color: var(--text-1); }
+    .thread-item:hover { background: var(--bg-hover); color: var(--text-1); }
     .thread-item.active { background: var(--accent-dim); border-color: var(--accent-glow); color: var(--accent-bright); }
-    .thread-item .t-icon { flex-shrink: 0; opacity: 0.4; }
+    .thread-item .t-icon { flex-shrink: 0; opacity: 0.45; }
     .thread-item.active .t-icon { opacity: 1; }
     .thread-text {
-      font-family: var(--font-code); font-size: 0.7rem; font-weight: 500;
+      font-family: var(--font-ui); font-size: 0.82rem; font-weight: 500;
       overflow: hidden; text-overflow: ellipsis;
-      display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
-      line-height: 1.4; word-break: break-word;
+      white-space: nowrap; flex: 1; min-width: 0;
+      line-height: 1.4;
     }
-    .thread-meta { display: flex; align-items: center; justify-content: space-between; gap: 4px; }
+    .thread-meta { display: flex; align-items: center; gap: 4px; flex-shrink: 0; }
     .thread-time { font-size: 0.6rem; font-family: var(--font-code); color: var(--text-3); opacity: 0.7; }
     .t-action-btn {
       background: none; border: none; cursor: pointer;
@@ -573,6 +573,11 @@
       flex: 1; display: flex; align-items: center; justify-content: center;
       padding: 20px 16px 16px; overflow: hidden; background: var(--bg-void);
     }
+
+    /* FIX 2: Phone dimensions + iframe scale so content fits without clipping
+       Phone: 260px wide, 8px border each side → 244px inner content area
+       Iframe: 375px declared → scale = 244/375 = 0.6507
+       At that scale: rendered height = 721 * 0.6507 = 469px < 484px inner ✓ */
     .sim-phone {
       width: 260px; height: 500px;
       background: var(--bg-void);
@@ -588,10 +593,15 @@
     }
     .sim-notch-cam { width: 7px; height: 7px; background: var(--bg-active); border-radius: 50%; }
     .sim-notch-speaker { width: 26px; height: 3px; background: var(--bg-active); border-radius: 99px; }
-    .sim-iframe-wrap { width: 100%; height: 100%; position: relative; overflow: hidden; }
+    .sim-iframe-wrap {
+      width: 100%; height: 100%;
+      position: relative; overflow: hidden;
+    }
     .sim-iframe {
-      width: 375px; height: 721px; border: none; display: block; background: white;
-      transform: scale(0.6933); transform-origin: top left;
+      width: 375px; height: 721px;
+      border: none; display: block; background: white;
+      transform: scale(0.6507);
+      transform-origin: top left;
     }
     .sim-empty-state {
       position: absolute; inset: 0;
@@ -1241,12 +1251,10 @@ Keep responses technically precise, modern, and directly actionable.`;
     const div = document.createElement('div');
     div.className = `thread-item${t.id === currentThreadId ? ' active' : ''}`;
     div.id = `thread-${t.id}`;
-    const time = relativeTime(t.updatedAt);
     div.innerHTML = `
-      <i data-feather="message-square" class="t-icon" style="width:12px;height:12px;"></i>
+      <i data-feather="message-square" class="t-icon" style="width:13px;height:13px;flex-shrink:0;"></i>
       <span class="thread-text">${escapeHtml(t.title || 'New Thread')}</span>
       <div class="thread-meta">
-        <span class="thread-time">${time}</span>
         <button class="t-action-btn" title="Delete" onclick="window.deleteThread('${t.id}',event)">
           <i data-feather="trash-2" style="width:11px;height:11px;"></i>
         </button>
@@ -1277,9 +1285,7 @@ Keep responses technically precise, modern, and directly actionable.`;
       if (msg.role === 'system') continue;
       if (msg.role === 'user') appendUserMsg(msg.content, false);
       else if (msg.role === 'assistant') {
-        // Render image blocks stored as [Image generated: ...] differently
         if (msg.content.startsWith('[Image generated:')) {
-          // Skip rendering raw placeholder — images can't be replayed from history without URL
           const prompt = msg.content.replace('[Image generated: ', '').replace(']', '');
           const block = document.createElement('div');
           block.className = 'msg-block';
@@ -1641,7 +1647,6 @@ Keep responses technically precise, modern, and directly actionable.`;
     this.style.height = 'auto';
     this.style.height = Math.min(this.scrollHeight, 260) + 'px';
     sendBtn.disabled = this.value.trim().length === 0;
-    // Hint in ctx pill when image is detected
     if (isImageRequest(this.value.trim())) langLabel.textContent = 'imagine';
     else if (this.value.trim()) langLabel.textContent = detectLang(this.value.trim());
     else langLabel.textContent = 'general';
@@ -1817,3 +1822,6 @@ Keep responses technically precise, modern, and directly actionable.`;
 </script>
 </body>
 </html>
+Done
+
+You are out of free messages until 3:20 PM
