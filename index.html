@@ -12,24 +12,6 @@
   <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
   <script src="https://unpkg.com/feather-icons"></script>
 
-  <!-- CodeMirror 6 via CDN bundle -->
-  <script src="https://unpkg.com/@codemirror/state@6.4.1/dist/index.js"></script>
-  <script src="https://unpkg.com/@codemirror/view@6.26.3/dist/index.js"></script>
-  <script src="https://unpkg.com/@codemirror/commands@6.3.3/dist/index.js"></script>
-  <script src="https://unpkg.com/@codemirror/language@6.10.1/dist/index.js"></script>
-  <script src="https://unpkg.com/@codemirror/lang-javascript@6.2.2/dist/index.js"></script>
-  <script src="https://unpkg.com/@codemirror/lang-html@6.4.9/dist/index.js"></script>
-  <script src="https://unpkg.com/@codemirror/lang-css@6.2.1/dist/index.js"></script>
-  <script src="https://unpkg.com/@codemirror/lang-python@6.1.3/dist/index.js"></script>
-  <script src="https://unpkg.com/@codemirror/lang-java@6.0.1/dist/index.js"></script>
-  <script src="https://unpkg.com/@codemirror/lang-rust@6.0.1/dist/index.js"></script>
-  <script src="https://unpkg.com/@codemirror/lang-sql@6.7.1/dist/index.js"></script>
-  <script src="https://unpkg.com/@codemirror/lang-json@6.0.1/dist/index.js"></script>
-  <script src="https://unpkg.com/@codemirror/lang-markdown@6.2.5/dist/index.js"></script>
-  <script src="https://unpkg.com/@codemirror/theme-one-dark@6.1.2/dist/index.js"></script>
-  <script src="https://unpkg.com/@codemirror/autocomplete@6.16.2/dist/index.js"></script>
-  <script src="https://unpkg.com/codemirror@6.0.1/dist/index.js"></script>
-
   <style>
     /* ══════════════════════════════════════
        TOKENS
@@ -134,6 +116,7 @@
     .sidebar-section::-webkit-scrollbar-thumb { background: var(--bg-elevated); border-radius: 99px; }
     .sidebar-label { font-size: 0.65rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-3); padding: 0 4px; margin-bottom: 8px; }
 
+    /* ── FIX 1: Thread List — single-column flex like Claude sidebar ── */
     #threadList {
       display: flex;
       flex-direction: column;
@@ -161,6 +144,7 @@
       line-height: 1.4;
     }
     .thread-meta { display: flex; align-items: center; gap: 4px; flex-shrink: 0; }
+    .thread-time { font-size: 0.6rem; font-family: var(--font-code); color: var(--text-3); opacity: 0.7; }
     .t-action-btn {
       background: none; border: none; cursor: pointer;
       color: var(--text-3); padding: 2px; border-radius: 3px;
@@ -284,7 +268,6 @@
     .msg-ai-content strong { color: var(--text-1); font-weight: 700; }
     .msg-ai-content em { color: var(--text-2); }
 
-    /* ══ CODE BLOCKS — CodeMirror 6 ══ */
     .code-block { margin: 16px 0; background: var(--bg-void); border: 1px solid var(--border); border-radius: var(--radius-md); overflow: hidden; }
     .code-block-header { display: flex; align-items: center; justify-content: space-between; padding: 10px 16px; background: var(--bg-surface); border-bottom: 1px solid var(--border); }
     .code-lang-badge { font-size: 0.7rem; font-family: var(--font-code); font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--accent-bright); background: var(--accent-dim); padding: 2px 8px; border-radius: 4px; }
@@ -293,40 +276,11 @@
     .code-action-btn:hover { color: var(--text-1); background: var(--bg-hover); }
     .code-action-btn.run-in-sim { color: var(--green); }
     .code-action-btn.run-in-sim:hover { background: rgba(61,220,132,0.1); }
+    .code-block pre { padding: 16px; overflow-x: auto; font-family: var(--font-code); font-size: 0.82rem; line-height: 1.65; color: var(--text-1); }
+    .code-block pre::-webkit-scrollbar { height: 4px; }
+    .code-block pre::-webkit-scrollbar-track { background: transparent; }
+    .code-block pre::-webkit-scrollbar-thumb { background: var(--bg-elevated); border-radius: 99px; }
 
-    /* CodeMirror 6 container inside code blocks */
-    .cm-code-block {
-      max-height: 520px;
-      overflow: hidden;
-    }
-    .cm-code-block .cm-editor {
-      background: var(--bg-void) !important;
-      font-family: var(--font-code) !important;
-      font-size: 0.82rem !important;
-    }
-    .cm-code-block .cm-editor.cm-focused { outline: none !important; }
-    .cm-code-block .cm-scroller {
-      font-family: var(--font-code) !important;
-      overflow-x: auto !important;
-      padding: 16px !important;
-      line-height: 1.65 !important;
-      max-height: 520px;
-    }
-    .cm-code-block .cm-scroller::-webkit-scrollbar { height: 4px; width: 4px; }
-    .cm-code-block .cm-scroller::-webkit-scrollbar-track { background: transparent; }
-    .cm-code-block .cm-scroller::-webkit-scrollbar-thumb { background: var(--bg-elevated); border-radius: 99px; }
-    /* Hide cursor / selection highlight in read-only display */
-    .cm-code-block .cm-cursor { display: none !important; }
-    .cm-code-block .cm-selectionBackground { background: rgba(124,106,255,0.15) !important; }
-    /* Line numbers (subtle) */
-    .cm-code-block .cm-lineNumbers { color: var(--text-3); opacity: 0.5; padding-right: 4px; }
-    .cm-code-block .cm-gutterElement { font-size: 0.7rem; }
-    /* Light theme overrides */
-    [data-theme="light"] .cm-code-block .cm-editor {
-      background: #F4F4F8 !important;
-    }
-
-    /* Inline code */
     .msg-ai-content :not(pre) > code { background: var(--bg-elevated); color: var(--accent-bright); padding: 2px 7px; border-radius: 4px; font-family: var(--font-code); font-size: 0.82em; border: 1px solid var(--border); }
 
     .msg-actions { display: flex; gap: 6px; margin-top: 14px; opacity: 0; transition: opacity 0.15s; }
@@ -348,21 +302,65 @@
 
     /* ══ IMAGE GENERATION ══ */
     .img-gen-block { margin: 4px 0; }
-    .img-gen-header { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; font-size: 0.72rem; font-family: var(--font-code); color: var(--text-3); }
-    .img-gen-badge { background: rgba(124,106,255,0.12); color: var(--accent-bright); padding: 2px 8px; border-radius: 4px; font-size: 0.68rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; }
-    .img-gen-card { border-radius: var(--radius-lg); overflow: hidden; border: 1px solid var(--border); background: var(--bg-surface); display: inline-flex; flex-direction: column; max-width: 480px; width: 100%; transition: border-color 0.2s, box-shadow 0.2s; }
+    .img-gen-header {
+      display: flex; align-items: center; gap: 8px; margin-bottom: 12px;
+      font-size: 0.72rem; font-family: var(--font-code); color: var(--text-3);
+    }
+    .img-gen-badge {
+      background: rgba(124,106,255,0.12); color: var(--accent-bright);
+      padding: 2px 8px; border-radius: 4px; font-size: 0.68rem; font-weight: 700;
+      letter-spacing: 0.06em; text-transform: uppercase;
+    }
+    .img-gen-card {
+      border-radius: var(--radius-lg); overflow: hidden;
+      border: 1px solid var(--border); background: var(--bg-surface);
+      display: inline-flex; flex-direction: column;
+      max-width: 480px; width: 100%;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
     .img-gen-card:hover { border-color: var(--border-glow); box-shadow: 0 8px 32px rgba(0,0,0,0.25); }
-    .img-gen-card img { width: 100%; display: block; object-fit: cover; transition: opacity 0.4s ease; }
+    .img-gen-card img {
+      width: 100%; display: block; object-fit: cover;
+      transition: opacity 0.4s ease;
+    }
     .img-gen-card img.loading { opacity: 0; }
-    .img-gen-card-footer { display: flex; align-items: center; gap: 8px; padding: 10px 14px; border-top: 1px solid var(--border); }
-    .img-gen-prompt { font-size: 0.72rem; font-family: var(--font-code); color: var(--text-3); flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-    .img-gen-action { background: none; border: none; cursor: pointer; color: var(--text-3); padding: 5px 8px; border-radius: var(--radius-sm); display: flex; align-items: center; gap: 5px; font-size: 0.7rem; font-family: var(--font-code); transition: all 0.15s; white-space: nowrap; }
+    .img-gen-card-footer {
+      display: flex; align-items: center; gap: 8px;
+      padding: 10px 14px; border-top: 1px solid var(--border);
+    }
+    .img-gen-prompt {
+      font-size: 0.72rem; font-family: var(--font-code); color: var(--text-3);
+      flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+    }
+    .img-gen-action {
+      background: none; border: none; cursor: pointer; color: var(--text-3);
+      padding: 5px 8px; border-radius: var(--radius-sm);
+      display: flex; align-items: center; gap: 5px;
+      font-size: 0.7rem; font-family: var(--font-code); transition: all 0.15s;
+      white-space: nowrap;
+    }
     .img-gen-action:hover { color: var(--accent-bright); background: var(--accent-dim); }
-    .img-gen-skeleton { width: 100%; aspect-ratio: 1 / 1; max-width: 480px; background: var(--bg-surface); border: 1px solid var(--border); border-radius: var(--radius-lg); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; position: relative; overflow: hidden; }
-    .img-gen-skeleton::before { content: ''; position: absolute; inset: 0; background: linear-gradient(90deg, transparent 0%, rgba(124,106,255,0.06) 50%, transparent 100%); animation: skelShimmer 2s infinite; }
+
+    /* Image generation skeleton / loading state */
+    .img-gen-skeleton {
+      width: 100%; aspect-ratio: 1 / 1; max-width: 480px;
+      background: var(--bg-surface); border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: 16px;
+      position: relative; overflow: hidden;
+    }
+    .img-gen-skeleton::before {
+      content: ''; position: absolute; inset: 0;
+      background: linear-gradient(90deg, transparent 0%, rgba(124,106,255,0.06) 50%, transparent 100%);
+      animation: skelShimmer 2s infinite;
+    }
     @keyframes skelShimmer { 0%{transform:translateX(-100%)} 100%{transform:translateX(100%)} }
     .img-gen-skeleton-icon { color: var(--accent-bright); opacity: 0.4; }
-    .img-gen-skeleton-label { font-size: 0.78rem; font-family: var(--font-code); color: var(--text-3); animation: skelFade 1.8s infinite; }
+    .img-gen-skeleton-label {
+      font-size: 0.78rem; font-family: var(--font-code); color: var(--text-3);
+      animation: skelFade 1.8s infinite;
+    }
     @keyframes skelFade { 0%,100%{opacity:0.4} 50%{opacity:1} }
     .img-gen-skeleton-bar { width: 140px; height: 2px; background: var(--bg-active); border-radius: 99px; overflow: hidden; }
     .img-gen-skeleton-fill { height: 100%; background: var(--accent); border-radius: 99px; animation: imgBarSweep 2.2s ease-in-out infinite; }
@@ -370,19 +368,28 @@
 
     /* ══ SCROLL TO BOTTOM FAB ══ */
     #scrollToBottomBtn {
-      position: fixed; bottom: 108px;
+      position: fixed;
+      bottom: 108px;
       left: calc(var(--sidebar-w) + 50%);
       transform: translateX(-50%);
-      z-index: 200; width: 36px; height: 36px;
-      background: var(--bg-elevated); border: 1px solid var(--border-glow);
-      border-radius: 50%; color: var(--text-2); cursor: pointer;
+      z-index: 200;
+      width: 36px; height: 36px;
+      background: var(--bg-elevated);
+      border: 1px solid var(--border-glow);
+      border-radius: 50%;
+      color: var(--text-2);
+      cursor: pointer;
       display: flex; align-items: center; justify-content: center;
       box-shadow: 0 4px 16px rgba(0,0,0,0.35);
       transition: opacity 0.25s ease, transform 0.25s ease, background 0.15s;
-      opacity: 0; pointer-events: none;
+      opacity: 0;
+      pointer-events: none;
     }
     #scrollToBottomBtn.visible { opacity: 1; pointer-events: all; }
-    #scrollToBottomBtn:hover { background: var(--bg-active); color: var(--accent-bright); border-color: var(--accent-glow); transform: translateX(-50%) translateY(-2px); }
+    #scrollToBottomBtn:hover {
+      background: var(--bg-active); color: var(--accent-bright);
+      border-color: var(--accent-glow); transform: translateX(-50%) translateY(-2px);
+    }
     @media (max-width: 768px) { #scrollToBottomBtn { left: 50%; } }
 
     /* ══ INPUT AREA ══ */
@@ -401,7 +408,7 @@
 
     .input-box {
       background: var(--bg-surface); border: 1px solid var(--border);
-      border-radius: var(--radius-xl); padding: 10px 14px;
+      border-radius: var(--radius-xl); padding: 12px 14px;
       display: flex; align-items: flex-end; gap: 10px;
       transition: border-color 0.2s, box-shadow 0.2s;
       box-shadow: 0 4px 32px rgba(0,0,0,0.3);
@@ -411,41 +418,12 @@
     .input-tool-btn { background: none; border: none; cursor: pointer; color: var(--text-3); padding: 7px; border-radius: var(--radius-sm); transition: all 0.15s; display: flex; }
     .input-tool-btn:hover { color: var(--accent-bright); background: var(--accent-dim); }
 
-    /* ── CodeMirror 6 INPUT EDITOR ── */
-    #cmInputWrap {
-      flex: 1; min-height: 38px; max-height: 260px;
-      overflow-y: auto; cursor: text; padding: 0;
+    .chat-textarea {
+      flex: 1; border: none; background: transparent; resize: none;
+      font-family: var(--font-code); font-size: 0.88rem; color: var(--text-1);
+      outline: none; min-height: 22px; max-height: 260px; line-height: 1.55; padding: 8px 4px;
     }
-    #cmInputWrap::-webkit-scrollbar { width: 3px; }
-    #cmInputWrap::-webkit-scrollbar-thumb { background: var(--bg-active); border-radius: 99px; }
-
-    #cmInputWrap .cm-editor {
-      background: transparent !important;
-      font-family: var(--font-code) !important;
-      font-size: 0.88rem !important;
-      color: var(--text-1) !important;
-    }
-    #cmInputWrap .cm-editor.cm-focused { outline: none !important; }
-    #cmInputWrap .cm-scroller {
-      font-family: var(--font-code) !important;
-      line-height: 1.55 !important;
-      padding: 8px 4px !important;
-      overflow: visible !important;
-    }
-    #cmInputWrap .cm-content { color: var(--text-1) !important; caret-color: var(--accent-bright); white-space: pre-wrap !important; word-break: break-word !important; }
-    #cmInputWrap .cm-placeholder { color: var(--text-3) !important; font-style: normal !important; }
-    #cmInputWrap .cm-line { padding: 0 !important; }
-    /* Hide gutter in input */
-    #cmInputWrap .cm-gutters { display: none !important; }
-    /* Subtle selection */
-    #cmInputWrap .cm-selectionBackground { background: var(--accent-glow) !important; }
-    #cmInputWrap .cm-cursor { border-left-color: var(--accent-bright) !important; }
-    /* Keyword highlights in input (light) */
-    #cmInputWrap .tok-keyword { color: var(--accent-bright); }
-    #cmInputWrap .tok-string  { color: var(--green); }
-
-    /* hidden textarea fallback (mobile) */
-    .chat-textarea-hidden { display: none; }
+    .chat-textarea::placeholder { color: var(--text-3); }
 
     .send-btn {
       background: var(--accent); color: white; border: none; cursor: pointer;
@@ -504,6 +482,7 @@
     .pricing-title { font-size: 2rem; font-weight: 800; letter-spacing: -0.04em; margin-bottom: 10px; }
     .pricing-sub { font-size: 0.9rem; color: var(--text-2); line-height: 1.6; }
     .pricing-free-note { display: inline-flex; align-items: center; gap: 6px; margin-top: 10px; background: rgba(61,220,132,0.1); border: 1px solid rgba(61,220,132,0.25); border-radius: 99px; padding: 5px 14px; font-size: 0.75rem; font-family: var(--font-code); color: var(--green); }
+
     .billing-toggle-wrapper { display: flex; align-items: center; justify-content: center; gap: 14px; margin-top: 24px; }
     .billing-label { font-size: 0.88rem; font-weight: 600; color: var(--text-2); cursor: pointer; transition: color 0.2s; }
     .billing-label.active { color: var(--text-1); }
@@ -513,6 +492,7 @@
     .switch-thumb { width: 18px; height: 18px; background: white; border-radius: 50%; position: absolute; top: 3px; left: 3px; transition: transform 0.3s cubic-bezier(.4, 0, .2, 1); box-shadow: 0 2px 6px rgba(0,0,0,0.2); }
     .switch-track.yearly .switch-thumb { transform: translateX(20px); }
     .save-badge { background: rgba(61,220,132,0.15); color: var(--green); padding: 3px 8px; border-radius: 99px; font-size: 0.65rem; margin-left: 6px; font-family: var(--font-code); font-weight: 700; letter-spacing: 0.05em; text-transform: uppercase; }
+
     .pricing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; margin-top: 20px; }
     .plan-card { background: var(--bg-elevated); border: 1px solid var(--border); border-radius: var(--radius-xl); padding: 28px 24px; display: flex; flex-direction: column; gap: 16px; cursor: pointer; transition: all 0.3s cubic-bezier(.16,1,.3,1); position: relative; overflow: hidden; }
     .plan-card:hover { border-color: var(--border-glow); transform: translateY(-4px); box-shadow: 0 16px 40px rgba(0,0,0,0.2); }
@@ -537,6 +517,14 @@
     .plan-current-badge { font-size: 0.65rem; font-family: var(--font-code); font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--green); border: 1px solid rgba(61,220,132,0.3); border-radius: 99px; padding: 2px 8px; display: inline-block; background: rgba(61,220,132,0.08); }
     @media (max-width: 600px) { .pricing-grid { grid-template-columns: 1fr; } .pricing-box { padding: 28px 16px 32px; } .pricing-title { font-size: 1.5rem; } }
 
+    /* Syntax highlight */
+    .tok-kw { color: var(--accent-bright); }
+    .tok-str { color: var(--green); }
+    .tok-fn  { color: var(--cyan); }
+    .tok-num { color: var(--orange); }
+    .tok-cmt { color: var(--text-3); font-style: italic; }
+    .tok-type { color: var(--yellow); }
+
     /* Scrollbar global */
     ::-webkit-scrollbar { width: 5px; }
     ::-webkit-scrollbar-track { background: transparent; }
@@ -553,22 +541,66 @@
     }
 
     /* ══ MOBILE SIMULATOR ══ */
-    .sim-toggle-btn { position: fixed; right: 20px; bottom: 88px; z-index: 500; width: 44px; height: 44px; border-radius: 50%; background: var(--bg-surface); border: 1px solid var(--border); color: var(--text-2); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; box-shadow: 0 4px 20px rgba(0,0,0,0.3); }
+    .sim-toggle-btn {
+      position: fixed; right: 20px; bottom: 88px; z-index: 500;
+      width: 44px; height: 44px; border-radius: 50%;
+      background: var(--bg-surface); border: 1px solid var(--border);
+      color: var(--text-2); cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: all 0.2s; box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+    }
     .sim-toggle-btn:hover { background: var(--bg-elevated); color: var(--accent-bright); border-color: var(--accent-glow); transform: translateY(-1px); }
     .sim-toggle-btn.active { background: var(--accent-dim); border-color: var(--accent-glow); color: var(--accent-bright); box-shadow: 0 4px 20px var(--accent-glow); }
-    .sim-panel { position: fixed; top: 0; right: -380px; width: 360px; height: 100svh; z-index: 400; display: flex; flex-direction: column; background: var(--bg-base); border-left: 1px solid var(--border); transition: right 0.35s cubic-bezier(.4,0,.2,1); overflow: hidden; }
+
+    .sim-panel {
+      position: fixed; top: 0; right: -380px; width: 360px; height: 100svh;
+      z-index: 400; display: flex; flex-direction: column;
+      background: var(--bg-base); border-left: 1px solid var(--border);
+      transition: right 0.35s cubic-bezier(.4,0,.2,1); overflow: hidden;
+    }
     .sim-panel.open { right: 0; }
-    .sim-topbar { height: 50px; display: flex; align-items: center; gap: 8px; padding: 0 14px; border-bottom: 1px solid var(--border); flex-shrink: 0; background: var(--bg-base); }
+
+    .sim-topbar {
+      height: 50px; display: flex; align-items: center; gap: 8px;
+      padding: 0 14px; border-bottom: 1px solid var(--border);
+      flex-shrink: 0; background: var(--bg-base);
+    }
     .sim-title { font-size: 0.7rem; font-family: var(--font-code); font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-3); flex: 1; }
     .sim-topbar-btn { background: none; border: none; cursor: pointer; color: var(--text-3); padding: 6px; border-radius: var(--radius-sm); display: flex; align-items: center; justify-content: center; transition: all 0.15s; }
     .sim-topbar-btn:hover { color: var(--text-1); background: var(--bg-hover); }
-    .sim-phone-wrap { flex: 1; display: flex; align-items: center; justify-content: center; padding: 20px 16px 16px; overflow: hidden; background: var(--bg-void); }
-    .sim-phone { width: 260px; height: 500px; background: var(--bg-void); border-radius: 40px; border: 8px solid var(--bg-elevated); box-shadow: 0 0 0 1px var(--border), 0 24px 60px rgba(0,0,0,0.5), inset 0 0 0 1px rgba(255,255,255,0.03); overflow: hidden; position: relative; flex-shrink: 0; }
-    .sim-iframe { width: 375px; height: 721px; border: none; display: block; background: white; transform: scale(0.6507); transform-origin: top left; }
-    .sim-empty-state { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; padding: 28px; text-align: center; }
+
+    .sim-phone-wrap {
+      flex: 1; display: flex; align-items: center; justify-content: center;
+      padding: 20px 16px 16px; overflow: hidden; background: var(--bg-void);
+    }
+
+    /* FIX 2: Phone dimensions + iframe scale so content fits without clipping
+       Phone: 260px wide, 8px border each side → 244px inner content area
+       Iframe: 375px declared → scale = 244/375 = 0.6507
+       At that scale: rendered height = 721 * 0.6507 = 469px < 484px inner ✓ */
+    .sim-phone {
+      width: 260px; height: 500px;
+      background: var(--bg-void);
+      border-radius: 40px; border: 8px solid var(--bg-elevated);
+      box-shadow: 0 0 0 1px var(--border), 0 24px 60px rgba(0,0,0,0.5), inset 0 0 0 1px rgba(255,255,255,0.03);
+      overflow: hidden; position: relative; flex-shrink: 0;
+    }
+    
+    .sim-iframe {
+      width: 375px; height: 721px;
+      border: none; display: block; background: white;
+      transform: scale(0.6507);
+      transform-origin: top left;
+    }
+    .sim-empty-state {
+      position: absolute; inset: 0;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 12px; padding: 28px; text-align: center;
+    }
     .sim-empty-icon { width: 44px; height: 44px; border-radius: 50%; background: var(--bg-surface); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; color: var(--text-3); }
     .sim-empty-title { font-size: 0.76rem; font-weight: 600; color: var(--text-2); }
     .sim-empty-sub { font-size: 0.66rem; color: var(--text-3); font-family: var(--font-code); line-height: 1.55; }
+
     .sim-footer { padding: 14px 16px 16px; border-top: 1px solid var(--border); display: flex; flex-direction: column; gap: 10px; flex-shrink: 0; }
     .sim-status-bar { display: flex; align-items: center; gap: 8px; }
     .sim-status-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--text-3); flex-shrink: 0; }
@@ -576,15 +608,33 @@
     .sim-status-dot.running { background: var(--yellow); animation: blink 0.8s infinite; }
     .sim-status-dot.error { background: var(--red); }
     .sim-status-text { font-size: 0.68rem; font-family: var(--font-code); color: var(--text-3); flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
     .sim-run-bar { display: flex; gap: 8px; }
-    .sim-run-full-btn { flex: 1; padding: 9px 12px; background: var(--accent-dim); border: 1px solid var(--accent-glow); border-radius: var(--radius-md); color: var(--accent-bright); font-family: var(--font-code); font-size: 0.72rem; font-weight: 700; letter-spacing: 0.04em; cursor: pointer; transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 7px; }
+    .sim-run-full-btn {
+      flex: 1; padding: 9px 12px;
+      background: var(--accent-dim); border: 1px solid var(--accent-glow);
+      border-radius: var(--radius-md); color: var(--accent-bright);
+      font-family: var(--font-code); font-size: 0.72rem; font-weight: 700;
+      letter-spacing: 0.04em; cursor: pointer; transition: all 0.2s;
+      display: flex; align-items: center; justify-content: center; gap: 7px;
+    }
     .sim-run-full-btn:hover { background: var(--accent-glow); border-color: var(--accent); }
-    .sim-clear-btn { padding: 9px 10px; background: none; border: 1px solid var(--border); border-radius: var(--radius-md); color: var(--text-3); cursor: pointer; transition: all 0.15s; display: flex; align-items: center; }
+    .sim-clear-btn {
+      padding: 9px 10px; background: none; border: 1px solid var(--border);
+      border-radius: var(--radius-md); color: var(--text-3);
+      cursor: pointer; transition: all 0.15s; display: flex; align-items: center;
+    }
     .sim-clear-btn:hover { color: var(--red); border-color: rgba(255,95,109,0.4); background: rgba(255,95,109,0.06); }
     .sim-hint-text { font-size: 0.62rem; font-family: var(--font-code); color: var(--text-3); text-align: center; }
-    .sim-toggle-btn .sim-badge { position: absolute; top: 2px; right: 2px; width: 10px; height: 10px; border-radius: 50%; background: var(--green); border: 2px solid var(--bg-void); display: none; }
+
+    .sim-toggle-btn .sim-badge {
+      position: absolute; top: 2px; right: 2px;
+      width: 10px; height: 10px; border-radius: 50%;
+      background: var(--green); border: 2px solid var(--bg-void); display: none;
+    }
     .sim-toggle-btn.has-code .sim-badge { display: block; animation: badgePulse 2s infinite; }
     @keyframes badgePulse { 0%,100%{transform:scale(1);opacity:1} 50%{transform:scale(1.3);opacity:0.7} }
+
     @media (min-width: 769px) {
       body.sim-open .main-wrapper { margin-right: 360px; transition: margin-right 0.35s cubic-bezier(.4,0,.2,1); }
       body.sim-open .input-zone { right: 360px; transition: right 0.35s cubic-bezier(.4,0,.2,1); }
@@ -628,10 +678,12 @@
 <div class="pricing-overlay" id="pricingOverlay">
   <div class="pricing-box" id="pricingBox">
     <button class="pricing-close" id="pricingClose"><i data-feather="x" style="width:18px;height:18px;"></i></button>
+
     <div class="pricing-header">
       <div class="pricing-eyebrow">Steward Plans</div>
       <div class="pricing-title">Build without limits</div>
       <div class="pricing-sub">Every account gets free daily credits. Upgrade anytime to unlock more power.</div>
+      
       <div class="billing-toggle-wrapper">
         <span class="billing-label active" id="label-mo" onclick="window.setBilling(false)">Monthly</span>
         <div class="switch-track" id="billingSwitch" onclick="window.toggleBilling()">
@@ -641,44 +693,80 @@
           Yearly <span class="save-badge">Save 20%</span>
         </span>
       </div>
+
       <div class="pricing-free-note">
         <i data-feather="gift" style="width:12px;height:12px;"></i>
         Free users get <strong id="freeLimitLabel">10 messages/day</strong> — no card required
       </div>
     </div>
+
     <div class="pricing-grid" id="pricingGrid">
       <div class="plan-card" id="plan-free" onclick="window.selectPlan('free')">
         <div class="plan-name">Hobby</div>
-        <div class="plan-price-wrap"><div class="plan-price-row"><div class="plan-price">R0</div></div><div class="plan-price-unit">Forever free</div></div>
+        <div class="plan-price-wrap">
+          <div class="plan-price-row">
+            <div class="plan-price">R0</div>
+          </div>
+          <div class="plan-price-unit">Forever free</div>
+        </div>
         <div class="plan-target">Perfect for students and casual exploration.</div>
         <div class="plan-credits">R80–R165 credits/mo</div>
         <button class="plan-cta cta-outline" onclick="window.selectPlan('free');event.stopPropagation()">Current Plan</button>
       </div>
+
       <div class="plan-card plan-popular" id="plan-pro" onclick="window.selectPlan('pro')">
         <div class="plan-badge">Most Popular</div>
         <div class="plan-name">Pro</div>
-        <div class="plan-price-wrap"><div class="plan-price-row"><div class="plan-price" data-mo="R330" data-yr="R220">R330</div><div class="plan-price-unit">/mo</div></div><div class="plan-yearly-total" data-total="Billed R2,640 annually"></div></div>
+        <div class="plan-price-wrap">
+          <div class="plan-price-row">
+            <div class="plan-price" data-mo="R330" data-yr="R220">R330</div>
+            <div class="plan-price-unit">/mo</div>
+          </div>
+          <div class="plan-yearly-total" data-total="Billed R2,640 annually"></div>
+        </div>
         <div class="plan-target">For individual developers building applications.</div>
         <div class="plan-credits">R330 credits included</div>
-        <button class="plan-cta cta-accent" onclick="window.selectPlan('pro');event.stopPropagation()"><i data-feather="zap" style="width:14px;height:14px;"></i> Get Pro</button>
+        <button class="plan-cta cta-accent" onclick="window.selectPlan('pro');event.stopPropagation()">
+          <i data-feather="zap" style="width:14px;height:14px;"></i> Get Pro
+        </button>
       </div>
+
       <div class="plan-card" id="plan-proplus" onclick="window.selectPlan('proplus')">
         <div class="plan-name">Pro+</div>
-        <div class="plan-price-wrap"><div class="plan-price-row"><div class="plan-price" data-mo="R825" data-yr="R660">R825</div><div class="plan-price-unit">/mo</div></div><div class="plan-yearly-total" data-total="Billed R7,920 annually"></div></div>
+        <div class="plan-price-wrap">
+          <div class="plan-price-row">
+            <div class="plan-price" data-mo="R825" data-yr="R660">R825</div>
+            <div class="plan-price-unit">/mo</div>
+          </div>
+          <div class="plan-yearly-total" data-total="Billed R7,920 annually"></div>
+        </div>
         <div class="plan-target">For power users and full-time developers.</div>
         <div class="plan-credits">R990 credits included</div>
         <button class="plan-cta cta-accent" onclick="window.selectPlan('proplus');event.stopPropagation()">Get Pro+</button>
       </div>
+
       <div class="plan-card" id="plan-teams" onclick="window.selectPlan('teams')">
         <div class="plan-name">Teams</div>
-        <div class="plan-price-wrap"><div class="plan-price-row"><div class="plan-price" data-mo="R580" data-yr="R440">R580</div><div class="plan-price-unit">/user/mo</div></div><div class="plan-yearly-total" data-total="Billed R5,280/user annually"></div></div>
+        <div class="plan-price-wrap">
+          <div class="plan-price-row">
+            <div class="plan-price" data-mo="R580" data-yr="R440">R580</div>
+            <div class="plan-price-unit">/user/mo</div>
+          </div>
+          <div class="plan-yearly-total" data-total="Billed R5,280/user annually"></div>
+        </div>
         <div class="plan-target">For small teams and startups scaling rapidly.</div>
         <div class="plan-credits">R660/user credits</div>
         <button class="plan-cta cta-accent" onclick="window.selectPlan('teams');event.stopPropagation()">Get Teams</button>
       </div>
+      
       <div class="plan-card plan-enterprise" id="plan-enterprise">
         <div class="plan-name">Enterprise</div>
-        <div class="plan-price-wrap"><div class="plan-price-row"><div class="plan-price" style="font-size:1.8rem;">Custom</div></div><div class="plan-price-unit">Contact us</div></div>
+        <div class="plan-price-wrap">
+          <div class="plan-price-row">
+            <div class="plan-price" style="font-size:1.8rem;">Custom</div>
+          </div>
+          <div class="plan-price-unit">Contact us</div>
+        </div>
         <div class="plan-target">Companies & larger teams. Pooled credits, SSO, SLAs.</div>
         <div class="plan-credits">Pooled credits</div>
         <button class="plan-cta cta-outline" onclick="window.contactSales()">Contact Sales</button>
@@ -699,34 +787,53 @@
 
 <div class="sim-panel" id="simPanel">
   <div class="sim-topbar">
-    <span class="sim-title"><i data-feather="smartphone" style="width:12px;height:12px;margin-right:4px;vertical-align:-1px;"></i>Preview</span>
-    <button class="sim-topbar-btn" id="simRefreshBtn" title="Reload preview"><i data-feather="refresh-cw" style="width:14px;height:14px;"></i></button>
-    <button class="sim-topbar-btn" id="simOpenExtBtn" title="Open in new tab"><i data-feather="external-link" style="width:14px;height:14px;"></i></button>
-    <button class="sim-topbar-btn" id="simCloseBtn" title="Close simulator"><i data-feather="x" style="width:14px;height:14px;"></i></button>
+    <span class="sim-title">
+      <i data-feather="smartphone" style="width:12px;height:12px;margin-right:4px;vertical-align:-1px;"></i>
+      Preview
+    </span>
+    <button class="sim-topbar-btn" id="simRefreshBtn" title="Reload preview">
+      <i data-feather="refresh-cw" style="width:14px;height:14px;"></i>
+    </button>
+    <button class="sim-topbar-btn" id="simOpenExtBtn" title="Open in new tab">
+      <i data-feather="external-link" style="width:14px;height:14px;"></i>
+    </button>
+    <button class="sim-topbar-btn" id="simCloseBtn" title="Close simulator">
+      <i data-feather="x" style="width:14px;height:14px;"></i>
+    </button>
   </div>
+
   <div class="sim-phone-wrap">
     <div class="sim-phone" id="simPhone">
       <div class="sim-iframe-wrap" id="simIframeWrap">
         <div class="sim-empty-state" id="simEmptyState">
-          <div class="sim-empty-icon"><i data-feather="monitor" style="width:18px;height:18px;"></i></div>
+          <div class="sim-empty-icon">
+            <i data-feather="monitor" style="width:18px;height:18px;"></i>
+          </div>
           <div class="sim-empty-title">No preview yet</div>
           <div class="sim-empty-sub">Ask Steward to write HTML, CSS, or JS — then hit Run to see it here</div>
         </div>
       </div>
     </div>
   </div>
+
   <div class="sim-footer">
     <div class="sim-status-bar">
       <div class="sim-status-dot" id="simStatusDot"></div>
       <span class="sim-status-text" id="simStatusText">Ready to preview</span>
     </div>
     <div class="sim-run-bar">
-      <button class="sim-run-full-btn" id="simRunLastBtn"><i data-feather="play" style="width:13px;height:13px;"></i>Run Latest Code</button>
-      <button class="sim-clear-btn" id="simClearBtn" title="Clear preview"><i data-feather="trash-2" style="width:14px;height:14px;"></i></button>
+      <button class="sim-run-full-btn" id="simRunLastBtn">
+        <i data-feather="play" style="width:13px;height:13px;"></i>
+        Run Latest Code
+      </button>
+      <button class="sim-clear-btn" id="simClearBtn" title="Clear preview">
+        <i data-feather="trash-2" style="width:14px;height:14px;"></i>
+      </button>
     </div>
     <div class="sim-hint-text">Runs the last HTML / CSS / JS code block from chat</div>
   </div>
 </div>
+
 
 <aside class="sidebar" id="sidebar">
   <div class="sidebar-top">
@@ -744,7 +851,9 @@
   </div>
   <div class="sidebar-footer">
     <div class="user-chip" id="userChip">
-      <div class="user-avatar" id="userAvatar"><i data-feather="user" style="width:16px;height:16px;"></i></div>
+      <div class="user-avatar" id="userAvatar">
+        <i data-feather="user" style="width:16px;height:16px;"></i>
+      </div>
       <div class="user-info">
         <div class="user-name" id="userName">Guest</div>
         <div class="user-status">grok-build · ready</div>
@@ -831,10 +940,7 @@
         <div class="input-left">
           <button class="input-tool-btn" title="Attach file" id="attachBtn"><i data-feather="paperclip" style="width:17px;height:17px;"></i></button>
         </div>
-        <!-- CodeMirror 6 replaces the plain textarea -->
-        <div id="cmInputWrap"></div>
-        <!-- Hidden textarea for form compat / fallback -->
-        <textarea class="chat-textarea-hidden" id="chatTextarea" rows="1" aria-hidden="true"></textarea>
+        <textarea class="chat-textarea" id="chatTextarea" placeholder="Ask anything about your code, or say 'generate an image of…'" rows="1"></textarea>
         <button class="send-btn" id="sendBtn" disabled>
           <i data-feather="arrow-up" style="width:16px;height:16px;"></i>
         </button>
@@ -842,107 +948,6 @@
     </div>
   </div>
 </div>
-
-<!-- ══════════════════════════════════════
-     CodeMirror 6 — ESM via skypack (avoids UMD conflict)
-══════════════════════════════════════ -->
-<script type="module">
-  // ── CM6 imports via skypack (resolves peer deps cleanly) ──
-  import { EditorState, Compartment } from 'https://cdn.skypack.dev/@codemirror/state@6.4.1';
-  import {
-    EditorView, keymap, placeholder, lineNumbers, drawSelection, highlightActiveLine
-  } from 'https://cdn.skypack.dev/@codemirror/view@6.26.3';
-  import { defaultKeymap, history, historyKeymap, indentWithTab } from 'https://cdn.skypack.dev/@codemirror/commands@6.3.3';
-  import {
-    syntaxHighlighting, defaultHighlightStyle, HighlightStyle,
-    StreamLanguage
-  } from 'https://cdn.skypack.dev/@codemirror/language@6.10.1';
-  import { javascript } from 'https://cdn.skypack.dev/@codemirror/lang-javascript@6.2.2';
-  import { html }       from 'https://cdn.skypack.dev/@codemirror/lang-html@6.4.9';
-  import { css }        from 'https://cdn.skypack.dev/@codemirror/lang-css@6.2.1';
-  import { python }     from 'https://cdn.skypack.dev/@codemirror/lang-python@6.1.3';
-  import { java }       from 'https://cdn.skypack.dev/@codemirror/lang-java@6.0.1';
-  import { rust }       from 'https://cdn.skypack.dev/@codemirror/lang-rust@6.0.1';
-  import { sql }        from 'https://cdn.skypack.dev/@codemirror/lang-sql@6.7.1';
-  import { json }       from 'https://cdn.skypack.dev/@codemirror/lang-json@6.0.1';
-  import { markdown }   from 'https://cdn.skypack.dev/@codemirror/lang-markdown@6.2.5';
-  import { tags }       from 'https://cdn.skypack.dev/@lezer/highlight@1.2.1';
-  import { autocompletion, closeBrackets, closeBracketsKeymap, completionKeymap } from 'https://cdn.skypack.dev/@codemirror/autocomplete@6.16.2';
-
-  // ── Custom highlight theme matching Steward palette ──
-  const stewardHighlight = HighlightStyle.define([
-    { tag: tags.keyword,           color: '#A08AFF' },
-    { tag: tags.operator,          color: '#A08AFF' },
-    { tag: tags.special(tags.variableName), color: '#56D0E3' },
-    { tag: [tags.string, tags.special(tags.string)], color: '#3DDC84' },
-    { tag: tags.number,            color: '#FF8C42' },
-    { tag: tags.bool,              color: '#FF8C42' },
-    { tag: tags.null,              color: '#FF8C42' },
-    { tag: tags.comment,           color: '#5A5A72', fontStyle: 'italic' },
-    { tag: tags.lineComment,       color: '#5A5A72', fontStyle: 'italic' },
-    { tag: tags.blockComment,      color: '#5A5A72', fontStyle: 'italic' },
-    { tag: tags.function(tags.variableName), color: '#56D0E3' },
-    { tag: tags.function(tags.propertyName), color: '#56D0E3' },
-    { tag: tags.definition(tags.variableName), color: '#F0F0F6' },
-    { tag: tags.typeName,          color: '#FFD260' },
-    { tag: tags.className,         color: '#FFD260' },
-    { tag: tags.propertyName,      color: '#9999B3' },
-    { tag: tags.punctuation,       color: '#5A5A72' },
-    { tag: tags.bracket,           color: '#9999B3' },
-    { tag: tags.angleBracket,      color: '#7C6AFF' },
-    { tag: tags.tagName,           color: '#A08AFF' },
-    { tag: tags.attributeName,     color: '#56D0E3' },
-    { tag: tags.attributeValue,    color: '#3DDC84' },
-    { tag: tags.meta,              color: '#9999B3' },
-    { tag: tags.regexp,            color: '#FF5F6D' },
-  ]);
-
-  // Light theme overrides
-  const stewardHighlightLight = HighlightStyle.define([
-    { tag: tags.keyword,           color: '#5C48F0' },
-    { tag: tags.operator,          color: '#5C48F0' },
-    { tag: [tags.string, tags.special(tags.string)], color: '#1A7A47' },
-    { tag: tags.number,            color: '#C05010' },
-    { tag: tags.bool,              color: '#C05010' },
-    { tag: tags.comment,           color: '#9090B0', fontStyle: 'italic' },
-    { tag: tags.lineComment,       color: '#9090B0', fontStyle: 'italic' },
-    { tag: tags.function(tags.variableName), color: '#0A6E8A' },
-    { tag: tags.typeName,          color: '#7A6000' },
-    { tag: tags.tagName,           color: '#5C48F0' },
-    { tag: tags.attributeName,     color: '#0A6E8A' },
-    { tag: tags.attributeValue,    color: '#1A7A47' },
-  ]);
-
-  // ── Language resolver ──
-  function getLangExtension(lang) {
-    const l = (lang || '').toLowerCase().trim();
-    if (['js','javascript','jsx','tsx','typescript','ts'].includes(l)) return javascript({ jsx: true, typescript: l.includes('ts') || l === 'tsx' });
-    if (['html','htm','vue','svelte'].includes(l)) return html();
-    if (['css','scss','less'].includes(l)) return css();
-    if (['python','py'].includes(l)) return python();
-    if (['java'].includes(l)) return java();
-    if (['rust','rs'].includes(l)) return rust();
-    if (['sql'].includes(l)) return sql();
-    if (['json'].includes(l)) return json();
-    if (['markdown','md'].includes(l)) return markdown();
-    return [];
-  }
-
-  // ── Expose globally so the main module can use them ──
-  window.__CM6 = {
-    EditorState, EditorView, keymap, placeholder, lineNumbers,
-    drawSelection, highlightActiveLine,
-    defaultKeymap, history, historyKeymap, indentWithTab,
-    syntaxHighlighting, defaultHighlightStyle,
-    stewardHighlight, stewardHighlightLight,
-    autocompletion, closeBrackets, closeBracketsKeymap, completionKeymap,
-    getLangExtension,
-    Compartment,
-  };
-
-  // Signal main module
-  window.dispatchEvent(new Event('cm6ready'));
-</script>
 
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
@@ -957,15 +962,11 @@
   const saved = localStorage.getItem('cf_theme') || 'dark';
   document.documentElement.setAttribute('data-theme', saved);
   const themeToggle = document.getElementById('themeToggle');
-  const themeIcon   = document.getElementById('themeIcon');
+  const themeIcon = document.getElementById('themeIcon');
   function updateThemeIcon() {
     const dark = document.documentElement.getAttribute('data-theme') === 'dark';
     themeIcon.setAttribute('data-feather', dark ? 'sun' : 'moon');
     feather.replace();
-    // Update input editor theme
-    if (window._inputView && window.__CM6) {
-      rebuildInputEditor();
-    }
   }
   updateThemeIcon();
   themeToggle.addEventListener('click', () => {
@@ -986,8 +987,8 @@
   };
   const app = initializeApp(firebaseConfig);
   const auth = getAuth(app);
-  const db   = getDatabase(app);
-  const rc   = getRemoteConfig(app);
+  const db = getDatabase(app);
+  const rc = getRemoteConfig(app);
   rc.settings.minimumFetchIntervalMillis = 0;
 
   let XAI_KEY = '';
@@ -1033,230 +1034,21 @@ RESPONSE STYLE:
 
 Keep responses technically precise, modern, and directly actionable.`;
 
-  const sidebar          = document.getElementById('sidebar');
-  const menuToggle       = document.getElementById('menuToggle');
-  const welcomeScreen    = document.getElementById('welcomeScreen');
-  const messagesContainer= document.getElementById('messagesContainer');
-  const chatScroll       = document.getElementById('chatScroll');
-  const threadList       = document.getElementById('threadList');
-  const sendBtn          = document.getElementById('sendBtn');
-  const langLabel        = document.getElementById('langLabel');
-  const cmInputWrap      = document.getElementById('cmInputWrap');
+  const sidebar = document.getElementById('sidebar');
+  const menuToggle = document.getElementById('menuToggle');
+  const welcomeScreen = document.getElementById('welcomeScreen');
+  const messagesContainer = document.getElementById('messagesContainer');
+  const chatScroll = document.getElementById('chatScroll');
+  const threadList = document.getElementById('threadList');
+  const chatTextarea = document.getElementById('chatTextarea');
+  const sendBtn = document.getElementById('sendBtn');
+  const inputZone = document.getElementById('inputZone');
+  const langLabel = document.getElementById('langLabel');
 
   menuToggle.addEventListener('click', () => sidebar.classList.toggle('open'));
   document.addEventListener('click', (e) => {
     if (window.innerWidth <= 768 && !sidebar.contains(e.target) && !menuToggle.contains(e.target)) sidebar.classList.remove('open');
   });
-
-  // ══════════════════════════════════════
-  // CM6 INPUT EDITOR SETUP
-  // ══════════════════════════════════════
-  let inputView = null;
-  window._inputView = null;
-
-  function buildInputTheme(isDark) {
-    const CM6 = window.__CM6;
-    if (!CM6) return [];
-    return [
-      CM6.EditorView.theme({
-        '&': {
-          background: 'transparent',
-          color: isDark ? '#F0F0F6' : '#0D0D1A',
-          fontSize: '0.88rem',
-          fontFamily: "'IBM Plex Mono', monospace",
-        },
-        '.cm-content': { caretColor: isDark ? '#A08AFF' : '#5C48F0', padding: '0' },
-        '.cm-scroller': { padding: '8px 4px', lineHeight: '1.55', fontFamily: "'IBM Plex Mono', monospace", overflow: 'visible' },
-        '.cm-line': { padding: '0' },
-        '.cm-cursor': { borderLeftColor: isDark ? '#A08AFF' : '#5C48F0' },
-        '.cm-selectionBackground': { background: isDark ? 'rgba(124,106,255,0.25)' : 'rgba(92,72,240,0.18)' },
-        '&.cm-focused .cm-selectionBackground': { background: isDark ? 'rgba(124,106,255,0.25)' : 'rgba(92,72,240,0.18)' },
-        '.cm-gutters': { display: 'none' },
-        '.cm-activeLine': { background: 'transparent' },
-        '.cm-placeholder': { color: isDark ? '#5A5A72' : '#9090B0' },
-      }, { dark: isDark }),
-      CM6.syntaxHighlighting(isDark ? CM6.stewardHighlight : CM6.stewardHighlightLight),
-    ];
-  }
-
-  function createInputEditor() {
-    const CM6 = window.__CM6;
-    if (!CM6 || !cmInputWrap) return;
-    const isDark = document.documentElement.getAttribute('data-theme') !== 'light';
-
-    // Destroy existing
-    if (inputView) { inputView.destroy(); cmInputWrap.innerHTML = ''; }
-
-    const updateListener = CM6.EditorView.updateListener.of((update) => {
-      if (update.docChanged) {
-        const val = inputView.state.doc.toString();
-        sendBtn.disabled = val.trim().length === 0;
-        // Detect language
-        if (isImageRequest(val.trim())) langLabel.textContent = 'imagine';
-        else if (val.trim()) langLabel.textContent = detectLang(val.trim());
-        else langLabel.textContent = 'general';
-        // Sync hidden textarea
-        document.getElementById('chatTextarea').value = val;
-      }
-    });
-
-    // Cmd/Ctrl+Enter → send; Shift+Enter → newline (default); Enter → send
-    const customKeymap = CM6.keymap.of([
-      {
-        key: 'Enter',
-        run: (view) => {
-          if (!sendBtn.disabled) { handleSend(); return true; }
-          return false;
-        }
-      },
-      {
-        key: 'Shift-Enter',
-        run: (view) => {
-          // insert newline
-          const tr = view.state.update({ changes: { from: view.state.selection.main.from, insert: '\n' }, selection: { anchor: view.state.selection.main.from + 1 } });
-          view.dispatch(tr);
-          return true;
-        }
-      },
-      {
-        key: 'Mod-Enter',
-        run: () => { if (!sendBtn.disabled) { handleSend(); return true; } return false; }
-      },
-      ...CM6.closeBracketsKeymap,
-      ...CM6.defaultKeymap,
-      ...CM6.historyKeymap,
-    ]);
-
-    const state = CM6.EditorState.create({
-      doc: '',
-      extensions: [
-        customKeymap,
-        CM6.history(),
-        CM6.drawSelection(),
-        CM6.closeBrackets(),
-        CM6.placeholder("Ask anything about your code, or say 'generate an image of…'"),
-        CM6.EditorView.lineWrapping,
-        updateListener,
-        ...buildInputTheme(isDark),
-      ],
-    });
-
-    inputView = new CM6.EditorView({ state, parent: cmInputWrap });
-    window._inputView = inputView;
-  }
-
-  function rebuildInputEditor() {
-    const current = inputView ? inputView.state.doc.toString() : '';
-    createInputEditor();
-    if (current && inputView) {
-      inputView.dispatch({
-        changes: { from: 0, to: 0, insert: current }
-      });
-    }
-  }
-
-  function getInputValue() {
-    return inputView ? inputView.state.doc.toString().trim() : '';
-  }
-
-  function clearInput() {
-    if (inputView) {
-      inputView.dispatch({ changes: { from: 0, to: inputView.state.doc.length, insert: '' } });
-    }
-    document.getElementById('chatTextarea').value = '';
-    sendBtn.disabled = true;
-    langLabel.textContent = 'general';
-  }
-
-  function setInputValue(text) {
-    if (!inputView) return;
-    inputView.dispatch({
-      changes: { from: 0, to: inputView.state.doc.length, insert: text }
-    });
-    inputView.focus();
-  }
-
-  // Init when CM6 is ready
-  function initCM6() {
-    createInputEditor();
-    // Click on input box focuses the editor
-    document.getElementById('inputBox').addEventListener('click', (e) => {
-      if (inputView && !e.target.closest('button')) inputView.focus();
-    });
-  }
-
-  if (window.__CM6) {
-    initCM6();
-  } else {
-    window.addEventListener('cm6ready', initCM6, { once: true });
-  }
-
-  // ══════════════════════════════════════
-  // CM6 CODE BLOCK RENDERER
-  // ══════════════════════════════════════
-  function createCM6CodeBlock(lang, code) {
-    const CM6 = window.__CM6;
-    if (!CM6) {
-      // Fallback: plain pre
-      const pre = document.createElement('pre');
-      const codeEl = document.createElement('code');
-      codeEl.textContent = code;
-      pre.appendChild(codeEl);
-      pre.style.padding = '16px';
-      pre.style.fontFamily = "'IBM Plex Mono', monospace";
-      pre.style.fontSize = '0.82rem';
-      return { element: pre, getText: () => code };
-    }
-
-    const isDark = document.documentElement.getAttribute('data-theme') !== 'light';
-    const wrap = document.createElement('div');
-    wrap.className = 'cm-code-block';
-
-    const langExt = CM6.getLangExtension(lang);
-    const state = CM6.EditorState.create({
-      doc: code,
-      extensions: [
-        CM6.EditorState.readOnly.of(true),
-        CM6.lineNumbers(),
-        CM6.drawSelection(),
-        CM6.syntaxHighlighting(isDark ? CM6.stewardHighlight : CM6.stewardHighlightLight),
-        CM6.EditorView.theme({
-          '&': {
-            background: 'var(--bg-void)',
-            fontSize: '0.82rem',
-            fontFamily: "'IBM Plex Mono', monospace",
-          },
-          '.cm-content': { padding: '0', color: isDark ? '#F0F0F6' : '#0D0D1A' },
-          '.cm-scroller': {
-            padding: '16px',
-            lineHeight: '1.65',
-            fontFamily: "'IBM Plex Mono', monospace",
-            maxHeight: '520px',
-            overflowY: 'auto',
-          },
-          '.cm-line': { padding: '0 4px' },
-          '.cm-gutters': {
-            background: 'var(--bg-void)',
-            borderRight: '1px solid var(--border)',
-            color: 'var(--text-3)',
-            opacity: '0.5',
-            fontSize: '0.7rem',
-          },
-          '.cm-activeLineGutter': { background: 'transparent' },
-          '.cm-activeLine': { background: 'rgba(124,106,255,0.04)' },
-          '.cm-cursor': { display: 'none' },
-          '.cm-selectionBackground': { background: 'rgba(124,106,255,0.15)' },
-          '&.cm-focused .cm-selectionBackground': { background: 'rgba(124,106,255,0.2)' },
-        }, { dark: isDark }),
-        ...(Array.isArray(langExt) ? langExt : [langExt]),
-        CM6.EditorView.lineWrapping,
-      ],
-    });
-
-    const view = new CM6.EditorView({ state, parent: wrap });
-    const getText = () => view.state.doc.toString();
-    return { element: wrap, getText, view };
-  }
 
   // ══════════════════════════════════════
   // SCROLL TO BOTTOM FAB
@@ -1276,9 +1068,9 @@ Keep responses technically precise, modern, and directly actionable.`;
 
   window.showDialog = (title, msg, btns) => {
     const overlay = document.getElementById('dialogOverlay');
-    const box     = document.getElementById('dialogBox');
+    const box = document.getElementById('dialogBox');
     document.getElementById('dialogTitle').textContent = title;
-    document.getElementById('dialogMsg').textContent   = msg;
+    document.getElementById('dialogMsg').textContent = msg;
     const btnsCont = document.getElementById('dialogBtns');
     btnsCont.innerHTML = '';
     btns.forEach(b => {
@@ -1293,12 +1085,12 @@ Keep responses technically precise, modern, and directly actionable.`;
   };
   window.closeDialog = () => {
     const overlay = document.getElementById('dialogOverlay');
-    const box     = document.getElementById('dialogBox');
+    const box = document.getElementById('dialogBox');
     overlay.style.opacity = '0'; box.style.transform = 'scale(0.95)';
     setTimeout(() => { overlay.style.display = 'none'; }, 250);
   };
   window.showShortcuts = () => {
-    window.showDialog('Keyboard Shortcuts', '/ — focus input · Cmd+Enter — send · Shift+Enter — newline · Esc — close · Cmd+K — new thread · P — toggle preview', [{ text: 'Got it', cls: 'btn-primary' }]);
+    window.showDialog('Keyboard Shortcuts', '/ — focus input · Cmd+Enter — send · Esc — close · Cmd+K — new thread · P — toggle preview', [{ text: 'Got it', cls: 'btn-primary' }]);
   };
 
   const pricingOverlay = document.getElementById('pricingOverlay');
@@ -1313,7 +1105,7 @@ Keep responses technically precise, modern, and directly actionable.`;
     setTimeout(() => { pricingOverlay.style.display = 'none'; }, 300);
   };
   document.getElementById('pricingClose').onclick = window.closePricing;
-  document.getElementById('pricingBtn').onclick   = window.openPricing;
+  document.getElementById('pricingBtn').onclick = window.openPricing;
   pricingOverlay.addEventListener('click', e => { if (e.target === pricingOverlay) window.closePricing(); });
 
   function updatePricingUI() {
@@ -1333,8 +1125,9 @@ Keep responses technically precise, modern, and directly actionable.`;
       const ctaFree = document.getElementById('plan-free')?.querySelector('.plan-cta');
       if (ctaFree) { ctaFree.textContent = '✓ Current Plan'; ctaFree.className = 'plan-cta cta-muted'; }
     }
+    const limit = currentUser ? PLAN_DAILY_LIMITS[userPlan] || 10 : PLAN_DAILY_LIMITS.guest;
     const label = document.getElementById('freeLimitLabel');
-    if (label) label.textContent = (PLAN_DAILY_LIMITS[userPlan] || 10) >= 999 ? 'Unlimited messages/day' : `${PLAN_DAILY_LIMITS.free} messages/day`;
+    if (label) label.textContent = limit >= 999 ? 'Unlimited messages/day' : `${PLAN_DAILY_LIMITS.free} messages/day`;
   }
 
   window.selectPlan = (planId) => {
@@ -1379,7 +1172,7 @@ Keep responses technically precise, modern, and directly actionable.`;
   }
 
   const authOverlay = document.getElementById('authOverlay');
-  const authBox     = document.getElementById('authBox');
+  const authBox = document.getElementById('authBox');
   window.openAuth = () => { authOverlay.style.display = 'flex'; setTimeout(() => { authOverlay.style.opacity = '1'; authBox.style.transform = 'translateY(0)'; }, 10); };
   window.closeAuth = () => { authOverlay.style.opacity = '0'; authBox.style.transform = 'translateY(20px)'; setTimeout(() => { authOverlay.style.display = 'none'; }, 300); };
   document.getElementById('authClose').onclick = window.closeAuth;
@@ -1396,7 +1189,7 @@ Keep responses technically precise, modern, and directly actionable.`;
   onAuthStateChanged(auth, async user => {
     currentUser = user;
     const avatarEl = document.getElementById('userAvatar');
-    const nameEl   = document.getElementById('userName');
+    const nameEl = document.getElementById('userName');
     if (user) {
       nameEl.textContent = user.displayName?.split(' ')[0] || 'User';
       if (user.photoURL) avatarEl.innerHTML = `<img src="${user.photoURL}" alt="">`;
@@ -1413,6 +1206,19 @@ Keep responses technically precise, modern, and directly actionable.`;
       threadList.innerHTML = ''; startNewThread(); feather.replace();
     }
   });
+
+  function relativeTime(ts) {
+    if (!ts) return '';
+    const diff = Date.now() - ts;
+    const m = Math.floor(diff / 60000);
+    if (m < 1) return 'now';
+    if (m < 60) return `${m}m`;
+    const h = Math.floor(m / 60);
+    if (h < 24) return `${h}h`;
+    const d = Math.floor(h / 24);
+    if (d < 7) return `${d}d`;
+    return `${Math.floor(d/7)}w`;
+  }
 
   async function loadThreads(uid) {
     const snap = await get(ref(db, `cf_threads/${uid}`));
@@ -1496,7 +1302,7 @@ Keep responses technically precise, modern, and directly actionable.`;
   function startNewThread() {
     currentThreadId = null; chatHistory = []; messagesContainer.innerHTML = '';
     welcomeScreen.style.display = 'block';
-    clearInput();
+    chatTextarea.value = ''; chatTextarea.style.height = 'auto'; sendBtn.disabled = true;
     langLabel.textContent = 'general'; updateActiveThread();
     if (window.innerWidth <= 768) sidebar.classList.remove('open');
   }
@@ -1518,35 +1324,21 @@ Keep responses technically precise, modern, and directly actionable.`;
     return 'general';
   }
 
-  // ── CM6-powered markdown parser ──
-  // Store CM6 view refs by block id so copyBlock can pull text
-  const cmBlockViews = {};
-
   function parseMarkdown(raw) {
     if (!raw) return '';
-    let text = raw; // we'll escape per-segment
-
-    // Extract code blocks first
+    let text = escapeHtml(raw);
     const codeBlocks = [];
     text = text.replace(/```(\w*)\n?([\s\S]*?)```/gm, (_, lang, code) => {
-      const ph  = 'CODEBLOCK_' + codeBlocks.length;
-      const l   = lang || 'code';
-      const id  = 'cb_' + Math.random().toString(36).substr(2,8);
+      const ph = 'CODEBLOCK_' + codeBlocks.length;
+      const l = lang || 'code';
+      const id = 'cb_' + Math.random().toString(36).substr(2,8);
       const isRunnable = ['html','css','javascript','js','jsx','tsx','vue','svelte'].includes(l.toLowerCase());
-      const runBtn = isRunnable
-        ? `<button class="code-action-btn run-in-sim" onclick="window.runInSim('${id}','${l}')"><i data-feather="play" style="width:12px;height:12px;"></i> preview</button>`
-        : '';
-      codeBlocks.push({
-        ph, lang: l, code: code.trim(), id,
-        html: `<div class="code-block"><div class="code-block-header"><span class="code-lang-badge">${l}</span><div class="code-actions">${runBtn}<button class="code-action-btn" onclick="window.copyBlock('${id}')"><i data-feather="copy" style="width:12px;height:12px;"></i> copy</button><button class="code-action-btn" onclick="window.insertToInput('${id}')"><i data-feather="corner-down-left" style="width:12px;height:12px;"></i> use</button></div></div><div id="${id}-cm"></div></div>`
-      });
+      const runBtn = isRunnable ? `<button class="code-action-btn run-in-sim" onclick="window.runInSim('${id}','${l}')"><i data-feather="play" style="width:12px;height:12px;"></i> preview</button>` : '';
+      codeBlocks.push({ ph, html:
+        `<div class="code-block"><div class="code-block-header"><span class="code-lang-badge">${l}</span><div class="code-actions">${runBtn}<button class="code-action-btn" onclick="window.copyBlock('${id}')"><i data-feather="copy" style="width:12px;height:12px;"></i> copy</button><button class="code-action-btn" onclick="window.insertToInput('${id}')"><i data-feather="corner-down-left" style="width:12px;height:12px;"></i> use</button></div></div><pre id="${id}"><code>${code.trim()}</code></pre></div>` });
       if (isRunnable) { setTimeout(() => window._notifyNewCode && window._notifyNewCode(l, code.trim()), 50); }
       return ph;
     });
-
-    // Escape the non-code parts
-    text = escapeHtml(text);
-
     text = text.replace(/^### (.+)$/gm,'<h3>$1</h3>').replace(/^## (.+)$/gm,'<h2>$1</h2>').replace(/^# (.+)$/gm,'<h1>$1</h1>');
     text = text.replace(/\*\*\*(.+?)\*\*\*/g,'<strong><em>$1</em></strong>').replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/\*(.+?)\*/g,'<em>$1</em>').replace(/_(.+?)_/g,'<em>$1</em>');
     const lines = text.split('\n'); let out = []; let inUl = false;
@@ -1564,38 +1356,17 @@ Keep responses technically precise, modern, and directly actionable.`;
       if (p.startsWith('<') && !p.startsWith('<code') && !p.startsWith('<em') && !p.startsWith('<strong')) return p;
       return `<p>${p}</p>`;
     }).join('\n');
-
     codeBlocks.forEach(({ ph, html }) => { text = text.replace(ph, html); });
-
-    return { html: text, codeBlocks };
-  }
-
-  // After inserting HTML, mount CM6 editors into the code block containers
-  function mountCM6CodeBlocks(codeBlocks) {
-    if (!codeBlocks) return;
-    setTimeout(() => {
-      codeBlocks.forEach(({ id, lang, code }) => {
-        const container = document.getElementById(`${id}-cm`);
-        if (!container) return;
-        const { element, getText } = createCM6CodeBlock(lang, code);
-        container.appendChild(element);
-        cmBlockViews[id] = { getText, rawCode: code };
-        feather.replace();
-      });
-    }, 0);
+    return text;
   }
 
   window.copyBlock = (id) => {
-    const ref = cmBlockViews[id];
-    const text = ref ? ref.getText() : (document.getElementById(id)?.innerText || '');
-    if (text) navigator.clipboard.writeText(text).then(() =>
-      window.showDialog('Copied', 'Code copied to clipboard.', [{ text: 'OK', cls: 'btn-primary' }])
-    );
+    const pre = document.getElementById(id);
+    if (pre) navigator.clipboard.writeText(pre.innerText).then(() => window.showDialog('Copied', 'Code block copied to clipboard.', [{ text: 'OK', cls: 'btn-primary' }]));
   };
   window.insertToInput = (id) => {
-    const ref = cmBlockViews[id];
-    const text = ref ? ref.getText() : '';
-    if (text) { setInputValue(text); }
+    const pre = document.getElementById(id);
+    if (pre) { chatTextarea.value = pre.innerText; chatTextarea.dispatchEvent(new Event('input')); chatTextarea.focus(); }
   };
 
   function appendUserMsg(text, animate = true) {
@@ -1613,17 +1384,7 @@ Keep responses technically precise, modern, and directly actionable.`;
     block.innerHTML = `<div class="msg-ai-header"><div class="ai-badge"><div class="ai-badge-dot"></div>Steward</div></div><div class="msg-ai-content" id="${mid}"></div><div class="msg-actions"><button class="msg-action" onclick="window.copyAIMsg('${mid}')"><i data-feather="copy" style="width:12px;height:12px;"></i> copy</button><button class="msg-action" onclick="window.retryLast()"><i data-feather="refresh-cw" style="width:12px;height:12px;"></i> retry</button></div>`;
     messagesContainer.appendChild(block);
     if (animate) requestAnimationFrame(() => { block.style.transition = 'opacity 0.2s'; block.style.opacity = '1'; });
-    if (content) {
-      const parsed = parseMarkdown(content);
-      const contentEl = document.getElementById(mid);
-      if (typeof parsed === 'object') {
-        contentEl.innerHTML = parsed.html;
-        mountCM6CodeBlocks(parsed.codeBlocks);
-      } else {
-        contentEl.innerHTML = parsed;
-      }
-      feather.replace();
-    }
+    if (content) { document.getElementById(mid).innerHTML = parseMarkdown(content); feather.replace(); }
     scrollToBottom(); return { block, mid };
   }
 
@@ -1632,7 +1393,7 @@ Keep responses technically precise, modern, and directly actionable.`;
     block.innerHTML = `<div class="thinking-content"><div class="thinking-label"><div class="thinking-dots"><div class="thinking-dot"></div><div class="thinking-dot"></div><div class="thinking-dot"></div></div><span id="thinkingLabel">${isImage ? 'Preparing prompt…' : 'Analysing...'}</span></div><div class="thinking-skeleton"><div class="skeleton-line" style="width:80%"></div><div class="skeleton-line" style="width:60%"></div><div class="skeleton-line" style="width:72%"></div></div></div>`;
     messagesContainer.appendChild(block); scrollToBottom();
     const labels = isImage
-      ? ['Preparing prompt…','Sending to Grok Imagine…','Generating pixels…','Almost ready…']
+      ? ['Preparing prompt…', 'Sending to Grok Imagine…', 'Generating pixels…', 'Almost ready…']
       : ['Analysing...','Reviewing context...','Writing response...','Finalising...'];
     let i = 0;
     const interval = setInterval(() => {
@@ -1643,7 +1404,7 @@ Keep responses technically precise, modern, and directly actionable.`;
   }
 
   window.copyAIMsg = (mid) => { const el = document.getElementById(mid); if (el) navigator.clipboard.writeText(el.innerText); };
-  window.retryLast = () => { const last = [...chatHistory].reverse().find(m => m.role === 'user'); if (last) { setInputValue(last.content); handleSend(); } };
+  window.retryLast = () => { const last = [...chatHistory].reverse().find(m => m.role === 'user'); if (last) { chatTextarea.value = last.content; sendBtn.disabled = false; handleSend(); } };
 
   function showAuthGate() {
     if (document.getElementById('auth-gate')) return;
@@ -1656,23 +1417,43 @@ Keep responses technically precise, modern, and directly actionable.`;
   // IMAGE GENERATION
   // ══════════════════════════════════════
   const IMAGE_TRIGGERS = [
-    /\bgenerate (an? )?image\b/i, /\bcreate (an? )?image\b/i, /\bdraw (me |an? )?/i,
-    /\billustrate\b/i, /\bimage of\b/i, /\bpicture of\b/i, /\bvisualiz(e|ation) of\b/i,
+    /\bgenerate (an? )?image\b/i,
+    /\bcreate (an? )?image\b/i,
+    /\bdraw (me |an? )?/i,
+    /\billustrate\b/i,
+    /\bimage of\b/i,
+    /\bpicture of\b/i,
+    /\bvisualiz(e|ation) of\b/i,
     /\brender (a |an |me )?.*(image|scene|illustration|photo|picture)/i,
     /\bshow me .*(image|picture|illustration|photo)/i,
     /\bmake (a |an |me )?.*(image|picture|illustration|photo)\b/i,
-    /\bpaint (a |an |me )?/i, /\bphoto of\b/i,
+    /\bpaint (a |an |me )?/i,
+    /\bphoto of\b/i,
     /\bgenerate .*(art|artwork|illustration|portrait|landscape|scene)\b/i,
   ];
-  function isImageRequest(text) { return IMAGE_TRIGGERS.some(rx => rx.test(text)); }
+
+  function isImageRequest(text) {
+    return IMAGE_TRIGGERS.some(rx => rx.test(text));
+  }
 
   async function generateImage(prompt) {
     const response = await fetch('https://api.x.ai/v1/images/generations', {
       method: 'POST',
-      headers: { 'Authorization': `Bearer ${XAI_KEY}`, 'Content-Type': 'application/json' },
-      body: JSON.stringify({ model: 'grok-imagine-image-quality', prompt, n: 1, response_format: 'url' })
+      headers: {
+        'Authorization': `Bearer ${XAI_KEY}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        model: 'grok-imagine-image-quality',
+        prompt: prompt,
+        n: 1,
+        response_format: 'url'
+      })
     });
-    if (!response.ok) { const errText = await response.text(); throw new Error(errText); }
+    if (!response.ok) {
+      const errText = await response.text();
+      throw new Error(errText);
+    }
     const data = await response.json();
     return data.data[0].url;
   }
@@ -1683,25 +1464,40 @@ Keep responses technically precise, modern, and directly actionable.`;
     const imgId = 'img_' + Math.random().toString(36).substr(2, 8);
     const safePrompt = prompt.replace(/'/g, "\\'").replace(/"/g, '&quot;');
     block.innerHTML = `
-      <div class="msg-ai-header"><div class="ai-badge"><div class="ai-badge-dot"></div>Steward</div></div>
+      <div class="msg-ai-header">
+        <div class="ai-badge"><div class="ai-badge-dot"></div>Steward</div>
+      </div>
       <div class="img-gen-block">
-        <div class="img-gen-header"><span class="img-gen-badge">grok-imagine</span><span>Image generated</span></div>
+        <div class="img-gen-header">
+          <span class="img-gen-badge">grok-imagine</span>
+          <span>Image generated</span>
+        </div>
         <div class="img-gen-card">
           <img id="${imgId}" src="${imageUrl}" alt="${escapeHtml(prompt)}" class="loading"
                onload="this.classList.remove('loading')"
                onerror="this.parentElement.querySelector('.img-gen-card-footer').insertAdjacentHTML('beforebegin','<div class=\\'img-gen-error\\'>Failed to load image. URL may have expired.</div>')">
           <div class="img-gen-card-footer">
             <span class="img-gen-prompt" title="${escapeHtml(prompt)}">${escapeHtml(prompt)}</span>
-            <button class="img-gen-action" onclick="window.downloadGenImage('${imgId}')"><i data-feather="download" style="width:12px;height:12px;"></i> Save</button>
-            <button class="img-gen-action" onclick="window.copyGenImageUrl('${imageUrl}')"><i data-feather="link" style="width:12px;height:12px;"></i> URL</button>
+            <button class="img-gen-action" onclick="window.downloadGenImage('${imgId}')">
+              <i data-feather="download" style="width:12px;height:12px;"></i> Save
+            </button>
+            <button class="img-gen-action" onclick="window.copyGenImageUrl('${imageUrl}')">
+              <i data-feather="link" style="width:12px;height:12px;"></i> URL
+            </button>
           </div>
         </div>
       </div>
       <div class="msg-actions">
-        <button class="msg-action" onclick="window.regenerateImage('${safePrompt}')"><i data-feather="refresh-cw" style="width:12px;height:12px;"></i> regenerate</button>
-        <button class="msg-action" onclick="window.varyImage('${safePrompt}')"><i data-feather="shuffle" style="width:12px;height:12px;"></i> variation</button>
+        <button class="msg-action" onclick="window.regenerateImage('${safePrompt}')">
+          <i data-feather="refresh-cw" style="width:12px;height:12px;"></i> regenerate
+        </button>
+        <button class="msg-action" onclick="window.varyImage('${safePrompt}')">
+          <i data-feather="shuffle" style="width:12px;height:12px;"></i> variation
+        </button>
       </div>`;
-    messagesContainer.appendChild(block); feather.replace(); scrollToBottom();
+    messagesContainer.appendChild(block);
+    feather.replace();
+    scrollToBottom();
     return block;
   }
 
@@ -1712,17 +1508,38 @@ Keep responses technically precise, modern, and directly actionable.`;
       const res = await fetch(img.src);
       const blob = await res.blob();
       const url = URL.createObjectURL(blob);
-      const a = document.createElement('a'); a.href = url; a.download = 'steward_image_' + Date.now() + '.jpg';
-      document.body.appendChild(a); a.click(); document.body.removeChild(a); URL.revokeObjectURL(url);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'steward_image_' + Date.now() + '.jpg';
+      document.body.appendChild(a); a.click(); document.body.removeChild(a);
+      URL.revokeObjectURL(url);
     } catch(e) {
-      window.showDialog('Download failed', 'Could not download the image directly. Try right-clicking and saving instead.', [{ text: 'OK', cls: 'btn-primary' }]);
+      window.showDialog('Download failed', 'Could not download the image directly. Try right-clicking the image and saving it instead.', [{ text: 'OK', cls: 'btn-primary' }]);
     }
   };
-  window.copyGenImageUrl = (url) => { navigator.clipboard.writeText(url).then(() => window.showDialog('URL Copied', 'Image URL copied to clipboard.', [{ text: 'OK', cls: 'btn-primary' }])); };
-  window.regenerateImage = (prompt) => { setInputValue(prompt); handleSend(); };
+
+  window.copyGenImageUrl = (url) => {
+    navigator.clipboard.writeText(url).then(() =>
+      window.showDialog('URL Copied', 'Image URL copied to clipboard.', [{ text: 'OK', cls: 'btn-primary' }])
+    );
+  };
+
+  window.regenerateImage = (prompt) => {
+    chatTextarea.value = prompt;
+    chatTextarea.dispatchEvent(new Event('input'));
+    handleSend();
+  };
+
   window.varyImage = (prompt) => {
-    const variations = ['in a different art style','with different lighting and color palette','from a different angle or perspective','with more detail and texture'];
-    setInputValue(prompt + ', ' + variations[Math.floor(Math.random() * variations.length)]);
+    const variations = [
+      'in a different art style',
+      'with different lighting and color palette',
+      'from a different angle or perspective',
+      'with more detail and texture',
+    ];
+    const variation = variations[Math.floor(Math.random() * variations.length)];
+    chatTextarea.value = prompt + ', ' + variation;
+    chatTextarea.dispatchEvent(new Event('input'));
     handleSend();
   };
 
@@ -1730,28 +1547,40 @@ Keep responses technically precise, modern, and directly actionable.`;
   // SEND / MAIN HANDLER
   // ══════════════════════════════════════
   async function handleSend() {
-    const prompt = getInputValue();
+    const prompt = chatTextarea.value.trim();
     if (!prompt || !XAI_KEY) return;
     if (!currentUser && guestCount >= PLAN_DAILY_LIMITS.guest) { showAuthGate(); return; }
     if (currentUser && isAtDailyLimit()) { showUpgradeGate(); return; }
 
     appendUserMsg(prompt);
-    clearInput();
+    chatTextarea.value = ''; chatTextarea.style.height = 'auto'; sendBtn.disabled = true;
 
     const imageMode = isImageRequest(prompt);
     langLabel.textContent = imageMode ? 'imagine' : detectLang(prompt);
+
     const clearThinking = appendThinking(imageMode);
 
     try {
       if (imageMode) {
+        // ── IMAGE GENERATION PATH ──
         clearThinking();
         document.getElementById('thinking-block')?.remove();
-        const imageUrl = await generateImage(prompt);
+
+        let imageUrl;
+        try {
+          imageUrl = await generateImage(prompt);
+        } catch(imgErr) {
+          throw imgErr;
+        }
+
         appendImageResult(imageUrl, prompt);
+
         chatHistory.push({ role: 'user', content: prompt });
         chatHistory.push({ role: 'assistant', content: `[Image generated: ${prompt}]` });
         saveThread();
+
       } else {
+        // ── TEXT / CODE PATH ──
         const msgs = [{ role:'system', content: SYSTEM_PROMPT }, ...chatHistory, { role:'user', content: prompt }];
         const res = await fetch(`${API_BASE}/chat/completions`, {
           method: 'POST',
@@ -1762,14 +1591,17 @@ Keep responses technically precise, modern, and directly actionable.`;
         const data = await res.json();
         clearThinking();
         document.getElementById('thinking-block')?.remove();
+
         const aiText = data.choices[0].message.content;
         chatHistory.push({ role:'user', content:prompt });
         chatHistory.push({ role:'assistant', content:aiText });
-        appendAIMsg(aiText);
+
+        const { mid } = appendAIMsg(aiText);
         feather.replace();
         saveThread();
       }
 
+      // ── Usage tracking (shared by both paths) ──
       if (!currentUser) {
         guestCount++;
         if (guestCount >= PLAN_DAILY_LIMITS.guest) showAuthGate();
@@ -1784,6 +1616,7 @@ Keep responses technically precise, modern, and directly actionable.`;
           ]);
         }
       }
+
     } catch (err) {
       clearThinking();
       document.getElementById('thinking-block')?.remove();
@@ -1795,27 +1628,31 @@ Keep responses technically precise, modern, and directly actionable.`;
   }
   window.handleSend = handleSend;
 
+  chatTextarea.addEventListener('input', function() {
+    this.style.height = 'auto';
+    this.style.height = Math.min(this.scrollHeight, 260) + 'px';
+    sendBtn.disabled = this.value.trim().length === 0;
+    if (isImageRequest(this.value.trim())) langLabel.textContent = 'imagine';
+    else if (this.value.trim()) langLabel.textContent = detectLang(this.value.trim());
+    else langLabel.textContent = 'general';
+  });
+  chatTextarea.addEventListener('keydown', e => {
+    if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); if (!sendBtn.disabled) handleSend(); }
+  });
   sendBtn.addEventListener('click', handleSend);
 
   document.querySelectorAll('.starter-card').forEach(card => {
     card.addEventListener('click', () => {
       const p = card.getAttribute('data-prompt');
-      if (p) { setInputValue(p); if (inputView) inputView.focus(); }
+      if (p) { chatTextarea.value = p; chatTextarea.dispatchEvent(new Event('input')); chatTextarea.focus(); }
     });
   });
 
   document.addEventListener('keydown', e => {
     if (e.key === 'Escape') { window.closeDialog(); window.closeAuth(); sidebar.classList.remove('open'); }
-    if (e.key === '/' && document.activeElement?.tagName !== 'TEXTAREA' && !e.ctrlKey && !e.metaKey) {
-      const active = document.activeElement;
-      const inCM = active && (active.closest('#cmInputWrap') || active.classList.contains('cm-content'));
-      if (!inCM) { e.preventDefault(); if (inputView) inputView.focus(); }
-    }
-    if ((e.metaKey || e.ctrlKey) && e.key === 'k') { e.preventDefault(); startNewThread(); if (inputView) inputView.focus(); }
-    if (e.key === 'p' && document.activeElement?.tagName !== 'TEXTAREA') {
-      const inCM = document.activeElement?.closest('#cmInputWrap');
-      if (!inCM) { simOpen ? closeSim() : openSim(); }
-    }
+    if (e.key === '/' && document.activeElement !== chatTextarea && !e.ctrlKey && !e.metaKey) { e.preventDefault(); chatTextarea.focus(); }
+    if ((e.metaKey || e.ctrlKey) && e.key === 'k') { e.preventDefault(); startNewThread(); chatTextarea.focus(); }
+    if (e.key === 'p' && document.activeElement !== chatTextarea && !e.ctrlKey && !e.metaKey) { simOpen ? closeSim() : openSim(); }
   });
 
   // ══════════════════════════════════════
@@ -1836,12 +1673,31 @@ Keep responses technically precise, modern, and directly actionable.`;
   let simOpen = false;
   let lastCodeContent = null;
 
-  function setSimStatus(state, msg) { simStatusDot.className = 'sim-status-dot ' + state; simStatusText.textContent = msg; }
-  function openSim() { simOpen = true; simPanel.classList.add('open'); simToggleBtn.classList.add('active'); if (window.innerWidth >= 769) document.body.classList.add('sim-open'); feather.replace(); }
-  function closeSim() { simOpen = false; simPanel.classList.remove('open'); simToggleBtn.classList.remove('active'); document.body.classList.remove('sim-open'); }
+  function setSimStatus(state, msg) {
+    simStatusDot.className = 'sim-status-dot ' + state;
+    simStatusText.textContent = msg;
+  }
+
+  function openSim() {
+    simOpen = true; simPanel.classList.add('open'); simToggleBtn.classList.add('active');
+    if (window.innerWidth >= 769) document.body.classList.add('sim-open');
+    feather.replace();
+  }
+  function closeSim() {
+    simOpen = false; simPanel.classList.remove('open'); simToggleBtn.classList.remove('active');
+    document.body.classList.remove('sim-open');
+  }
+
   simToggleBtn.addEventListener('click', () => simOpen ? closeSim() : openSim());
   simCloseBtn.addEventListener('click', closeSim);
-  simRefreshBtn.addEventListener('click', () => { if (!lastCodeContent) return; const old = simIframeWrap.querySelector('iframe'); if (old) old.remove(); runCodeInSim(lastCodeContent); });
+
+  simRefreshBtn.addEventListener('click', () => {
+    if (!lastCodeContent) return;
+    const old = simIframeWrap.querySelector('iframe');
+    if (old) old.remove();
+    runCodeInSim(lastCodeContent);
+  });
+
   simOpenExtBtn.addEventListener('click', () => {
     if (!lastCodeContent) return;
     const blob = new Blob([buildSimDoc(lastCodeContent)], { type: 'text/html' });
@@ -1849,17 +1705,25 @@ Keep responses technically precise, modern, and directly actionable.`;
     window.open(url, '_blank');
     setTimeout(() => URL.revokeObjectURL(url), 10000);
   });
+
   simClearBtn.addEventListener('click', () => {
-    const old = simIframeWrap.querySelector('iframe'); if (old) old.remove();
+    const old = simIframeWrap.querySelector('iframe');
+    if (old) old.remove();
     if (simEmptyState) simEmptyState.style.display = 'flex';
-    lastCodeContent = null; simToggleBtn.classList.remove('has-code'); setSimStatus('', 'Ready to preview');
+    lastCodeContent = null;
+    simToggleBtn.classList.remove('has-code');
+    setSimStatus('', 'Ready to preview');
   });
 
   function buildSimDoc(content) {
     const isFullDoc = /<!doctype|<html/i.test(content.code);
     if (isFullDoc) return content.code;
-    if (content.lang === 'css') return '<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>*{box-sizing:border-box;margin:0;padding:0}body{overflow-x:hidden}' + content.code + '</style></head><body></body></html>';
-    if (content.lang === 'javascript' || content.lang === 'js') return '<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>body{overflow-x:hidden;margin:0;padding:0}</style></head><body><script>' + content.code + '<\/script></body></html>';
+    if (content.lang === 'css') {
+      return '<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>*{box-sizing:border-box;margin:0;padding:0}body{overflow-x:hidden}' + content.code + '</style></head><body></body></html>';
+    }
+    if (content.lang === 'javascript' || content.lang === 'js') {
+      return '<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>body{overflow-x:hidden;margin:0;padding:0}</style></head><body><script>' + content.code + '<\/script></body></html>';
+    }
     return '<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>*{box-sizing:border-box;margin:0;padding:0}body{font-family:system-ui,sans-serif;background:#fff;color:#111;overflow-x:hidden}</style></head><body>' + content.code + '</body></html>';
   }
 
@@ -1867,45 +1731,43 @@ Keep responses technically precise, modern, and directly actionable.`;
     if (!content) return;
     lastCodeContent = content;
     if (simEmptyState) simEmptyState.style.display = 'none';
-    const old = simIframeWrap.querySelector('iframe'); if (old) old.remove();
+    const old = simIframeWrap.querySelector('iframe');
+    if (old) old.remove();
     setSimStatus('running', 'Loading...');
     const iframe = document.createElement('iframe');
     iframe.className = 'sim-iframe';
     iframe.setAttribute('sandbox', 'allow-scripts allow-same-origin allow-forms allow-modals');
     iframe.setAttribute('title', 'Code Preview');
-    iframe.onload  = () => setSimStatus('ready', content.lang.toUpperCase() + ' · preview ready');
+    iframe.onload = () => setSimStatus('ready', content.lang.toUpperCase() + ' · preview ready');
     iframe.onerror = () => setSimStatus('error', 'Failed to load');
     simIframeWrap.appendChild(iframe);
     const doc = iframe.contentDocument || iframe.contentWindow.document;
     doc.open(); doc.write(buildSimDoc(content)); doc.close();
     if (!simOpen) openSim();
   }
-
   window.runInSim = (id, lang) => {
-    const ref = cmBlockViews[id];
-    const code = ref ? ref.getText() : '';
-    if (!code) return;
-    runCodeInSim({ lang, code });
+    const pre = document.getElementById(id);
+    if (!pre) return;
+    runCodeInSim({ lang, code: pre.innerText });
   };
 
   function extractLastCode() {
-    // Find last cm6 block
-    const ids = Object.keys(cmBlockViews);
-    if (ids.length === 0) return null;
-    const last = ids[ids.length - 1];
-    const ref = cmBlockViews[last];
-    if (!ref) return null;
-    // Try to get lang from the badge near that block
-    const container = document.getElementById(`${last}-cm`);
-    const block = container?.closest('.code-block');
-    const langEl = block?.querySelector('.code-lang-badge');
+    const codeBlocks = messagesContainer.querySelectorAll('.code-block');
+    if (!codeBlocks.length) return null;
+    const last = codeBlocks[codeBlocks.length - 1];
+    const langEl = last.querySelector('.code-lang-badge');
+    const codeEl = last.querySelector('pre code');
+    if (!codeEl) return null;
     const lang = langEl ? langEl.textContent.toLowerCase().trim() : 'html';
-    return { lang, code: ref.getText() };
+    return { lang, code: codeEl.innerText };
   }
 
   simRunLastBtn.addEventListener('click', () => {
     const content = extractLastCode();
-    if (!content) { window.showDialog('No code found', 'Ask Steward to write some HTML, CSS, or JavaScript first — then run it here.', [{ text: 'Got it', cls: 'btn-primary' }]); return; }
+    if (!content) {
+      window.showDialog('No code found', 'Ask Steward to write some HTML, CSS, or JavaScript first — then run it here.', [{ text: 'Got it', cls: 'btn-primary' }]);
+      return;
+    }
     runCodeInSim(content);
   });
 
@@ -1919,19 +1781,28 @@ Keep responses technically precise, modern, and directly actionable.`;
   };
 
   // ══════════════════════════════════════
-  // BILLING TOGGLE
+  // BILLING TOGGLE LOGIC
   // ══════════════════════════════════════
   window.isYearly = false;
+
   window.toggleBilling = () => { window.setBilling(!window.isYearly); };
+
   window.setBilling = (yearly) => {
     window.isYearly = yearly;
     const track = document.getElementById('billingSwitch');
     const lblMo = document.getElementById('label-mo');
     const lblYr = document.getElementById('label-yr');
-    if (window.isYearly) { track.classList.add('yearly'); lblMo.classList.remove('active'); lblYr.classList.add('active'); }
-    else { track.classList.remove('yearly'); lblMo.classList.add('active'); lblYr.classList.remove('active'); }
-    document.querySelectorAll('.plan-price').forEach(el => { if (el.dataset.mo && el.dataset.yr) el.textContent = window.isYearly ? el.dataset.yr : el.dataset.mo; });
-    document.querySelectorAll('.plan-yearly-total').forEach(el => { if (el.dataset.total) { el.textContent = el.dataset.total; el.style.display = window.isYearly ? 'block' : 'none'; } });
+    if (window.isYearly) {
+      track.classList.add('yearly'); lblMo.classList.remove('active'); lblYr.classList.add('active');
+    } else {
+      track.classList.remove('yearly'); lblMo.classList.add('active'); lblYr.classList.remove('active');
+    }
+    document.querySelectorAll('.plan-price').forEach(el => {
+      if (el.dataset.mo && el.dataset.yr) el.textContent = window.isYearly ? el.dataset.yr : el.dataset.mo;
+    });
+    document.querySelectorAll('.plan-yearly-total').forEach(el => {
+      if (el.dataset.total) { el.textContent = el.dataset.total; el.style.display = window.isYearly ? 'block' : 'none'; }
+    });
   };
 </script>
 </body>
