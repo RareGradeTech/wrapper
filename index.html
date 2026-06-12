@@ -116,12 +116,7 @@
     .sidebar-section::-webkit-scrollbar-thumb { background: var(--bg-elevated); border-radius: 99px; }
     .sidebar-label { font-size: 0.65rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-3); padding: 0 4px; margin-bottom: 8px; }
 
-    /* ── FIX 1: Thread List — single-column flex like Claude sidebar ── */
-    #threadList {
-      display: flex;
-      flex-direction: column;
-      gap: 2px;
-    }
+    #threadList { display: flex; flex-direction: column; gap: 2px; }
 
     .thread-item {
       display: flex; align-items: center;
@@ -268,6 +263,7 @@
     .msg-ai-content strong { color: var(--text-1); font-weight: 700; }
     .msg-ai-content em { color: var(--text-2); }
 
+    /* ══ VS CODE SYNTAX HIGHLIGHTING TOKENS ══ */
     .code-block { margin: 16px 0; background: var(--bg-void); border: 1px solid var(--border); border-radius: var(--radius-md); overflow: hidden; }
     .code-block-header { display: flex; align-items: center; justify-content: space-between; padding: 10px 16px; background: var(--bg-surface); border-bottom: 1px solid var(--border); }
     .code-lang-badge { font-size: 0.7rem; font-family: var(--font-code); font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: var(--accent-bright); background: var(--accent-dim); padding: 2px 8px; border-radius: 4px; }
@@ -276,10 +272,27 @@
     .code-action-btn:hover { color: var(--text-1); background: var(--bg-hover); }
     .code-action-btn.run-in-sim { color: var(--green); }
     .code-action-btn.run-in-sim:hover { background: rgba(61,220,132,0.1); }
-    .code-block pre { padding: 16px; overflow-x: auto; font-family: var(--font-code); font-size: 0.82rem; line-height: 1.65; color: var(--text-1); }
+    
+    .code-block pre { 
+      padding: 16px; overflow-x: auto; font-family: var(--font-code); 
+      font-size: 0.82rem; line-height: 1.65;
+      color: #D4D4D4; /* VS Code Default Text */
+      background: #1E1E1E !important; /* VS Code Background */
+    }
     .code-block pre::-webkit-scrollbar { height: 4px; }
     .code-block pre::-webkit-scrollbar-track { background: transparent; }
     .code-block pre::-webkit-scrollbar-thumb { background: var(--bg-elevated); border-radius: 99px; }
+
+    /* Common Token Mappings */
+    .hl-comment  { color: #6A9955; font-style: italic; } /* Green comments */
+    .hl-keyword  { color: #569CD6; font-weight: 600; }  /* Blue control keywords */
+    .hl-string   { color: #CE9178; }                    /* Terracotta strings */
+    .hl-number   { color: #B5CEA8; }                    /* Light green numbers */
+    .hl-fn       { color: #DCDCAA; }                    /* Yellow functions */
+    .hl-tag      { color: #569CD6; }                    /* Blue HTML tags */
+    .hl-attr     { color: #9CDCFE; }                    /* Light blue HTML attributes */
+    .hl-type     { color: #4EC9B0; }                    /* Teal Classes/Types */
+    .hl-operator { color: #D4D4D4; }
 
     .msg-ai-content :not(pre) > code { background: var(--bg-elevated); color: var(--accent-bright); padding: 2px 7px; border-radius: 4px; font-family: var(--font-code); font-size: 0.82em; border: 1px solid var(--border); }
 
@@ -340,31 +353,6 @@
       white-space: nowrap;
     }
     .img-gen-action:hover { color: var(--accent-bright); background: var(--accent-dim); }
-
-    /* Image generation skeleton / loading state */
-    .img-gen-skeleton {
-      width: 100%; aspect-ratio: 1 / 1; max-width: 480px;
-      background: var(--bg-surface); border: 1px solid var(--border);
-      border-radius: var(--radius-lg);
-      display: flex; flex-direction: column;
-      align-items: center; justify-content: center; gap: 16px;
-      position: relative; overflow: hidden;
-    }
-    .img-gen-skeleton::before {
-      content: ''; position: absolute; inset: 0;
-      background: linear-gradient(90deg, transparent 0%, rgba(124,106,255,0.06) 50%, transparent 100%);
-      animation: skelShimmer 2s infinite;
-    }
-    @keyframes skelShimmer { 0%{transform:translateX(-100%)} 100%{transform:translateX(100%)} }
-    .img-gen-skeleton-icon { color: var(--accent-bright); opacity: 0.4; }
-    .img-gen-skeleton-label {
-      font-size: 0.78rem; font-family: var(--font-code); color: var(--text-3);
-      animation: skelFade 1.8s infinite;
-    }
-    @keyframes skelFade { 0%,100%{opacity:0.4} 50%{opacity:1} }
-    .img-gen-skeleton-bar { width: 140px; height: 2px; background: var(--bg-active); border-radius: 99px; overflow: hidden; }
-    .img-gen-skeleton-fill { height: 100%; background: var(--accent); border-radius: 99px; animation: imgBarSweep 2.2s ease-in-out infinite; }
-    @keyframes imgBarSweep { 0%{width:0%;opacity:1} 80%{width:100%;opacity:1} 100%{width:100%;opacity:0} }
 
     /* ══ SCROLL TO BOTTOM FAB ══ */
     #scrollToBottomBtn {
@@ -552,14 +540,6 @@
     .plan-current-badge { font-size: 0.65rem; font-family: var(--font-code); font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--green); border: 1px solid rgba(61,220,132,0.3); border-radius: 99px; padding: 2px 8px; display: inline-block; background: rgba(61,220,132,0.08); }
     @media (max-width: 600px) { .pricing-grid { grid-template-columns: 1fr; } .pricing-box { padding: 28px 16px 32px; } .pricing-title { font-size: 1.5rem; } }
 
-    /* Syntax highlight */
-    .tok-kw { color: var(--accent-bright); }
-    .tok-str { color: var(--green); }
-    .tok-fn  { color: var(--cyan); }
-    .tok-num { color: var(--orange); }
-    .tok-cmt { color: var(--text-3); font-style: italic; }
-    .tok-type { color: var(--yellow); }
-
     /* Scrollbar global */
     ::-webkit-scrollbar { width: 5px; }
     ::-webkit-scrollbar-track { background: transparent; }
@@ -609,10 +589,6 @@
       padding: 20px 16px 16px; overflow: hidden; background: var(--bg-void);
     }
 
-    /* FIX 2: Phone dimensions + iframe scale so content fits without clipping
-       Phone: 260px wide, 8px border each side → 244px inner content area
-       Iframe: 375px declared → scale = 244/375 = 0.6507
-       At that scale: rendered height = 721 * 0.6507 = 469px < 484px inner ✓ */
     .sim-phone {
       width: 260px; height: 500px;
       background: var(--bg-void);
@@ -681,7 +657,6 @@
     }
   </style>
   <base target="_blank">
-<base target="_blank">
 </head>
 <body>
 
@@ -811,7 +786,6 @@
   </div>
 </div>
 
-<!-- Scroll to bottom FAB -->
 <button id="scrollToBottomBtn" title="Scroll to bottom">
   <i data-feather="chevrons-down" style="width:16px;height:16px;"></i>
 </button>
@@ -1470,21 +1444,65 @@ Keep responses technically precise, modern, and directly actionable.`;
     return 'general';
   }
 
+  // ══════════════════════════════════════
+  // VS CODE LEXER FUNCTION
+  // ══════════════════════════════════════
+  function highlightCode(code, lang) {
+    if (!code) return '';
+    lang = (lang || '').toLowerCase();
+
+    let escaped = escapeHtml(code);
+
+    // Comments: // or /* */ or #
+    escaped = escaped.replace(/(\/\/.*|\/\*[\s\S]*?\*\/|#.*)/g, '<span class="hl-comment">$1</span>');
+
+    // Strings: "..." or '...' or `...`
+    escaped = escaped.replace(/(["'`])(.*?)\1/g, '<span class="hl-string">$1$2$1</span>');
+
+    // Numbers
+    escaped = escaped.replace(/\b(\d+)\b/g, '<span class="hl-number">$1</span>');
+
+    // Keywords
+    const keywords = /\b(const|let|var|function|return|if|else|for|while|do|switch|case|break|continue|import|from|export|default|class|extends|new|async|await|def|print|try|except|catch|finally|public|private|protected|void|static|fn|mut|impl|use|match|SELECT|FROM|WHERE|INSERT|UPDATE|DELETE|and|or|not)\b/g;
+    escaped = escaped.replace(keywords, match => {
+      if (match.startsWith('<') || match.endsWith('>')) return match;
+      return `<span class="hl-keyword">${match}</span>`;
+    });
+
+    // Functions
+    escaped = escaped.replace(/\b([a-zA-Z_]\w*)(?=\s*\()/g, '<span class="hl-fn">$1</span>');
+
+    // HTML / XML Specific Adjustments
+    if (lang === 'html' || lang === 'xml' || lang === 'vue' || lang === 'svelte') {
+      escaped = escaped.replace(/(&lt;\/?[a-zA-Z1-6]+)/g, '<span class="hl-tag">$1</span>');
+      escaped = escaped.replace(/(\/?&gt;)/g, '<span class="hl-tag">$1</span>');
+      escaped = escaped.replace(/\b([a-zA-Z\-:]+)(?=\s*=)/g, '<span class="hl-attr">$1</span>');
+    }
+
+    return escaped;
+  }
+
   function parseMarkdown(raw) {
     if (!raw) return '';
     let text = escapeHtml(raw);
     const codeBlocks = [];
+    
+    // Updated code block parser with custom highlightCode lexer
     text = text.replace(/```(\w*)\n?([\s\S]*?)```/gm, (_, lang, code) => {
       const ph = 'CODEBLOCK_' + codeBlocks.length;
       const l = lang || 'code';
       const id = 'cb_' + Math.random().toString(36).substr(2,8);
       const isRunnable = ['html','css','javascript','js','jsx','tsx','vue','svelte'].includes(l.toLowerCase());
       const runBtn = isRunnable ? `<button class="code-action-btn run-in-sim" onclick="window.runInSim('${id}','${l}')"><i data-feather="play" style="width:12px;height:12px;"></i> preview</button>` : '';
+      
+      const highlightedHtml = highlightCode(code.trim(), l);
+      
       codeBlocks.push({ ph, html:
-        `<div class="code-block"><div class="code-block-header"><span class="code-lang-badge">${l}</span><div class="code-actions">${runBtn}<button class="code-action-btn" onclick="window.copyBlock('${id}')"><i data-feather="copy" style="width:12px;height:12px;"></i> copy</button><button class="code-action-btn" onclick="window.insertToInput('${id}')"><i data-feather="corner-down-left" style="width:12px;height:12px;"></i> use</button></div></div><pre id="${id}"><code>${code.trim()}</code></pre></div>` });
+        `<div class="code-block"><div class="code-block-header"><span class="code-lang-badge">${l}</span><div class="code-actions">${runBtn}<button class="code-action-btn" onclick="window.copyBlock('${id}')"><i data-feather="copy" style="width:12px;height:12px;"></i> copy</button><button class="code-action-btn" onclick="window.insertToInput('${id}')"><i data-feather="corner-down-left" style="width:12px;height:12px;"></i> use</button></div></div><pre id="${id}"><code>${highlightedHtml}</code></pre></div>` });
       if (isRunnable) { setTimeout(() => window._notifyNewCode && window._notifyNewCode(l, code.trim()), 50); }
       return ph;
     });
+
     text = text.replace(/^### (.+)$/gm,'<h3>$1</h3>').replace(/^## (.+)$/gm,'<h2>$1</h2>').replace(/^# (.+)$/gm,'<h1>$1</h1>');
     text = text.replace(/\*\*\*(.+?)\*\*\*/g,'<strong><em>$1</em></strong>').replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>').replace(/\*(.+?)\*/g,'<em>$1</em>').replace(/_(.+?)_/g,'<em>$1</em>');
     const lines = text.split('\n'); let out = []; let inUl = false;
